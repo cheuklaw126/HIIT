@@ -23,7 +23,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mynetgear.cheuklaw126.hiit.YouTubeContent;
+import com.example.kenneth.hiit.YouTubeContent;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubeThumbnailLoader;
 import com.google.android.youtube.player.YouTubeThumbnailView;
@@ -66,57 +66,57 @@ public class VideoListAdapter extends BaseAdapter implements YouTubeThumbnailVie
         //The item at the current position
         final YouTubeContent.YouTubeVideo item = YouTubeContent.ITEMS.get(position);
 
-        if (convertView == null) {
-            //Create the row
-            final LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.row_layout, parent, false);
+        //if (convertView == null) {
+        //Create the row
+        final LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        convertView = inflater.inflate(R.layout.row_layout, parent, false);
 
-            //Create the video holder
-            holder = new VideoHolder();
+        //Create the video holder
+        holder = new VideoHolder();
 
-            //Set the title
-            holder.title = (TextView) convertView.findViewById(R.id.textView_title);
-            holder.title.setText(item.title);
+        //Set the title
+        holder.title = (TextView) convertView.findViewById(R.id.textView_title);
+        holder.title.setText(item.title);
 
-            //Initialise the thumbnail
-            holder.thumb = (YouTubeThumbnailView) convertView.findViewById(R.id.imageView_thumbnail);
-            holder.thumb.setTag(item.id);
-            holder.thumb.initialize(mContext.getString(R.string.DEVELOPER_KEY), this);
+        //Initialise the thumbnail
+        holder.thumb = (YouTubeThumbnailView) convertView.findViewById(R.id.imageView_thumbnail);
+        holder.thumb.setTag(item.id);
+        holder.thumb.initialize(mContext.getString(R.string.DEVELOPER_KEY), this);
 
-            convertView.setTag(holder);
-        } else {
-            //Create it again
-            holder = (VideoHolder) convertView.getTag();
-            final YouTubeThumbnailLoader loader = mLoaders.get(holder.thumb);
+        convertView.setTag(holder);
+        //} else {
+        //Create it again
+        //holder = (VideoHolder) convertView.getTag();
+        //final YouTubeThumbnailLoader loader = mLoaders.get(holder.thumb);
 
-            if (item != null) {
-                //Set the title
-                holder.title.setText(item.title);
+        // if (item != null) {
+        //Set the title
+        //holder.title.setText(item.title);
 
-                //Setting the video id can take a while to actually change the image
-                //in the meantime the old image is shown.
-                //Removing the image will cause the background color to show instead, not ideal
-                //but preferable to flickering images.
-                holder.thumb.setImageBitmap(null);
+        //Setting the video id can take a while to actually change the image
+        //in the meantime the old image is shown.
+        //Removing the image will cause the background color to show instead, not ideal
+        //but preferable to flickering images.
+        //holder.thumb.setImageBitmap(null);
 
-                if (loader == null) {
-                    //Loader is currently initialising
-                    holder.thumb.setTag(item.id);
-                } else {
-                    //The loader is already initialised
-                    //Note that it's possible to get a DeadObjectException here
-                    try {
-                        loader.setVideo(item.id);
-                    } catch (IllegalStateException exception) {
-                        //If the Loader has been released then remove it from the map and re-init
-                        mLoaders.remove(holder.thumb);
-                        holder.thumb.initialize(mContext.getString(R.string.DEVELOPER_KEY), this);
+        // if (loader == null) {
+        //Loader is currently initialising
+        // holder.thumb.setTag(item.id);
+        // } else {
+        //The loader is already initialised
+        //Note that it's possible to get a DeadObjectException here
+        // try {
+        //loader.setVideo(item.id);
+        //} catch (IllegalStateException exception) {
+        //If the Loader has been released then remove it from the map and re-init
+        //mLoaders.remove(holder.thumb);
+        //holder.thumb.initialize(mContext.getString(R.string.DEVELOPER_KEY), this);
 
-                    }
-                }
+        //}
+        //}
 
-            }
-        }
+        //}
+        //}
         return convertView;
     }
 
@@ -138,4 +138,5 @@ public class VideoListAdapter extends BaseAdapter implements YouTubeThumbnailVie
         YouTubeThumbnailView thumb;
         TextView title;
     }
+
 }

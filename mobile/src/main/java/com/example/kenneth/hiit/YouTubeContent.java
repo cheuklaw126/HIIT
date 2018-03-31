@@ -1,6 +1,6 @@
 package com.example.kenneth.hiit;
 
-import com.mynetgear.cheuklaw126.hiit.Global;
+import com.example.kenneth.hiit.Global;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -23,7 +23,7 @@ public class YouTubeContent {
     Global global;
     public  String LINK;
     public  String DESC;
-   SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/com.mynetgear.cheuklaw126.hiit/hiitDB", null, SQLiteDatabase.OPEN_READONLY); //Create DB file
+    SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/com.example.kenneth.hiit/hiitDB", null, SQLiteDatabase.OPEN_READONLY); //Create DB file
 
     /**
      * An array of YouTube videos
@@ -34,13 +34,13 @@ public class YouTubeContent {
     /**
      * A map of YouTube videos, by ID.
      */
-   public static Map<String, YouTubeVideo> ITEM_MAP = new HashMap<>();
+    public static Map<String, YouTubeVideo> ITEM_MAP = new HashMap<>();
     static {
         VideoList vl = new VideoList();
 
 
 
-    System.out.println("v1.getLINK = " + vl.getLINK() + "  vl.getDESC =" + vl.getDESC() +" v1.getcount = "+vl.getcount());
+        System.out.println("inside videocontent v1.getLINK = " + vl.getLINK() + "  vl.getDESC =" + vl.getDESC() +" v1.getcount = "+vl.getcount());
         addItem(new YouTubeVideo(vl.getLINK(), vl.getDESC()));
     }
 
@@ -73,22 +73,22 @@ public class YouTubeContent {
 
     public static void getvideolist() {
         SQLiteDatabase db;
-        System.out.println("Enter to get db videolist!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        db = SQLiteDatabase.openDatabase("/data/data/com.mynetgear.cheuklaw126.hiit/hiitDB", null, SQLiteDatabase.OPEN_READONLY); //Create DB file
+        System.out.println("inside videocontent Enter to get db videolist!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        db = SQLiteDatabase.openDatabase("/data/data/com.example.kenneth.hiit/hiitDB", null, SQLiteDatabase.OPEN_READONLY); //Create DB file
 
 
         Cursor cursor = null;
         cursor = db.rawQuery("SELECT * FROM videolist;", null);
         if (cursor.getCount() > 0) {
-            System.out.println("Sucess get data from videolist!!!!!!!!!!!!!!");
-            System.out.println("Count = " + cursor.getCount());
+            System.out.println("inside videocontent Sucess get data from videolist!!!!!!!!!!!!!!");
+            System.out.println("inside videocontent Count = " + cursor.getCount());
         } else {
-            System.out.println("No data get from videolist!!!!!!!!!!!!!!!");
-            System.out.println("Count = " + cursor.getCount());
+            System.out.println("inside videocontent No data get from videolist!!!!!!!!!!!!!!!");
+            System.out.println("inside videocontent Count = " + cursor.getCount());
         }
         while (cursor.moveToNext()) {
-             String LINK = cursor.getString(cursor.getColumnIndex("link"));
-           String DESC = cursor.getString(cursor.getColumnIndex("desc"));
+            String LINK = cursor.getString(cursor.getColumnIndex("link"));
+            String DESC = cursor.getString(cursor.getColumnIndex("desc"));
             addItem(new YouTubeVideo(LINK, DESC));
 
         }

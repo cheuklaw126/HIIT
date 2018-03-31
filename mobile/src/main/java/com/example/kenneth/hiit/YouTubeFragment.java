@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 
-import com.mynetgear.cheuklaw126.hiit.R;
+import com.example.kenneth.hiit.R;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;

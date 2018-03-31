@@ -13,9 +13,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mynetgear.cheuklaw126.hiit.LoginActivity;
-import com.mynetgear.cheuklaw126.hiit.YouTubeContent;
-import com.mynetgear.cheuklaw126.hiit.YouTubeFragment;
+import com.example.kenneth.hiit.LoginActivity;
+import com.example.kenneth.hiit.YouTubeContent;
+import com.example.kenneth.hiit.YouTubeFragment;
 import com.google.android.youtube.player.YouTubeIntents;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 

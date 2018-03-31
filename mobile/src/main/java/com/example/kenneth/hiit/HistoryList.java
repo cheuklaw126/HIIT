@@ -70,7 +70,7 @@ public class HistoryList extends  AppCompatActivity {
     public void setupData() {
         historys = new ArrayList<History>();
         try {
-            SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/com.mynetgear.cheuklaw126.hiit/hiitDB", null, SQLiteDatabase.OPEN_READWRITE); //open DB file
+            SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/com.example.kenneth.hiit/hiitDB", null, SQLiteDatabase.OPEN_READWRITE); //open DB file
             Cursor cursor = db.rawQuery("select e.*, v.vname as vvname from exlist as e join videolist as v on e.vid=v.vid;", null);
 
             while (cursor.moveToNext()) {
@@ -96,8 +96,8 @@ public class HistoryList extends  AppCompatActivity {
         String thiseid = eid;
 
         try {
-            SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/com.mynetgear.cheuklaw126.hiit/hiitDB", null, SQLiteDatabase.OPEN_READWRITE); //open DB file
-            System.out.println("INSERT INTO noex VALUES (" + thiseid + ");");
+            SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/com.example.kenneth.hiit/hiitDB", null, SQLiteDatabase.OPEN_READWRITE); //open DB file
+            System.out.println("INSIDE HISTORYLIST INSERT INTO noex VALUES (" + thiseid + ");");
             db.execSQL("DELETE FROM noex");
             db.execSQL("INSERT INTO noex VALUES (" + thiseid + ");");
         } catch (SQLiteException e) {

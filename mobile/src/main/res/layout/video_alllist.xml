@@ -3,13 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:name="com.mynetgear.cheuklaw126.hiit.ExercisePage"
+    android:name="com.example.kenneth.hiit.ExercisePage"
     android:orientation="vertical">
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/video_alllist"
-        android:name="com.mynetgear.cheuklaw126.hiit.VideoListFragment"
+        android:name="com.example.kenneth.hiit.VideoAllList$VideoListFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="6dp"

@@ -43,7 +43,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     TextView ac, lastname;
-    IOObject io;
+    IOObject io,io1;
     Global global;
     VideoView vdo;
     private static int IMG_RESULT = 1;
@@ -59,14 +59,16 @@ public class MainActivity extends AppCompatActivity
         hideSoftKeyboard();
 
 
-        db = SQLiteDatabase.openDatabase("/data/data/com.mynetgear.cheuklaw126.hiit/hiitDB", null, SQLiteDatabase.CREATE_IF_NECESSARY); //Create DB file
+        db = SQLiteDatabase.openDatabase("/data/data/com.example.kenneth.hiit/hiitDB", null, SQLiteDatabase.CREATE_IF_NECESSARY); //Create DB file
         try{
             db.execSQL("DROP TABLE if exists videolist;");
             db.execSQL("DROP TABLE if exists exlist;");
             db.execSQL("DROP TABLE if exists noex;");
+            db.execSQL("DROP TABLE if exists novideo;");
             db.execSQL("CREATE TABLE IF NOT EXISTS videolist(vid int PRIMARY KEY , vname text, vlink text,vdesc text);");    //Create tables
             db.execSQL("CREATE TABLE IF NOT EXISTS exlist(elid INTEGER PRIMARY KEY AUTOINCREMENT, uid int, vid int, lastD text, lastT text, cc text, hr text, eg text, com text);");
             db.execSQL("CREATE TABLE IF NOT EXISTS noex(getvid int);");
+            db.execSQL("CREATE TABLE IF NOT EXISTS novideo(totalvideo int);");
             db.close();
 
         }catch (SQLException e){
@@ -85,7 +87,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
         vdo.start();
-
+        GetExerciseHistory(global.Uid);
 
 
 
@@ -271,10 +273,11 @@ try {
             intent.setClass(MainActivity.this, frdActivity.class);
             break;
         case R.id.nav_gallery:
-
-            GetExerciseHistory(global.Uid);
-
           intent.setClass(MainActivity.this, HistoryList.class);
+            break;
+        case R.id.nav_slideshow:
+            System.out.println(" in intent nav_slideshow");
+            intent.setClass(MainActivity.this, VideoAllList.class);
             break;
         default:
             break;
@@ -329,21 +332,29 @@ try {
         int compEx;
         String lastD, lastT, cc, hr, eg, com;
         String query = String.format("select * from exeriseHistory where uID =%s ",uid);
+        String query1 = String.format("select * from movie");
         final ArrayList<String> querys = new ArrayList<String>();
+        final ArrayList<String> querys1 = new ArrayList<String>();
         querys.add(query);
+        querys1.add(query1);
         compEx=0;
-        SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/com.mynetgear.cheuklaw126.hiit/hiitDB", null, SQLiteDatabase.OPEN_READWRITE); //open DB file
+        SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/com.example.kenneth.hiit/hiitDB", null, SQLiteDatabase.OPEN_READWRITE); //open DB file
 
 
         try {
             io = new IOObject("ExecuteReader", querys);
+            io1= new IOObject("ExecuteReader", querys1);
             io.Start();
+            io1.Start();
             JSONObject jobj = io.getReturnObject();
+            JSONObject jobj1 = io1.getReturnObject();
             JSONArray jsonArray = io.getReturnObject().getJSONArray("data");
-                System.out.println("jsonArray = "+jsonArray.length());
+            JSONArray jsonArray1 = io1.getReturnObject().getJSONArray("data");
+            System.out.println("jsonArray = "+jsonArray.length()+" jsonArray1 =  "+jsonArray1);
             db.execSQL("DELETE FROM exlist");
             db.execSQL("DELETE FROM videoList");
             db.execSQL("DELETE FROM noex");
+            db.execSQL("DELETE FROM novideo");
             db.execSQL("DELETE FROM SQLITE_SEQUENCE WHERE NAME = 'exlist'");
             if (jsonArray.length() > 0) {
                 compEx=jsonArray.length();
@@ -372,7 +383,8 @@ try {
             }else{
                 compEx=0;
             }
-
+            System.out.println("inside mainactivity INSERT INTO novideo VALUES ("+jsonArray1.length()+");");
+            db.execSQL("INSERT INTO novideo VALUES ("+jsonArray1.length()+");");
         }
         catch (Exception ex){
             ex.printStackTrace();
@@ -382,7 +394,7 @@ try {
         String vn,link,desc;
         int videoid=vid;
         int allvideo=0;
-        SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/com.mynetgear.cheuklaw126.hiit/hiitDB", null, SQLiteDatabase.OPEN_READWRITE); //open DB file
+        SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/com.example.kenneth.hiit/hiitDB", null, SQLiteDatabase.OPEN_READWRITE); //open DB file
 
         String queryV = String.format("select * from movie where vid =%s ",videoid);
         System.out.println("queryV = "+queryV);
@@ -400,14 +412,14 @@ try {
             }
             System.out.println(" getvideo allvideo = "+allvideo);
             for(int i=0; i<allvideo; i++) {
-            JSONObject veh=vjsonArray.getJSONObject(i);
+                JSONObject veh=vjsonArray.getJSONObject(i);
 
-            vn = veh.getString("vname");
-            link = veh.getString("link");
-            desc= veh.getString("description");
-System.out.println("INSERT INTO videolist VALUES ("+vid+" , '"+vn+"', '"+link+"', '"+desc+"');");
-            db.execSQL("INSERT INTO videolist VALUES ("+vid+" , '"+vn+"', '"+link+"', '"+desc+"');");
-        }}
+                vn = veh.getString("vname");
+                link = veh.getString("link");
+                desc= veh.getString("description");
+                System.out.println("INSERT INTO videolist VALUES ("+vid+" , '"+vn+"', '"+link+"', '"+desc+"');");
+                db.execSQL("INSERT INTO videolist VALUES ("+vid+" , '"+vn+"', '"+link+"', '"+desc+"');");
+            }}
         catch (Exception ex){
             ex.printStackTrace();
         }
