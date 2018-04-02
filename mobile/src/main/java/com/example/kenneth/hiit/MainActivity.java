@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity
 
 
         db = SQLiteDatabase.openDatabase("/data/data/com.example.kenneth.hiit/hiitDB", null, SQLiteDatabase.CREATE_IF_NECESSARY); //Create DB file
-        try{
+        try {
             db.execSQL("DROP TABLE if exists videolist;");
             db.execSQL("DROP TABLE if exists exlist;");
             db.execSQL("DROP TABLE if exists noex;");
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity
             db.execSQL("CREATE TABLE IF NOT EXISTS noex(getvid int);");
             db.close();
 
-        }catch (SQLException e){
+        } catch (SQLException e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
         setContentView(R.layout.activity_main);
@@ -85,8 +85,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
         vdo.start();
-
-
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -122,6 +120,7 @@ public class MainActivity extends AppCompatActivity
             // super.onBackPressed();
         }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -150,7 +149,7 @@ public class MainActivity extends AppCompatActivity
 
 
     public void hideSoftKeyboard() {
-        if(getCurrentFocus()!=null) {
+        if (getCurrentFocus() != null) {
             InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
@@ -158,58 +157,52 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode== Activity.RESULT_OK)
-        {
+        if (resultCode == Activity.RESULT_OK) {
 
             /**
              * 当选择的图片不为空的话，在获取到图片的途径
              */
             Uri uri = data.getData();
-            Log.e("uploadImage", "uri = "+ uri);
+            Log.e("uploadImage", "uri = " + uri);
             try {
                 String[] pojo = {MediaStore.Images.Media.DATA};
 
                 CursorLoader cursorLoader = new CursorLoader(this, uri, null, null, null, null);
-                Cursor  cursor = cursorLoader.loadInBackground();
-                if(cursor!=null)
-                {
+                Cursor cursor = cursorLoader.loadInBackground();
+                if (cursor != null) {
                     ContentResolver cr = this.getContentResolver();
                     int colunm_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
                     cursor.moveToFirst();
                     String path = cursor.getString(colunm_index);
-                                if(path.endsWith("jpg")||path.endsWith("png"))
-                    {
+                    if (path.endsWith("jpg") || path.endsWith("png")) {
                         picPath = path;
                         Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
                         File file = new File(picPath);
 
                         byte[] fileByte = global.loadFile(file);
-                     String enc64 =  android.util.Base64.encodeToString(fileByte, android.util.Base64.DEFAULT);
+                        String enc64 = android.util.Base64.encodeToString(fileByte, android.util.Base64.DEFAULT);
                         FileInputStream fileInputStream = new FileInputStream(file);
-                        io = new IOObject("obj",  new ArrayList<String>());
+                        io = new IOObject("obj", new ArrayList<String>());
                         io.obj = enc64;
-if(path.endsWith("jpg")){
+                        if (path.endsWith("jpg")) {
 
-    io.FileType="jpg";
-}else{
-    io.FileType="png";
-}
-
-
-
+                            io.FileType = "jpg";
+                        } else {
+                            io.FileType = "png";
+                        }
 
 
                         io.CreateUser = global.UserName;
                         io.Start();
 
 
-                       // imageView.setImageBitmap(bitmap);
-                    }else{
+                        // imageView.setImageBitmap(bitmap);
+                    } else {
 
                         //??
 
                     }
-                }else{
+                } else {
 
                     ///???
 
@@ -237,7 +230,7 @@ if(path.endsWith("jpg")){
             return true;
         }
         if (id == R.id.logout) {
-
+            global.client.Send("/logout");
             global = null;
             MainActivity.this.finish();
             return true;
@@ -251,39 +244,38 @@ if(path.endsWith("jpg")){
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-try {
-    int id = item.getItemId();
+        try {
+            int id = item.getItemId();
 
-    Fragment fragment = null;
-    Class currentClass;
+            Fragment fragment = null;
+            Class currentClass;
       /* View fd  = (View)findViewById(R.id.frd);
         View indexView  = (View)findViewById(R.id.index);
         fd.setVisibility(View.INVISIBLE);
        indexView.setVisibility(View.INVISIBLE);*/
 
-    Intent intent = new Intent();
+            Intent intent = new Intent();
 
 
-    switch (id) {
+            switch (id) {
 
-        case R.id.frd:
-            //intent.putExtra("global", global);
-            intent.setClass(MainActivity.this, frdActivity.class);
-            break;
-        case R.id.nav_gallery:
+                case R.id.frd:
+                    //intent.putExtra("global", global);
+                    intent.setClass(MainActivity.this, frdActivity.class);
+                    break;
+                case R.id.nav_gallery:
 
-            GetExerciseHistory(global.Uid);
+                    GetExerciseHistory(global.Uid);
 
-          intent.setClass(MainActivity.this, HistoryList.class);
-            break;
-        default:
-            break;
-    }
-    startActivity(intent);
-} catch (Exception e) {
-    e.printStackTrace();
-}
-
+                    intent.setClass(MainActivity.this, HistoryList.class);
+                    break;
+                default:
+                    break;
+            }
+            startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
 //        try {
@@ -324,14 +316,14 @@ try {
         vdo.start();
     }
 
-    public void GetExerciseHistory(int uid){
-        int vid,getvid;
+    public void GetExerciseHistory(int uid) {
+        int vid, getvid;
         int compEx;
         String lastD, lastT, cc, hr, eg, com;
-        String query = String.format("select * from exeriseHistory where uID =%s ",uid);
+        String query = String.format("select * from exeriseHistory where uID =%s ", uid);
         final ArrayList<String> querys = new ArrayList<String>();
         querys.add(query);
-        compEx=0;
+        compEx = 0;
         SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/com.example.kenneth.hiit/hiitDB", null, SQLiteDatabase.OPEN_READWRITE); //open DB file
 
 
@@ -340,20 +332,20 @@ try {
             io.Start();
             JSONObject jobj = io.getReturnObject();
             JSONArray jsonArray = io.getReturnObject().getJSONArray("data");
-                System.out.println("jsonArray = "+jsonArray.length());
+            System.out.println("jsonArray = " + jsonArray.length());
             db.execSQL("DELETE FROM exlist");
             db.execSQL("DELETE FROM videoList");
             db.execSQL("DELETE FROM noex");
             db.execSQL("DELETE FROM SQLITE_SEQUENCE WHERE NAME = 'exlist'");
             if (jsonArray.length() > 0) {
-                compEx=jsonArray.length();
-                System.out.println("in mainActivity compEX = "+compEx);
-                JSONObject gvid=jsonArray.getJSONObject(compEx-1);
-                getvid= gvid.getInt("vid");
+                compEx = jsonArray.length();
+                System.out.println("in mainActivity compEX = " + compEx);
+                JSONObject gvid = jsonArray.getJSONObject(compEx - 1);
+                getvid = gvid.getInt("vid");
                 //System.out.println("INSERT INTO noex VALUES ("+compEx+", "+getvid+");");
                 //db.execSQL("INSERT INTO noex VALUES ("+compEx+", "+getvid+");");
-                System.out.println("compEx = "+compEx);
-                for(int i=0; i<compEx; i++) {
+                System.out.println("compEx = " + compEx);
+                for (int i = 0; i < compEx; i++) {
                     JSONObject eh = jsonArray.getJSONObject(i);
                     lastD = eh.getString("createDate");
                     lastT = eh.getString("totTime");
@@ -362,53 +354,53 @@ try {
                     eg = eh.getString("exGain");
                     com = eh.getString("isComplete");
                     vid = eh.getInt("vid");
-                    String query111=("INSERT INTO exlist (uid, vid, lastD, lastT, cc, hr, eg, com) VALUES ("+uid+ ", "+vid+", '"+lastD+"', '"+lastT+"', '"+cc+"', '"+hr+"', '"+eg+"', '"+com+"');");
-                    System.out.println("query111 = "+query111);
+                    String query111 = ("INSERT INTO exlist (uid, vid, lastD, lastT, cc, hr, eg, com) VALUES (" + uid + ", " + vid + ", '" + lastD + "', '" + lastT + "', '" + cc + "', '" + hr + "', '" + eg + "', '" + com + "');");
+                    System.out.println("query111 = " + query111);
 
-                    db.execSQL("INSERT INTO exlist (uid, vid, lastD, lastT, cc, hr, eg, com) VALUES ("+uid+ ", "+vid+", '"+lastD+"', '"+lastT+"', '"+cc+"', '"+hr+"', '"+eg+"', '"+com+"');");
-                    System.out.println("compEx = "+compEx);
+                    db.execSQL("INSERT INTO exlist (uid, vid, lastD, lastT, cc, hr, eg, com) VALUES (" + uid + ", " + vid + ", '" + lastD + "', '" + lastT + "', '" + cc + "', '" + hr + "', '" + eg + "', '" + com + "');");
+                    System.out.println("compEx = " + compEx);
                     GetVideo(vid);
                 }
-            }else{
-                compEx=0;
+            } else {
+                compEx = 0;
             }
 
-        }
-        catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
-    public void GetVideo(int vid){
-        String vn,link,desc;
-        int videoid=vid;
-        int allvideo=0;
+
+    public void GetVideo(int vid) {
+        String vn, link, desc;
+        int videoid = vid;
+        int allvideo = 0;
         SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/com.example.kenneth.hiit/hiitDB", null, SQLiteDatabase.OPEN_READWRITE); //open DB file
 
-        String queryV = String.format("select * from movie where vid =%s ",videoid);
-        System.out.println("queryV = "+queryV);
+        String queryV = String.format("select * from movie where vid =%s ", videoid);
+        System.out.println("queryV = " + queryV);
         final ArrayList<String> queryvs = new ArrayList<String>();
         queryvs.add(queryV);
-        try{
+        try {
             io = new IOObject("ExecuteReader", queryvs);
             io.Start();
             JSONObject vjobj = io.getReturnObject();
-            JSONArray vjsonArray =io.getReturnObject().getJSONArray("data");
+            JSONArray vjsonArray = io.getReturnObject().getJSONArray("data");
 
-            System.out.println(" getvideo allvideo = "+allvideo);
+            System.out.println(" getvideo allvideo = " + allvideo);
             if (vjsonArray.length() > 0) {
-                allvideo=vjsonArray.length();
+                allvideo = vjsonArray.length();
             }
-            System.out.println(" getvideo allvideo = "+allvideo);
-            for(int i=0; i<allvideo; i++) {
-            JSONObject veh=vjsonArray.getJSONObject(i);
+            System.out.println(" getvideo allvideo = " + allvideo);
+            for (int i = 0; i < allvideo; i++) {
+                JSONObject veh = vjsonArray.getJSONObject(i);
 
-            vn = veh.getString("vname");
-            link = veh.getString("link");
-            desc= veh.getString("description");
-System.out.println("INSERT INTO videolist VALUES ("+vid+" , '"+vn+"', '"+link+"', '"+desc+"');");
-            db.execSQL("INSERT INTO videolist VALUES ("+vid+" , '"+vn+"', '"+link+"', '"+desc+"');");
-        }}
-        catch (Exception ex){
+                vn = veh.getString("vname");
+                link = veh.getString("link");
+                desc = veh.getString("description");
+                System.out.println("INSERT INTO videolist VALUES (" + vid + " , '" + vn + "', '" + link + "', '" + desc + "');");
+                db.execSQL("INSERT INTO videolist VALUES (" + vid + " , '" + vn + "', '" + link + "', '" + desc + "');");
+            }
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
