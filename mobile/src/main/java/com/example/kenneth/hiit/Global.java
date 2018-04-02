@@ -381,7 +381,7 @@ if(!this.ChkAccExit(frdUname))
     }
 
     public void GetVideo(int vid) {
-        SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/com.mynetgear.cheuklaw126.hiit/hiitDB", null, SQLiteDatabase.OPEN_READWRITE); //open DB file
+        SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/com.example.kenneth.hiit/hiitDB", null, SQLiteDatabase.OPEN_READWRITE); //open DB file
         db.execSQL("DELETE FROM videoList");
         String queryV = String.format("select * from movie where vid =%s ", vid);
 

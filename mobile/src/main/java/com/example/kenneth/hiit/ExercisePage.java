@@ -2,27 +2,9 @@ package com.example.kenneth.hiit;
 
 
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ListView;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.mynetgear.cheuklaw126.hiit.LoginActivity;
-import com.mynetgear.cheuklaw126.hiit.YouTubeContent;
-import com.mynetgear.cheuklaw126.hiit.YouTubeFragment;
-import com.google.android.youtube.player.YouTubeIntents;
-import com.google.android.youtube.player.YouTubeStandalonePlayer;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 
 public class ExercisePage extends AppCompatActivity {

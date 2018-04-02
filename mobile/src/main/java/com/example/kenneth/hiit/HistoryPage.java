@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-//  import com.mynetgear.cheuklaw126.hiit.YouTubeFragment;
+//  import com.example.kenneth.hiit.YouTubeFragment;
 
 
 public class HistoryPage extends AppCompatActivity {
@@ -36,7 +36,7 @@ public class HistoryPage extends AppCompatActivity {
         System.out.println(" in getEXDATA noex  ");
 
         System.out.println("Enter to get db exlist!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        db = SQLiteDatabase.openDatabase("/data/data/com.mynetgear.cheuklaw126.hiit/hiitDB", null, SQLiteDatabase.OPEN_READWRITE); //Create DB file
+        db = SQLiteDatabase.openDatabase("/data/data/com.example.kenneth.hiit/hiitDB", null, SQLiteDatabase.OPEN_READWRITE); //Create DB file
         try{
 
         System.out.println("SELECT * from exlist WHERE elid="+EID+";");
@@ -56,7 +56,7 @@ public class HistoryPage extends AppCompatActivity {
             eg = cursor1.getString(cursor1.getColumnIndex("eg"));
             hr = cursor1.getString(cursor1.getColumnIndex("hr"));
             //System.out.println("inside videolist " + LINK+"  "+DESC);
-            db = SQLiteDatabase.openDatabase("/data/data/com.mynetgear.cheuklaw126.hiit/hiitDB", null, SQLiteDatabase.OPEN_READWRITE); //Create DB file
+            db = SQLiteDatabase.openDatabase("/data/data/com.example.kenneth.hiit/hiitDB", null, SQLiteDatabase.OPEN_READWRITE); //Create DB file
             System.out.println("SELECT * from videolist where vid="+vid+";");
             Cursor cursor2 = db.rawQuery("SELECT * from videolist where vid="+vid+";", null);
             while(cursor2.moveToNext()){

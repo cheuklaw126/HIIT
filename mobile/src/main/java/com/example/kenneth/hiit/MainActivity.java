@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity
         hideSoftKeyboard();
 
 
-        db = SQLiteDatabase.openDatabase("/data/data/com.mynetgear.cheuklaw126.hiit/hiitDB", null, SQLiteDatabase.CREATE_IF_NECESSARY); //Create DB file
+        db = SQLiteDatabase.openDatabase("/data/data/com.example.kenneth.hiit/hiitDB", null, SQLiteDatabase.CREATE_IF_NECESSARY); //Create DB file
         try{
             db.execSQL("DROP TABLE if exists videolist;");
             db.execSQL("DROP TABLE if exists exlist;");
@@ -332,7 +332,7 @@ try {
         final ArrayList<String> querys = new ArrayList<String>();
         querys.add(query);
         compEx=0;
-        SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/com.mynetgear.cheuklaw126.hiit/hiitDB", null, SQLiteDatabase.OPEN_READWRITE); //open DB file
+        SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/com.example.kenneth.hiit/hiitDB", null, SQLiteDatabase.OPEN_READWRITE); //open DB file
 
 
         try {
@@ -382,7 +382,7 @@ try {
         String vn,link,desc;
         int videoid=vid;
         int allvideo=0;
-        SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/com.mynetgear.cheuklaw126.hiit/hiitDB", null, SQLiteDatabase.OPEN_READWRITE); //open DB file
+        SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/com.example.kenneth.hiit/hiitDB", null, SQLiteDatabase.OPEN_READWRITE); //open DB file
 
         String queryV = String.format("select * from movie where vid =%s ",videoid);
         System.out.println("queryV = "+queryV);
