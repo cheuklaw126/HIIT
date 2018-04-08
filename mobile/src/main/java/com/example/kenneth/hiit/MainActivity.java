@@ -112,6 +112,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onDestroy() {
+        this.global.client.Send("/logout");
+super.onDestroy();
+    }
+
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -231,8 +237,10 @@ public class MainActivity extends AppCompatActivity
         }
         if (id == R.id.logout) {
             global.client.Send("/logout");
-            global = null;
+
             MainActivity.this.finish();
+          //  global = null;
+
             return true;
         }
 
@@ -258,9 +266,10 @@ public class MainActivity extends AppCompatActivity
 
 
             switch (id) {
-
+                case R.id.createParty:
+                    intent.setClass(MainActivity.this, CreatePartyActivity.class);
+                    break;
                 case R.id.frd:
-                    //intent.putExtra("global", global);
                     intent.setClass(MainActivity.this, frdActivity.class);
                     break;
                 case R.id.nav_gallery:

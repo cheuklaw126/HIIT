@@ -15,6 +15,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.google.gson.Gson;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,11 +41,29 @@ public class Global extends Application implements Serializable {
     public static String vn, link, desc;
     public static Context contextOfApplication;
     public Client client;
-
+    public Party  CurrentParty;
     public Thread SocketListener;
 
     IOObject io;
     ArrayList<JSONObject> fdList, fdRequestList, nearlyByList;
+
+    public void Reset(){
+       this.UserName=null;
+        this.pw=null;
+        this.FirstName=null;
+        this.LastName=null;
+        this.src=null;
+       this.Uid=0;
+        this.vid=0;
+        this.compEx=0;
+       this.lastD=null;
+        this.lastT=null;
+        this.cc=null;
+        this.hr=null;this.eg=null;this.com=null;
+       this.client=null;
+       this.CurrentParty=null;
+       this.SocketListener =null;
+    }
 
     public Global() {
     }
@@ -152,36 +172,34 @@ public class Global extends Application implements Serializable {
                             String msg = client.Listener();
                             String[] pair = msg.split("/");
                             String Action="",Value="";
-                            if(pair.length>=2){
+                           try{
                            //     Action = pair[0].toLowerCase();
                                 Action = pair[1];
+                                Value =pair[2];
+                            }
+                            catch (Exception ex){}
+                            System.out.println(msg);
+                            switch (Action){
+                                case "msg":
+                                    NoticeMsg(Value);
+                                    break;
+
                             }
 
 
-
-                            System.out.println(msg);
                             if(Action.startsWith("kill")){
-
                                 if(!Action.equals("kill")){
-
-                                     if(Action.split("kill")[1].equals(UserName)){
-                                         NoticeMsg("You got server Killed");
+                                     if(Action.split("kill")[1].toLowerCase().equals(UserName.toLowerCase())){
+                                         NoticeMsg("You got server Kicked");
                                         android.os.Process.killProcess(android.os.Process.myPid());
                                         this.interrupt();
                                     }
-
                                 }else{
-                                    NoticeMsg("You got server Killed");
+                                    NoticeMsg("You got server Kicked");
                                     android.os.Process.killProcess(android.os.Process.myPid());
                                     this.interrupt();
                                 }
                             }
-
-
-
-
-
-
                         }
                     }
 
@@ -197,29 +215,39 @@ public class Global extends Application implements Serializable {
         return false;
     }
 
+    public void CreateParty(String roomName,String url){
+        CurrentParty = new Party(roomName,this.UserName,url);
+        Gson gson = new Gson();
+String jsonString = gson.toJson(CurrentParty);
+
+//this.client.Send("0123456789");
+this.client.Send("/cp/"+jsonString);
+
+    }
+
+
     public void NoticeMsg(String msg){
 
         int notificationId = 0x1234;
-       Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);// 通知音效的URI，在這裡使用系統內建的通知音效
+       Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-        Notification notification = null;// 建立通知
+        Notification notification = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
 
 
             NotificationChannel channel = new NotificationChannel("1","Channel1", NotificationManager.IMPORTANCE_DEFAULT);
-            channel.enableLights(true); //是否在桌面icon右上角展示小红点
-            channel.setLightColor(Color.GREEN); //小红点颜色
-            channel.setShowBadge(true); //是否在久按桌面图标时显示此渠道的通知
+            channel.enableLights(true);
+            channel.setLightColor(Color.GREEN);
+            channel.setShowBadge(true);
             notificationManager.createNotificationChannel(channel);
 
-            Notification.Builder builder = new Notification.Builder(this,"1"); //与channelId对应
-            //icon title text必须包含，不然影响桌面图标小红点的展示
+            Notification.Builder builder = new Notification.Builder(this,"1");
            // builder.setSmallIcon(android.R.drawable.stat_notify_chat)
             builder.setSmallIcon(android.R.drawable.stat_notify_chat)
                     .setContentTitle("HIIT")
                     .setContentText(msg)
-                    .setNumber(99); //久按桌面图标时允许的此条通知的数量
-           // notification = new Notification.Builder(getApplicationContext()).setSmallIcon(R.drawable.icon).setContentTitle("內容標題").setContentText("內容文字").setSound(soundUri).setChannelId("1").build();
+                    .setNumber(99);
+           // notification = new Notification.Builder(getApplicationContext()).setSmallIcon(R.drawable.icon).setContentTitle("").setContentText("").setSound(soundUri).setChannelId("1").build();
 
             notificationManager.notify(notificationId, builder.build());
 
@@ -227,16 +255,8 @@ public class Global extends Application implements Serializable {
         else{
             //notification = new Notification.Builder(getApplicationContext()).setSmallIcon(R.drawable.icon).setContentTitle("HIIT").setContentText(msg).setSound(soundUri).build();
             notification = new Notification.Builder(getApplicationContext()).setSmallIcon(android.R.drawable.stat_notify_chat).setContentTitle("HIIT").setContentText(msg).setSound(soundUri).build();
-            notificationManager.notify(notificationId,notification);// 發送通知
+            notificationManager.notify(notificationId,notification);
         }
-
-
-
-
-
-
-
-
     }
 
 
@@ -275,7 +295,6 @@ public class Global extends Application implements Serializable {
 
     }
 
-
     public boolean RemoveFrd(String uname, String funame) {
         String query = String.format("delete fdList where (uname='%s'  and funame='%s') or (uname='%s'  and funame='%s');", uname.toLowerCase(), funame.toLowerCase(), funame.toLowerCase(), uname.toLowerCase());
         ArrayList<String> querys = new ArrayList<String>();
@@ -296,7 +315,6 @@ public class Global extends Application implements Serializable {
 
         }
     }
-
 
     public boolean AddFrd(String frdUname) {
 
@@ -343,7 +361,6 @@ public class Global extends Application implements Serializable {
 
 
     }
-
 
     public void SetFrdList() {
         if (fdList != null) {
@@ -427,7 +444,6 @@ public class Global extends Application implements Serializable {
 
         return false;
     }
-
 
     public boolean ChkAccExit(String id) {
 
@@ -517,7 +533,6 @@ public class Global extends Application implements Serializable {
             ex.printStackTrace();
         }
     }
-
 
     public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;

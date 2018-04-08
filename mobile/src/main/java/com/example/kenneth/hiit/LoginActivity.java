@@ -25,21 +25,21 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Global global = (Global) getApplicationContext();
-
+                global.Reset();
                 global.NoticeMsg("");
                 String acc = ac.getText().toString();
                 acc = acc.toLowerCase();
                 String pwd = pw.getText().toString();
-                boolean chk = global.Login(acc,pwd);
-                    if (chk) {
-                        Toast.makeText(getApplicationContext(), "Log in Success", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent();
-                        intent.setClass(LoginActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        LoginActivity.this.finish();
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Username or Password Invalid!", Toast.LENGTH_SHORT).show();
-                    }
+                boolean chk = global.Login(acc, pwd);
+                if (chk) {
+                    Toast.makeText(getApplicationContext(), "Log in Success", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent();
+                    intent.setClass(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    LoginActivity.this.finish();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Username or Password Invalid!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

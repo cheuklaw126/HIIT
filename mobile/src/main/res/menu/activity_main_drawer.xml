@@ -14,8 +14,14 @@
             android:icon="@drawable/ic_menu_gallery"
             android:title="History" />
 
-
-
+        <item
+            android:id="@+id/createParty"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Create Party" />
+        <item
+            android:id="@+id/joinParty"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Join Party" />
         <item
             android:id="@+id/nav_camera"
             android:icon="@drawable/ic_menu_camera"
@@ -26,9 +32,9 @@
             android:icon="@drawable/ic_menu_slideshow"
             android:title="Video" />
         <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+        android:id="@+id/nav_manage"
+        android:icon="@drawable/ic_menu_manage"
+        android:title="Suggest Food" />
     </group>
 
     <item android:title="Communicate">
@@ -37,14 +43,7 @@
                 android:id="@+id/frd"
                 android:icon="@drawable/ic_menu_share"
                 android:title="Friends" />
-            <item
-                android:id="@+id/battle"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Battle" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Ranking" />
+
         </menu>
     </item>
 
