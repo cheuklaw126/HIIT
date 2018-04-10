@@ -5,6 +5,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,8 +22,8 @@ import static android.content.Context.MODE_PRIVATE;
 public class YouTubeContent {
     //SQLiteDatabase db;
     Global global;
-    public  String LINK;
-    public  String DESC;
+    public  String LINK=null;
+    public  String DESC=null;
     SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/com.example.kenneth.hiit/hiitDB", null, SQLiteDatabase.OPEN_READONLY); //Create DB file
 
     /**
@@ -35,18 +36,37 @@ public class YouTubeContent {
      * A map of YouTube videos, by ID.
      */
     public static Map<String, YouTubeVideo> ITEM_MAP = new HashMap<>();
+
     static {
-        VideoList vl = new VideoList();
+        //if(ITEMS.isEmpty()){
+            //System.out.println("ITEM is EMPTY");
+            VideoList vl = new VideoList();
+            System.out.println("inside videocontent isempty v1.getLINK = " + vl.getLINK() + "  vl.getDESC =" + vl.getDESC() +" v1.getcount = "+vl.getcount());
+            addItem(new YouTubeVideo(vl.getLINK(), vl.getDESC()));
+        //}else{
+            //System.out.println("ITEM is not EMPTY");
+            //System.out.println("ITEMS = "+ Arrays.toString(ITEMS.toArray()));
+        //removeItem();
+            //VideoList vl = new VideoList();
+            //System.out.println("inside videocontent notempty v1.getLINK = " + vl.getLINK() + "  vl.getDESC =" + vl.getDESC() +" v1.getcount = "+vl.getcount());
+            //addItem(new YouTubeVideo(vl.getLINK(), vl.getDESC()));
+        //}
 
 
 
-        System.out.println("inside videocontent v1.getLINK = " + vl.getLINK() + "  vl.getDESC =" + vl.getDESC() +" v1.getcount = "+vl.getcount());
-        addItem(new YouTubeVideo(vl.getLINK(), vl.getDESC()));
+
+
     }
 
 
 
-
+    private static void removeItem(){
+        System.out.println("inside removeitem");
+        ITEMS.remove(0);
+        ITEM_MAP.remove(0);
+        ITEMS.clear();
+        ITEM_MAP.clear();
+    }
     private static void addItem(final YouTubeVideo item) {
         ITEMS.add(item);
         ITEM_MAP.put(item.id, item);

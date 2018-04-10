@@ -12,7 +12,7 @@ public class History {
     private String complete;
     private String vname;
 
-    public History(int eid, int vid, int uid, String c_date,String eg, String complete, String vname) {
+    public History(int eid, int uid, int vid, String c_date,String eg, String complete, String vname) {
         setEid(eid);
         setVid(vid);
         setUid(uid);

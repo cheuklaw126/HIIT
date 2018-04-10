@@ -42,9 +42,9 @@ public class GetAllVideoList {
 
             System.out.println("Enter to get db getallvideolist!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             db = SQLiteDatabase.openDatabase("/data/data/com.example.kenneth.hiit/hiitDB", null, SQLiteDatabase.OPEN_READWRITE); //Create DB file
-            System.out.println("inside VIDEOLIST SELECT *  FROM videolist;");
+            System.out.println("inside getALLVIDEO SELECT *  FROM allvideo;");
             try {
-                Cursor cursor = db.rawQuery("SELECT * FROM videolist;", null);
+                Cursor cursor = db.rawQuery("SELECT * FROM allvideo;", null);
                 GV= cursor.getCount();
                 LINK=new String[GV];
                 DESC=new String[GV];
@@ -55,14 +55,14 @@ public class GetAllVideoList {
                     if(i<GV){
                         //LINK[1]="this is test array";
                        // System.out.println("printout array "+LINK[1]);
-                        System.out.println("inside videolist  get lengtt "+LINK.length+DESC.length);
-                        System.out.println("inside videolist vlink"+cursor.getString(cursor.getColumnIndex("vlink")));
-                        System.out.println("inside videolist vdesc"+cursor.getString(cursor.getColumnIndex("vdesc")));
+                        System.out.println("inside allvideo  get lengtt "+LINK.length+DESC.length);
+                        System.out.println("inside allvideo vlink"+cursor.getString(cursor.getColumnIndex("vlink")));
+                        System.out.println("inside allvideo description"+cursor.getString(cursor.getColumnIndex("description")));
                         LINK[i] = cursor.getString(cursor.getColumnIndex("vlink"));
-                        DESC[i] = cursor.getString(cursor.getColumnIndex("vdesc"));
+                        DESC[i] = cursor.getString(cursor.getColumnIndex("description"));
 
 
-                        System.out.println("inside videolist " + LINK[i] + "  " + DESC[i]);
+                        System.out.println("inside allvideo " + LINK[i] + "  " + DESC[i]);
                         i++;
                     }
                     setLINK(LINK);

@@ -56,8 +56,9 @@ public class HistoryList extends  AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 History m = historys.get(i);
                 String eid = Integer.toString(m.getEid());
-                setvid(eid);
-                System.out.println("getEid = " + eid);
+                String vid= Integer.toString(m.getVid());
+                setvid(vid);
+                System.out.println("getEid, getVid = " + eid+" , "+vid);
                 Intent intent = new Intent();
                 intent.putExtra("eid", eid);
                 intent.setClass(HistoryList.this, HistoryPage.class);
@@ -72,7 +73,7 @@ public class HistoryList extends  AppCompatActivity {
         try {
             SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/com.example.kenneth.hiit/hiitDB", null, SQLiteDatabase.OPEN_READWRITE); //open DB file
             Cursor cursor = db.rawQuery("select e.*, v.vname as vvname from exlist as e join videolist as v on e.vid=v.vid;", null);
-
+            System.out.println("in HistoryList setupData cursor count = "+cursor.getCount());
             while (cursor.moveToNext()) {
                 historys.add(new History(
                         cursor.getInt(cursor.getColumnIndex("elid")),
@@ -92,14 +93,14 @@ public class HistoryList extends  AppCompatActivity {
         }
     }
 
-    public void setvid(String eid) {
-        String thiseid = eid;
+    public void setvid(String vid) {
+        String thisvid = vid;
 
         try {
             SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/com.example.kenneth.hiit/hiitDB", null, SQLiteDatabase.OPEN_READWRITE); //open DB file
-            System.out.println("INSIDE HISTORYLIST INSERT INTO noex VALUES (" + thiseid + ");");
+            System.out.println("INSIDE HISTORYLIST INSERT INTO noex VALUES (" + thisvid + ");");
             db.execSQL("DELETE FROM noex");
-            db.execSQL("INSERT INTO noex VALUES (" + thiseid + ");");
+            db.execSQL("INSERT INTO noex VALUES (" + thisvid + ");");
         } catch (SQLiteException e) {
             e.printStackTrace();
         }

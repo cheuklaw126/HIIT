@@ -65,10 +65,13 @@ public class MainActivity extends AppCompatActivity
             db.execSQL("DROP TABLE if exists exlist;");
             db.execSQL("DROP TABLE if exists noex;");
             db.execSQL("DROP TABLE if exists novideo;");
+            db.execSQL("DROP TABLE if exists allvideo;");
+
             db.execSQL("CREATE TABLE IF NOT EXISTS videolist(vid int PRIMARY KEY , vname text, vlink text,vdesc text);");    //Create tables
             db.execSQL("CREATE TABLE IF NOT EXISTS exlist(elid INTEGER PRIMARY KEY AUTOINCREMENT, uid int, vid int, lastD text, lastT text, cc text, hr text, eg text, com text);");
             db.execSQL("CREATE TABLE IF NOT EXISTS noex(getvid int);");
             db.execSQL("CREATE TABLE IF NOT EXISTS novideo(totalvideo int);");
+            db.execSQL("CREATE TABLE IF NOT EXISTS allvideo(vid int PRIMARY KEY , vname text,vlevel text,vlength text, description text, createBy text, createDate text, vlink text);");
             db.close();
 
         }catch (SQLException e){
@@ -279,6 +282,10 @@ try {
             System.out.println(" in intent nav_slideshow");
             intent.setClass(MainActivity.this, VideoAllList.class);
             break;
+        case R.id.nav_manage:
+            System.out.println("in intent nav_manage");
+            intent.setClass(MainActivity.this, AnalysisPage.class);
+            break;
         default:
             break;
     }
@@ -327,10 +334,15 @@ try {
         vdo.start();
     }
 
+    public void setAllVideo(){
+
+    }
+
     public void GetExerciseHistory(int uid){
         int vid,getvid;
-        int compEx;
+        int compEx,compEx1;
         String lastD, lastT, cc, hr, eg, com;
+        String allvid, allvname, allvlevel, allvlength, alldescription, allcreateby, allcreatedate, alllink;
         String query = String.format("select * from exeriseHistory where uID =%s ",uid);
         String query1 = String.format("select * from movie");
         final ArrayList<String> querys = new ArrayList<String>();
@@ -338,6 +350,7 @@ try {
         querys.add(query);
         querys1.add(query1);
         compEx=0;
+        compEx1=0;
         SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/com.example.kenneth.hiit/hiitDB", null, SQLiteDatabase.OPEN_READWRITE); //open DB file
 
 
@@ -355,7 +368,26 @@ try {
             db.execSQL("DELETE FROM videoList");
             db.execSQL("DELETE FROM noex");
             db.execSQL("DELETE FROM novideo");
+            db.execSQL("DELETE FROM allvideo");
             db.execSQL("DELETE FROM SQLITE_SEQUENCE WHERE NAME = 'exlist'");
+            if (jsonArray1.length() >0) {
+                compEx1=jsonArray1.length();
+                System.out.println("in mainActivity compEX1 = "+compEx1);
+                for(int j=0; j<compEx1; j++) {
+                    JSONObject eh1 = jsonArray1.getJSONObject(j);
+                    allvid=eh1.getString("vid");
+                    allvname=eh1.getString("vname");
+                    allvlevel=eh1.getString("vlevel");
+                    allvlength=eh1.getString("vlength");
+                    alldescription=eh1.getString("description");
+                    allcreateby=eh1.getString("createBy");
+                    allcreatedate=eh1.getString("createDate");
+                    alllink=eh1.getString("link");
+                    System.out.println("in mainactivity insert allvideo INSERT INTO allvideo VALUES ("+allvid+", '"+allvname+"', '"+allvlevel+"', '"+allvlength+"', '"+alldescription+"', '"+allcreateby+"', '"+allcreatedate+"', '"+alllink+"'); ");
+                    db.execSQL("INSERT INTO allvideo VALUES ("+allvid+", '"+allvname+"', '"+allvlevel+"', '"+allvlength+"', '"+alldescription+"', '"+allcreateby+"', '"+allcreatedate+"', '"+alllink+"');");
+
+                }
+            }
             if (jsonArray.length() > 0) {
                 compEx=jsonArray.length();
                 System.out.println("in mainActivity compEX = "+compEx);

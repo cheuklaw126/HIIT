@@ -41,6 +41,7 @@ public class VideoListAdapter extends BaseAdapter implements YouTubeThumbnailVie
     public VideoListAdapter(final Context context) {
         mContext = context;
         mLoaders = new HashMap<>();
+
     }
 
     @Override
@@ -66,8 +67,10 @@ public class VideoListAdapter extends BaseAdapter implements YouTubeThumbnailVie
         //The item at the current position
         final YouTubeContent.YouTubeVideo item = YouTubeContent.ITEMS.get(position);
 
-        //if (convertView == null) {
+        if (convertView==null) {
         //Create the row
+            System.out.println("convertview null = "+convertView);
+            System.out.println("convertView nulll");
         final LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView = inflater.inflate(R.layout.row_layout, parent, false);
 
@@ -84,11 +87,26 @@ public class VideoListAdapter extends BaseAdapter implements YouTubeThumbnailVie
         holder.thumb.initialize(mContext.getString(R.string.DEVELOPER_KEY), this);
 
         convertView.setTag(holder);
-        //} else {
+        } else {
         //Create it again
-        //holder = (VideoHolder) convertView.getTag();
-        //final YouTubeThumbnailLoader loader = mLoaders.get(holder.thumb);
 
+            System.out.println("convertView not nulll");
+        //holder = (VideoHolder) convertView.getTag();
+            final LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.row_layout, parent, false);
+        holder= new VideoHolder();
+           System.out.println("convertview = "+convertView);
+            mLoaders.remove(holder.thumb);
+            mLoaders.remove(holder.title);
+            final YouTubeThumbnailLoader loader = mLoaders.get(holder.thumb);
+            holder.title = (TextView) convertView.findViewById(R.id.textView_title);
+            holder.title.setText(item.title);
+
+            //Initialise the thumbnail
+            holder.thumb = (YouTubeThumbnailView) convertView.findViewById(R.id.imageView_thumbnail);
+            holder.thumb.setTag(item.id);
+            holder.thumb.initialize(mContext.getString(R.string.DEVELOPER_KEY), this);
+            convertView.setTag(holder);
         // if (item != null) {
         //Set the title
         //holder.title.setText(item.title);
@@ -99,13 +117,13 @@ public class VideoListAdapter extends BaseAdapter implements YouTubeThumbnailVie
         //but preferable to flickering images.
         //holder.thumb.setImageBitmap(null);
 
-        // if (loader == null) {
+         //if (loader == null) {
         //Loader is currently initialising
-        // holder.thumb.setTag(item.id);
-        // } else {
+         //holder.thumb.setTag(item.id);
+        //} else {
         //The loader is already initialised
         //Note that it's possible to get a DeadObjectException here
-        // try {
+         //try {
         //loader.setVideo(item.id);
         //} catch (IllegalStateException exception) {
         //If the Loader has been released then remove it from the map and re-init
@@ -113,7 +131,7 @@ public class VideoListAdapter extends BaseAdapter implements YouTubeThumbnailVie
         //holder.thumb.initialize(mContext.getString(R.string.DEVELOPER_KEY), this);
 
         //}
-        //}
+        }
 
         //}
         //}
@@ -123,12 +141,17 @@ public class VideoListAdapter extends BaseAdapter implements YouTubeThumbnailVie
 
     @Override
     public void onInitializationSuccess(YouTubeThumbnailView view, YouTubeThumbnailLoader loader) {
+        System.out.println("inside oninitializationsuccess");
+        if(loader.hasPrevious()){
+            System.out.println("youtubethumbnailloader hasprevious");
+        loader.release();}
         mLoaders.put(view, loader);
         loader.setVideo((String) view.getTag());
     }
 
     @Override
     public void onInitializationFailure(YouTubeThumbnailView thumbnailView, YouTubeInitializationResult errorReason) {
+        System.out.println("inside oninitializationfailure");
         final String errorMessage = errorReason.toString();
         Toast.makeText(mContext, errorMessage, Toast.LENGTH_LONG).show();
     }

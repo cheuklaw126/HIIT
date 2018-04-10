@@ -41,6 +41,11 @@
         <activity android:name=".HistoryPage" />
         <activity android:name=".HistoryList" />
         <activity android:name=".VideoAllList" />
+        <activity android:name=".AnalysisPage" />
+        <activity android:name=".GainIndex" />
+        <activity android:name=".TotalTime" />
+        <activity android:name=".HeartRate" />
+        <activity android:name=".CaloriesBurn" />
     </application>
 
 </manifest>
