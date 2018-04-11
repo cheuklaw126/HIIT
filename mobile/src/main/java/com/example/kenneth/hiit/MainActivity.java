@@ -43,7 +43,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     TextView ac, lastname;
-    IOObject io,io1;
+    IOObject io;
     Global global;
     VideoView vdo;
     private static int IMG_RESULT = 1;
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity
 
 
         db = SQLiteDatabase.openDatabase("/data/data/com.example.kenneth.hiit/hiitDB", null, SQLiteDatabase.CREATE_IF_NECESSARY); //Create DB file
-        try{
+        try {
             db.execSQL("DROP TABLE if exists videolist;");
             db.execSQL("DROP TABLE if exists exlist;");
             db.execSQL("DROP TABLE if exists noex;");
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity
             db.execSQL("CREATE TABLE IF NOT EXISTS allvideo(vid int PRIMARY KEY , vname text,vlevel text,vlength text, description text, createBy text, createDate text, vlink text);");
             db.close();
 
-        }catch (SQLException e){
+        } catch (SQLException e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
         setContentView(R.layout.activity_main);
@@ -119,6 +119,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onDestroy() {
+        this.global.client.Send("/logout");
+super.onDestroy();
+    }
+
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -127,6 +133,7 @@ public class MainActivity extends AppCompatActivity
             // super.onBackPressed();
         }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -198,9 +205,6 @@ public class MainActivity extends AppCompatActivity
                         }
 
 
-
-
-
                         io.CreateUser = global.UserName;
                         io.Start();
 
@@ -240,8 +244,10 @@ public class MainActivity extends AppCompatActivity
         }
         if (id == R.id.logout) {
             global.client.Send("/logout");
-            global = null;
+
             MainActivity.this.finish();
+          //  global = null;
+
             return true;
         }
 
@@ -290,8 +296,6 @@ public class MainActivity extends AppCompatActivity
 } catch (Exception e) {
     e.printStackTrace();
 }
-
-
 
 
 //        try {
