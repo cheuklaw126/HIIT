@@ -46,6 +46,7 @@
         <activity android:name=".TotalTime" />
         <activity android:name=".HeartRate" />
         <activity android:name=".CaloriesBurn" />
+        <activity android:name=".PartyActivity"></activity>
     </application>
 
 </manifest>

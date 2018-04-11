@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity
 
 
     public void hideSoftKeyboard() {
-        if(getCurrentFocus()!=null) {
+        if (getCurrentFocus() != null) {
             InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
@@ -163,42 +163,39 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode== Activity.RESULT_OK)
-        {
+        if (resultCode == Activity.RESULT_OK) {
 
             /**
              * 当选择的图片不为空的话，在获取到图片的途径
              */
             Uri uri = data.getData();
-            Log.e("uploadImage", "uri = "+ uri);
+            Log.e("uploadImage", "uri = " + uri);
             try {
                 String[] pojo = {MediaStore.Images.Media.DATA};
 
                 CursorLoader cursorLoader = new CursorLoader(this, uri, null, null, null, null);
-                Cursor  cursor = cursorLoader.loadInBackground();
-                if(cursor!=null)
-                {
+                Cursor cursor = cursorLoader.loadInBackground();
+                if (cursor != null) {
                     ContentResolver cr = this.getContentResolver();
                     int colunm_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
                     cursor.moveToFirst();
                     String path = cursor.getString(colunm_index);
-                                if(path.endsWith("jpg")||path.endsWith("png"))
-                    {
+                    if (path.endsWith("jpg") || path.endsWith("png")) {
                         picPath = path;
                         Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
                         File file = new File(picPath);
 
                         byte[] fileByte = global.loadFile(file);
-                     String enc64 =  android.util.Base64.encodeToString(fileByte, android.util.Base64.DEFAULT);
+                        String enc64 = android.util.Base64.encodeToString(fileByte, android.util.Base64.DEFAULT);
                         FileInputStream fileInputStream = new FileInputStream(file);
-                        io = new IOObject("obj",  new ArrayList<String>());
+                        io = new IOObject("obj", new ArrayList<String>());
                         io.obj = enc64;
-if(path.endsWith("jpg")){
+                        if (path.endsWith("jpg")) {
 
-    io.FileType="jpg";
-}else{
-    io.FileType="png";
-}
+                            io.FileType = "jpg";
+                        } else {
+                            io.FileType = "png";
+                        }
 
 
 
@@ -208,13 +205,13 @@ if(path.endsWith("jpg")){
                         io.Start();
 
 
-                       // imageView.setImageBitmap(bitmap);
-                    }else{
+                        // imageView.setImageBitmap(bitmap);
+                    } else {
 
                         //??
 
                     }
-                }else{
+                } else {
 
                     ///???
 
@@ -242,7 +239,7 @@ if(path.endsWith("jpg")){
             return true;
         }
         if (id == R.id.logout) {
-
+            global.client.Send("/logout");
             global = null;
             MainActivity.this.finish();
             return true;
@@ -256,20 +253,20 @@ if(path.endsWith("jpg")){
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-try {
-    int id = item.getItemId();
+        try {
+            int id = item.getItemId();
 
-    Fragment fragment = null;
-    Class currentClass;
+            Fragment fragment = null;
+            Class currentClass;
       /* View fd  = (View)findViewById(R.id.frd);
         View indexView  = (View)findViewById(R.id.index);
         fd.setVisibility(View.INVISIBLE);
        indexView.setVisibility(View.INVISIBLE);*/
 
-    Intent intent = new Intent();
+            Intent intent = new Intent();
 
 
-    switch (id) {
+            switch (id) {
 
         case R.id.frd:
             //intent.putExtra("global", global);
@@ -293,6 +290,7 @@ try {
 } catch (Exception e) {
     e.printStackTrace();
 }
+
 
 
 
