@@ -164,10 +164,6 @@ super.onDestroy();
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
-
-            /**
-             * 当选择的图片不为空的话，在获取到图片的途径
-             */
             Uri uri = data.getData();
             Log.e("uploadImage", "uri = " + uri);
             try {

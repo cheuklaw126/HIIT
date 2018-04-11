@@ -41,28 +41,30 @@ public class Global extends Application implements Serializable {
     public static String vn, link, desc;
     public static Context contextOfApplication;
     public Client client;
-    public Party  CurrentParty;
+    public Party CurrentParty;
     public Thread SocketListener;
 
     IOObject io;
     ArrayList<JSONObject> fdList, fdRequestList, nearlyByList;
 
-    public void Reset(){
-       this.UserName=null;
-        this.pw=null;
-        this.FirstName=null;
-        this.LastName=null;
-        this.src=null;
-       this.Uid=0;
-        this.vid=0;
-        this.compEx=0;
-       this.lastD=null;
-        this.lastT=null;
-        this.cc=null;
-        this.hr=null;this.eg=null;this.com=null;
-       this.client=null;
-       this.CurrentParty=null;
-       this.SocketListener =null;
+    public void Reset() {
+        this.UserName = null;
+        this.pw = null;
+        this.FirstName = null;
+        this.LastName = null;
+        this.src = null;
+        this.Uid = 0;
+        this.vid = 0;
+        this.compEx = 0;
+        this.lastD = null;
+        this.lastT = null;
+        this.cc = null;
+        this.hr = null;
+        this.eg = null;
+        this.com = null;
+        this.client = null;
+        this.CurrentParty = null;
+        this.SocketListener = null;
     }
 
     public Global() {
@@ -71,9 +73,10 @@ public class Global extends Application implements Serializable {
     public String LastLoginTIme;
 
 
-    public String GetUname(){
+    public String GetUname() {
         return this.UserName;
     }
+
     public void SetImage(ImageView bmImage, String url) {
         new DownloadImageTask(bmImage).execute(url);
     }
@@ -163,50 +166,8 @@ public class Global extends Application implements Serializable {
                 this.pw = data.getString("password");
                 this.src = data.getString("src");
                 this.client = new Client(this.UserName);
-
-
-                this.SocketListener = new Thread(this.client) {
-                    @Override
-                    public void run() {
-                        while (true) {
-                            String msg = client.Listener();
-                            String[] pair = msg.split("/");
-                            String Action="",Value="";
-                           try{
-                           //     Action = pair[0].toLowerCase();
-                                Action = pair[1];
-                                Value =pair[2];
-                            }
-                            catch (Exception ex){}
-                            System.out.println(msg);
-                            switch (Action){
-                                case "msg":
-                                    NoticeMsg(Value);
-                                    break;
-
-                            }
-
-
-                            if(Action.startsWith("kill")){
-                                if(!Action.equals("kill")){
-                                     if(Action.split("kill")[1].toLowerCase().equals(UserName.toLowerCase())){
-                                         NoticeMsg("You got server Kicked");
-                                        android.os.Process.killProcess(android.os.Process.myPid());
-                                        this.interrupt();
-                                    }
-                                }else{
-                                    NoticeMsg("You got server Kicked");
-                                    android.os.Process.killProcess(android.os.Process.myPid());
-                                    this.interrupt();
-                                }
-                            }
-                        }
-                    }
-
-                };
+                this.SocketListener = new serverListener(this.client);
                 this.SocketListener.start();
-
-
                 return true;
             }
         } catch (Exception ex) {
@@ -214,48 +175,110 @@ public class Global extends Application implements Serializable {
         }
         return false;
     }
+public void SendPartyReady(){
 
-    public void CreateParty(String roomName,String url){
-        CurrentParty = new Party(roomName,this.UserName,url);
+}
+
+    public class serverListener extends Thread {
+        Client client;
+
+        public serverListener(Client client) {
+            this.client = client;
+        }
+
+        @Override
+        public void run() {
+            while (true) {
+                String msg = client.Listener();
+                String[] pair = msg.split("/");
+                String Action = "", Value = "";
+                try {
+                    //     Action = pair[0].toLowerCase();
+                    Action = pair[1];
+                    Value = pair[2];
+                } catch (Exception ex) {
+                }
+                System.out.println(msg);
+                switch (Action) {
+                    case "msg":
+                        NoticeMsg(Value);
+                        break;
+
+                    case "updatePty":
+                        Gson tmpGson = new Gson();
+                        Party tmpPty = tmpGson.fromJson(Value, Party.class);
+                        if (CurrentParty != null) {
+                            if (CurrentParty.RoomName == tmpPty.RoomName
+                                    && CurrentParty.HostUname == tmpPty.HostUname) {
+                                CurrentParty.MemberList = (ArrayList<Party.PartyUser>) tmpPty.MemberList.clone();
+                            }
+                        }
+                        break;
+                    case "startPty":
+
+
+
+                        break;
+
+                }
+                if (Action.startsWith("kill")) {
+                    if (!Action.equals("kill")) {
+                        if (Action.split("kill")[1].toLowerCase().equals(UserName.toLowerCase())) {
+                            NoticeMsg("You got server Kicked");
+                            android.os.Process.killProcess(android.os.Process.myPid());
+                            this.interrupt();
+                        }
+                    } else {
+                        NoticeMsg("You got server Kicked");
+                        android.os.Process.killProcess(android.os.Process.myPid());
+                        this.interrupt();
+                    }
+                }
+            }
+        }
+    }
+
+
+    public void CreateParty(String roomName, String url) {
+        CurrentParty = new Party(roomName, this.UserName, url);
         Gson gson = new Gson();
-String jsonString = gson.toJson(CurrentParty);
+        String jsonString = gson.toJson(CurrentParty);
 
 //this.client.Send("0123456789");
-this.client.Send("/cp/"+jsonString);
+        this.client.Send("/cp/" + jsonString);
 
     }
 
 
-    public void NoticeMsg(String msg){
+    public void NoticeMsg(String msg) {
 
         int notificationId = 0x1234;
-       Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
         Notification notification = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
 
 
-            NotificationChannel channel = new NotificationChannel("1","Channel1", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel channel = new NotificationChannel("1", "Channel1", NotificationManager.IMPORTANCE_DEFAULT);
             channel.enableLights(true);
             channel.setLightColor(Color.GREEN);
             channel.setShowBadge(true);
             notificationManager.createNotificationChannel(channel);
 
-            Notification.Builder builder = new Notification.Builder(this,"1");
-           // builder.setSmallIcon(android.R.drawable.stat_notify_chat)
+            Notification.Builder builder = new Notification.Builder(this, "1");
+            // builder.setSmallIcon(android.R.drawable.stat_notify_chat)
             builder.setSmallIcon(android.R.drawable.stat_notify_chat)
                     .setContentTitle("HIIT")
                     .setContentText(msg)
                     .setNumber(99);
-           // notification = new Notification.Builder(getApplicationContext()).setSmallIcon(R.drawable.icon).setContentTitle("").setContentText("").setSound(soundUri).setChannelId("1").build();
+            // notification = new Notification.Builder(getApplicationContext()).setSmallIcon(R.drawable.icon).setContentTitle("").setContentText("").setSound(soundUri).setChannelId("1").build();
 
             notificationManager.notify(notificationId, builder.build());
 
-        }
-        else{
+        } else {
             //notification = new Notification.Builder(getApplicationContext()).setSmallIcon(R.drawable.icon).setContentTitle("HIIT").setContentText(msg).setSound(soundUri).build();
             notification = new Notification.Builder(getApplicationContext()).setSmallIcon(android.R.drawable.stat_notify_chat).setContentTitle("HIIT").setContentText(msg).setSound(soundUri).build();
-            notificationManager.notify(notificationId,notification);
+            notificationManager.notify(notificationId, notification);
         }
     }
 

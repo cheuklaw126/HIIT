@@ -22,15 +22,11 @@
             android:id="@+id/joinParty"
             android:icon="@drawable/ic_menu_camera"
             android:title="Join Party" />
-        <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
 
         <item
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Video" />
+            android:title="MyVideo" />
         <item
         android:id="@+id/nav_manage"
         android:icon="@drawable/ic_menu_manage"
@@ -43,6 +39,10 @@
                 android:id="@+id/frd"
                 android:icon="@drawable/ic_menu_share"
                 android:title="Friends" />
+            <item
+                android:id="@+id/ChatRoom"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Chat Room" />
 
         </menu>
     </item>
