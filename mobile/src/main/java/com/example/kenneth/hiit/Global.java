@@ -16,7 +16,6 @@ import android.os.AsyncTask;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -234,13 +233,17 @@ public void SendPartyReady(){
                         if (Action.split("kill")[1].toLowerCase().equals(UserName.toLowerCase())) {
                             NoticeMsg("You got server Kicked");
                             android.os.Process.killProcess(android.os.Process.myPid());
-                            this.interrupt();
+                         //   this.interrupt();
+                            System.exit(0);
+                            System.exit(0);
                             System.exit(0);
                         }
                     } else {
                         NoticeMsg("You got server Kicked");
                         android.os.Process.killProcess(android.os.Process.myPid());
                         this.interrupt();
+                        System.exit(0);
+                        System.exit(0);
                         System.exit(0);
                     }
                 }
@@ -249,23 +252,32 @@ public void SendPartyReady(){
     }
 
     public void PlayVideo() {
-        new CountDownTimer(5000,1000) {
-            int count =5;
-            @Override
-            public void onTick(long millisUntilFinished) {
-                client.Send("test:"+millisUntilFinished);
-                Toast.makeText(getApplicationContext(), "Ready Start :" +(count-(millisUntilFinished/1000)) +"sec left ", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(currentContext,IndexActivity.class);
+        startActivity(intent);
+
+           CountDownTimer cc   =  new CountDownTimer(5000,1000) {
+                    int count =5;
+
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                        client.Send("test:"+millisUntilFinished);
+                      //  Toast.makeText(getApplicationContext(), "Ready Start :" +(count-(millisUntilFinished/1000)) +"sec left ", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        Intent intent = new Intent(currentContext,IndexActivity.class);
+                        startActivity(intent);
+
+                    }
+                };
+try{
+    cc.start();
+}catch(Exception ex){
+    client.Send("test: fail"+ ex);
+}
+
             }
-
-            @Override
-            public void onFinish() {
-                Intent intent = new Intent(currentContext,IndexActivity.class);
-                startActivity(intent);
-
-            }
-        }.start();
-
-    }
 
 
 

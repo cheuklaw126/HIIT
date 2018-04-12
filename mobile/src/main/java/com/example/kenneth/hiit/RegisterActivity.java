@@ -1,10 +1,9 @@
 package com.example.kenneth.hiit;
 
 import android.app.AlertDialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,12 +12,9 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.Date;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
@@ -82,7 +78,7 @@ String query =String.format("INSERT INTO [dbo].[pData] ([uname],[firstName],[las
 IOObject io = new IOObject("ExecuteNonQuery",querys);
 io.Start();
                         JSONObject jsonObject= io.getReturnObject();
-                     int effectRows=   jsonObject.getInt("EffectRows");
+                     int effectRows=   jsonObject.getInt("effectRows");
 
                         if(effectRows==1){
                             AlertDialog ad = new AlertDialog.Builder(RegisterActivity.this).create();
