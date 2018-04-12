@@ -3,6 +3,7 @@ package com.example.kenneth.hiit;
 
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.database.Cursor;
@@ -93,7 +94,6 @@ public class MainActivity extends AppCompatActivity
         GetExerciseHistory(global.Uid);
 
 
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         this.global.client.Send("/logout");
-super.onDestroy();
+        super.onDestroy();
     }
 
     @Override
@@ -172,9 +172,7 @@ super.onDestroy();
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
 
-            /**
-             * 当选择的图片不为空的话，在获取到图片的途径
-             */
+
             Uri uri = data.getData();
             Log.e("uploadImage", "uri = " + uri);
             try {
@@ -246,7 +244,7 @@ super.onDestroy();
             global.client.Send("/logout");
 
             MainActivity.this.finish();
-          //  global = null;
+            //  global = null;
 
             return true;
         }
@@ -273,29 +271,31 @@ super.onDestroy();
 
 
             switch (id) {
-
-        case R.id.frd:
-            //intent.putExtra("global", global);
-            intent.setClass(MainActivity.this, frdActivity.class);
-            break;
-        case R.id.nav_gallery:
-          intent.setClass(MainActivity.this, HistoryList.class);
-            break;
-        case R.id.nav_slideshow:
-            System.out.println(" in intent nav_slideshow");
-            intent.setClass(MainActivity.this, VideoAllList.class);
-            break;
-        case R.id.nav_manage:
-            System.out.println("in intent nav_manage");
-            intent.setClass(MainActivity.this, AnalysisPage.class);
-            break;
-        default:
-            break;
-    }
-    startActivity(intent);
-} catch (Exception e) {
-    e.printStackTrace();
-}
+                case R.id.createParty:
+                    intent.setClass(MainActivity.this, CreatePartyActivity.class);
+                    break;
+                case R.id.frd:
+                    //intent.putExtra("global", global);
+                    intent.setClass(MainActivity.this, frdActivity.class);
+                    break;
+                case R.id.nav_gallery:
+                    intent.setClass(MainActivity.this, HistoryList.class);
+                    break;
+                case R.id.nav_slideshow:
+                    System.out.println(" in intent nav_slideshow");
+                    intent.setClass(MainActivity.this, VideoAllList.class);
+                    break;
+                case R.id.nav_manage:
+                    System.out.println("in intent nav_manage");
+                    intent.setClass(MainActivity.this, AnalysisPage.class);
+                    break;
+                default:
+                    break;
+            }
+            startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
 //        try {
@@ -334,71 +334,72 @@ super.onDestroy();
     protected void onResume() {
         super.onResume();
         vdo.start();
-    }
-
-    public void setAllVideo(){
 
     }
 
-    public void GetExerciseHistory(int uid){
-        int vid,getvid;
-        int compEx,compEx1;
+    public void setAllVideo() {
+
+    }
+
+    public void GetExerciseHistory(int uid) {
+        int vid, getvid;
+        int compEx, compEx1;
         String lastD, lastT, cc, hr, eg, com;
         String allvid, allvname, allvlevel, allvlength, alldescription, allcreateby, allcreatedate, alllink;
-        String query = String.format("select * from exeriseHistory where uID =%s ",uid);
+        String query = String.format("select * from exeriseHistory where uID =%s ", uid);
         String query1 = String.format("select * from movie");
         final ArrayList<String> querys = new ArrayList<String>();
         final ArrayList<String> querys1 = new ArrayList<String>();
         querys.add(query);
         querys1.add(query1);
-        compEx=0;
-        compEx1=0;
+        compEx = 0;
+        compEx1 = 0;
         SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/com.example.kenneth.hiit/hiitDB", null, SQLiteDatabase.OPEN_READWRITE); //open DB file
 
 
         try {
             io = new IOObject("ExecuteReader", querys);
-            io1= new IOObject("ExecuteReader", querys1);
+            IOObject io1 = new IOObject("ExecuteReader", querys1);
             io.Start();
             io1.Start();
             JSONObject jobj = io.getReturnObject();
             JSONObject jobj1 = io1.getReturnObject();
             JSONArray jsonArray = io.getReturnObject().getJSONArray("data");
             JSONArray jsonArray1 = io1.getReturnObject().getJSONArray("data");
-            System.out.println("jsonArray = "+jsonArray.length()+" jsonArray1 =  "+jsonArray1);
+            System.out.println("jsonArray = " + jsonArray.length() + " jsonArray1 =  " + jsonArray1);
             db.execSQL("DELETE FROM exlist");
             db.execSQL("DELETE FROM videoList");
             db.execSQL("DELETE FROM noex");
             db.execSQL("DELETE FROM novideo");
             db.execSQL("DELETE FROM allvideo");
             db.execSQL("DELETE FROM SQLITE_SEQUENCE WHERE NAME = 'exlist'");
-            if (jsonArray1.length() >0) {
-                compEx1=jsonArray1.length();
-                System.out.println("in mainActivity compEX1 = "+compEx1);
-                for(int j=0; j<compEx1; j++) {
+            if (jsonArray1.length() > 0) {
+                compEx1 = jsonArray1.length();
+                System.out.println("in mainActivity compEX1 = " + compEx1);
+                for (int j = 0; j < compEx1; j++) {
                     JSONObject eh1 = jsonArray1.getJSONObject(j);
-                    allvid=eh1.getString("vid");
-                    allvname=eh1.getString("vname");
-                    allvlevel=eh1.getString("vlevel");
-                    allvlength=eh1.getString("vlength");
-                    alldescription=eh1.getString("description");
-                    allcreateby=eh1.getString("createBy");
-                    allcreatedate=eh1.getString("createDate");
-                    alllink=eh1.getString("link");
-                    System.out.println("in mainactivity insert allvideo INSERT INTO allvideo VALUES ("+allvid+", '"+allvname+"', '"+allvlevel+"', '"+allvlength+"', '"+alldescription+"', '"+allcreateby+"', '"+allcreatedate+"', '"+alllink+"'); ");
-                    db.execSQL("INSERT INTO allvideo VALUES ("+allvid+", '"+allvname+"', '"+allvlevel+"', '"+allvlength+"', '"+alldescription+"', '"+allcreateby+"', '"+allcreatedate+"', '"+alllink+"');");
+                    allvid = eh1.getString("vid");
+                    allvname = eh1.getString("vname");
+                    allvlevel = eh1.getString("vlevel");
+                    allvlength = eh1.getString("vlength");
+                    alldescription = eh1.getString("description");
+                    allcreateby = eh1.getString("createBy");
+                    allcreatedate = eh1.getString("createDate");
+                    alllink = eh1.getString("link");
+                    System.out.println("in mainactivity insert allvideo INSERT INTO allvideo VALUES (" + allvid + ", '" + allvname + "', '" + allvlevel + "', '" + allvlength + "', '" + alldescription + "', '" + allcreateby + "', '" + allcreatedate + "', '" + alllink + "'); ");
+                    db.execSQL("INSERT INTO allvideo VALUES (" + allvid + ", '" + allvname + "', '" + allvlevel + "', '" + allvlength + "', '" + alldescription + "', '" + allcreateby + "', '" + allcreatedate + "', '" + alllink + "');");
 
                 }
             }
             if (jsonArray.length() > 0) {
-                compEx=jsonArray.length();
-                System.out.println("in mainActivity compEX = "+compEx);
-                JSONObject gvid=jsonArray.getJSONObject(compEx-1);
-                getvid= gvid.getInt("vid");
+                compEx = jsonArray.length();
+                System.out.println("in mainActivity compEX = " + compEx);
+                JSONObject gvid = jsonArray.getJSONObject(compEx - 1);
+                getvid = gvid.getInt("vid");
                 //System.out.println("INSERT INTO noex VALUES ("+compEx+", "+getvid+");");
                 //db.execSQL("INSERT INTO noex VALUES ("+compEx+", "+getvid+");");
-                System.out.println("compEx = "+compEx);
-                for(int i=0; i<compEx; i++) {
+                System.out.println("compEx = " + compEx);
+                for (int i = 0; i < compEx; i++) {
                     JSONObject eh = jsonArray.getJSONObject(i);
                     lastD = eh.getString("createDate");
                     lastT = eh.getString("totTime");
@@ -407,54 +408,54 @@ super.onDestroy();
                     eg = eh.getString("exGain");
                     com = eh.getString("isComplete");
                     vid = eh.getInt("vid");
-                    String query111=("INSERT INTO exlist (uid, vid, lastD, lastT, cc, hr, eg, com) VALUES ("+uid+ ", "+vid+", '"+lastD+"', '"+lastT+"', '"+cc+"', '"+hr+"', '"+eg+"', '"+com+"');");
-                    System.out.println("query111 = "+query111);
+                    String query111 = ("INSERT INTO exlist (uid, vid, lastD, lastT, cc, hr, eg, com) VALUES (" + uid + ", " + vid + ", '" + lastD + "', '" + lastT + "', '" + cc + "', '" + hr + "', '" + eg + "', '" + com + "');");
+                    System.out.println("query111 = " + query111);
 
-                    db.execSQL("INSERT INTO exlist (uid, vid, lastD, lastT, cc, hr, eg, com) VALUES ("+uid+ ", "+vid+", '"+lastD+"', '"+lastT+"', '"+cc+"', '"+hr+"', '"+eg+"', '"+com+"');");
-                    System.out.println("compEx = "+compEx);
+                    db.execSQL("INSERT INTO exlist (uid, vid, lastD, lastT, cc, hr, eg, com) VALUES (" + uid + ", " + vid + ", '" + lastD + "', '" + lastT + "', '" + cc + "', '" + hr + "', '" + eg + "', '" + com + "');");
+                    System.out.println("compEx = " + compEx);
                     GetVideo(vid);
                 }
-            }else{
-                compEx=0;
+            } else {
+                compEx = 0;
             }
-            System.out.println("inside mainactivity INSERT INTO novideo VALUES ("+jsonArray1.length()+");");
-            db.execSQL("INSERT INTO novideo VALUES ("+jsonArray1.length()+");");
-        }
-        catch (Exception ex){
+            System.out.println("inside mainactivity INSERT INTO novideo VALUES (" + jsonArray1.length() + ");");
+            db.execSQL("INSERT INTO novideo VALUES (" + jsonArray1.length() + ");");
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
-    public void GetVideo(int vid){
-        String vn,link,desc;
-        int videoid=vid;
-        int allvideo=0;
+
+    public void GetVideo(int vid) {
+        String vn, link, desc;
+        int videoid = vid;
+        int allvideo = 0;
         SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/com.example.kenneth.hiit/hiitDB", null, SQLiteDatabase.OPEN_READWRITE); //open DB file
 
-        String queryV = String.format("select * from movie where vid =%s ",videoid);
-        System.out.println("queryV = "+queryV);
+        String queryV = String.format("select * from movie where vid =%s ", videoid);
+        System.out.println("queryV = " + queryV);
         final ArrayList<String> queryvs = new ArrayList<String>();
         queryvs.add(queryV);
-        try{
+        try {
             io = new IOObject("ExecuteReader", queryvs);
             io.Start();
             JSONObject vjobj = io.getReturnObject();
-            JSONArray vjsonArray =io.getReturnObject().getJSONArray("data");
+            JSONArray vjsonArray = io.getReturnObject().getJSONArray("data");
 
-            System.out.println(" getvideo allvideo = "+allvideo);
+            System.out.println(" getvideo allvideo = " + allvideo);
             if (vjsonArray.length() > 0) {
-                allvideo=vjsonArray.length();
+                allvideo = vjsonArray.length();
             }
-            System.out.println(" getvideo allvideo = "+allvideo);
-            for(int i=0; i<allvideo; i++) {
-                JSONObject veh=vjsonArray.getJSONObject(i);
+            System.out.println(" getvideo allvideo = " + allvideo);
+            for (int i = 0; i < allvideo; i++) {
+                JSONObject veh = vjsonArray.getJSONObject(i);
 
                 vn = veh.getString("vname");
                 link = veh.getString("link");
-                desc= veh.getString("description");
-                System.out.println("INSERT INTO videolist VALUES ("+vid+" , '"+vn+"', '"+link+"', '"+desc+"');");
-                db.execSQL("INSERT INTO videolist VALUES ("+vid+" , '"+vn+"', '"+link+"', '"+desc+"');");
-            }}
-        catch (Exception ex){
+                desc = veh.getString("description");
+                System.out.println("INSERT INTO videolist VALUES (" + vid + " , '" + vn + "', '" + link + "', '" + desc + "');");
+                db.execSQL("INSERT INTO videolist VALUES (" + vid + " , '" + vn + "', '" + link + "', '" + desc + "');");
+            }
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }

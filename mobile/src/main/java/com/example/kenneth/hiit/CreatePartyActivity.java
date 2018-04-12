@@ -1,5 +1,6 @@
 package com.example.kenneth.hiit;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -23,6 +24,9 @@ Global global;
                 String URL = ((EditText)findViewById(R.id.editText2)).getText().toString();
 
               global.CreateParty(RoomNmae,URL);
+                Intent intent = new Intent(getApplicationContext(),PartyActivity.class);
+                startActivity(intent);
+              finish();
             }
         });
     }

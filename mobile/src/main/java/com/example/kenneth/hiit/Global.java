@@ -5,6 +5,7 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,8 +13,10 @@ import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -43,6 +46,7 @@ public class Global extends Application implements Serializable {
     public Client client;
     public Party CurrentParty;
     public Thread SocketListener;
+    public Context currentContext;
 
     IOObject io;
     ArrayList<JSONObject> fdList, fdRequestList, nearlyByList;
@@ -214,9 +218,13 @@ public void SendPartyReady(){
                             }
                         }
                         break;
-                    case "startPty":
+                    case "strPty":
 
-
+                        if(CurrentParty!=null){
+                            if(CurrentParty.HostUname.equals(Value)){
+                                PlayVideo();
+                            }
+                        }
 
                         break;
 
@@ -227,16 +235,38 @@ public void SendPartyReady(){
                             NoticeMsg("You got server Kicked");
                             android.os.Process.killProcess(android.os.Process.myPid());
                             this.interrupt();
+                            System.exit(0);
                         }
                     } else {
                         NoticeMsg("You got server Kicked");
                         android.os.Process.killProcess(android.os.Process.myPid());
                         this.interrupt();
+                        System.exit(0);
                     }
                 }
             }
         }
     }
+
+    public void PlayVideo() {
+        new CountDownTimer(5000,1000) {
+            int count =5;
+            @Override
+            public void onTick(long millisUntilFinished) {
+                client.Send("test:"+millisUntilFinished);
+                Toast.makeText(getApplicationContext(), "Ready Start :" +(count-(millisUntilFinished/1000)) +"sec left ", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFinish() {
+                Intent intent = new Intent(currentContext,IndexActivity.class);
+                startActivity(intent);
+
+            }
+        }.start();
+
+    }
+
 
 
     public void CreateParty(String roomName, String url) {
