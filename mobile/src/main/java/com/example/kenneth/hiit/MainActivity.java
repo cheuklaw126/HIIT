@@ -3,7 +3,6 @@ package com.example.kenneth.hiit;
 
 import android.app.Activity;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.database.Cursor;
@@ -154,7 +153,9 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-
+if(global.src.equals("")){
+    global.src = "http://cheuklaw126.mynetgear.com/share/img/default.png";
+}
         global.SetImage(pIcon, global.src);
 
         return true;

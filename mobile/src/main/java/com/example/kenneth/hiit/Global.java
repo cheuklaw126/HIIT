@@ -178,9 +178,10 @@ public class Global extends Application implements Serializable {
         }
         return false;
     }
-public void SendPartyReady(){
 
-}
+    public void SendPartyReady() {
+
+    }
 
     public class serverListener extends Thread {
         Client client;
@@ -219,8 +220,8 @@ public void SendPartyReady(){
                         break;
                     case "strPty":
 
-                        if(CurrentParty!=null){
-                            if(CurrentParty.HostUname.equals(Value)){
+                        if (CurrentParty != null) {
+                            if (CurrentParty.HostUname.equals(Value)) {
                                 PlayVideo();
                             }
                         }
@@ -233,7 +234,7 @@ public void SendPartyReady(){
                         if (Action.split("kill")[1].toLowerCase().equals(UserName.toLowerCase())) {
                             NoticeMsg("You got server Kicked");
                             android.os.Process.killProcess(android.os.Process.myPid());
-                         //   this.interrupt();
+                            //   this.interrupt();
                             System.exit(0);
                             System.exit(0);
                             System.exit(0);
@@ -252,33 +253,32 @@ public void SendPartyReady(){
     }
 
     public void PlayVideo() {
-        Intent intent = new Intent(currentContext,IndexActivity.class);
+        Intent intent = new Intent(currentContext, CameraActivity.class);
         startActivity(intent);
 
-           CountDownTimer cc   =  new CountDownTimer(5000,1000) {
-                    int count =5;
+        CountDownTimer cc = new CountDownTimer(5000, 1000) {
+            int count = 5;
 
-                    @Override
-                    public void onTick(long millisUntilFinished) {
-                        client.Send("test:"+millisUntilFinished);
-                      //  Toast.makeText(getApplicationContext(), "Ready Start :" +(count-(millisUntilFinished/1000)) +"sec left ", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        Intent intent = new Intent(currentContext,IndexActivity.class);
-                        startActivity(intent);
-
-                    }
-                };
-try{
-    cc.start();
-}catch(Exception ex){
-    client.Send("test: fail"+ ex);
-}
-
+            @Override
+            public void onTick(long millisUntilFinished) {
+                client.Send("test:" + millisUntilFinished);
+                //  Toast.makeText(getApplicationContext(), "Ready Start :" +(count-(millisUntilFinished/1000)) +"sec left ", Toast.LENGTH_SHORT).show();
             }
 
+            @Override
+            public void onFinish() {
+                Intent intent = new Intent(currentContext, IndexActivity.class);
+                startActivity(intent);
+
+            }
+        };
+        try {
+            cc.start();
+        } catch (Exception ex) {
+            client.Send("test: fail" + ex);
+        }
+
+    }
 
 
     public void CreateParty(String roomName, String url) {
