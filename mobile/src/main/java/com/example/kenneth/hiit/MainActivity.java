@@ -43,7 +43,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     TextView ac, lastname;
-    IOObject io;
+    IOObject io,io1;
     Global global;
     VideoView vdo;
     private static int IMG_RESULT = 1;
