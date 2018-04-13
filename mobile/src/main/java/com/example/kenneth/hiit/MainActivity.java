@@ -54,7 +54,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+        global = (Global) getApplicationContext();
 
         hideSoftKeyboard();
 
@@ -78,7 +80,6 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
         setContentView(R.layout.activity_main);
-        global = (Global) getApplicationContext();
 
         vdo = (VideoView) findViewById(R.id.videoView2);
         Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.bg2);
@@ -153,7 +154,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-if(global.src.equals("")){
+if(global.src.equals("null")||global.src.equals(null)||global.src.equals("")){
     global.src = "http://cheuklaw126.mynetgear.com/share/img/default.png";
 }
         global.SetImage(pIcon, global.src);
@@ -272,6 +273,10 @@ if(global.src.equals("")){
 
 
             switch (id) {
+
+                case R.id.ChatRoom:
+                    intent.setClass(MainActivity.this, ChatActivity.class);
+                    break;
                 case R.id.createParty:
                     intent.setClass(MainActivity.this, CreatePartyActivity.class);
                     break;

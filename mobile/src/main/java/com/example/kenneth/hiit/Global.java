@@ -16,6 +16,7 @@ import android.os.AsyncTask;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 
@@ -46,7 +47,7 @@ public class Global extends Application implements Serializable {
     public Party CurrentParty;
     public Thread SocketListener;
     public Context currentContext;
-
+public    TextView CurTv;
     IOObject io;
     ArrayList<JSONObject> fdList, fdRequestList, nearlyByList;
 
@@ -163,14 +164,12 @@ public class Global extends Application implements Serializable {
             JSONObject data = jsonArray.getJSONObject(0);
             if (jsonArray.length() > 0) {
                 this.Uid = data.getInt("uid");
-                this.UserName = data.getString("uname");
+                this.UserName = acc;
                 this.FirstName = data.getString("firstName");
                 this.LastName = data.getString("lastName");
                 this.pw = data.getString("password");
                 this.src = data.getString("src");
-                this.client = new Client(this.UserName);
-                this.SocketListener = new serverListener(this.client);
-                this.SocketListener.start();
+                StartSocket();
                 return true;
             }
         } catch (Exception ex) {
@@ -178,10 +177,11 @@ public class Global extends Application implements Serializable {
         }
         return false;
     }
-
-    public void SendPartyReady() {
-
-    }
+public  void StartSocket(){
+    this.client = new Client(this.UserName);
+    this.SocketListener = new serverListener(this.client);
+    this.SocketListener.start();
+}
 
     public class serverListener extends Thread {
         Client client;
@@ -204,6 +204,13 @@ public class Global extends Application implements Serializable {
                 }
                 System.out.println(msg);
                 switch (Action) {
+                    case "rchat":
+                        if(CurTv!=null){
+                            CurTv.setText(CurTv.getText()+"\n"+Value);
+                        }
+                        break;
+
+
                     case "msg":
                         NoticeMsg(Value);
                         break;
@@ -233,18 +240,11 @@ public class Global extends Application implements Serializable {
                     if (!Action.equals("kill")) {
                         if (Action.split("kill")[1].toLowerCase().equals(UserName.toLowerCase())) {
                             NoticeMsg("You got server Kicked");
-                            android.os.Process.killProcess(android.os.Process.myPid());
                             //   this.interrupt();
-                            System.exit(0);
-                            System.exit(0);
                             System.exit(0);
                         }
                     } else {
                         NoticeMsg("You got server Kicked");
-                        android.os.Process.killProcess(android.os.Process.myPid());
-                        this.interrupt();
-                        System.exit(0);
-                        System.exit(0);
                         System.exit(0);
                     }
                 }
@@ -253,7 +253,7 @@ public class Global extends Application implements Serializable {
     }
 
     public void PlayVideo() {
-        Intent intent = new Intent(currentContext, CameraActivity.class);
+        Intent intent = new Intent(currentContext, Client.class);
         startActivity(intent);
 
         CountDownTimer cc = new CountDownTimer(5000, 1000) {
