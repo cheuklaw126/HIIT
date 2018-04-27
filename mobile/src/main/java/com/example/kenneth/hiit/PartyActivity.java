@@ -1,5 +1,7 @@
 package com.example.kenneth.hiit;
 
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +12,10 @@ Global global;
 Party ptyObj;
 Button btn;
 Thread thread;
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,6 +24,19 @@ this.btn = (Button)findViewById(R.id.btn_ready);
         global = (Global) getApplicationContext();
 
         ptyObj = global.CurrentParty;
+
+        Handler mHandler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                switch(msg.what){
+                    case 1:
+
+                        break;
+                }
+            }
+        };
+        global.curHandler=mHandler;
+
         if(global.UserName==ptyObj.HostUname){
 //btn.setTag("Start");
 //btn.setEnabled(false);
@@ -25,10 +44,15 @@ this.btn = (Button)findViewById(R.id.btn_ready);
 this.btn.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
-        global.currentContext=getApplicationContext();
         global.client.Send("/rdypty/"+global.UserName);
     }
 });
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        global.curHandler=null;
     }
 }

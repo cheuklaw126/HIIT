@@ -14,6 +14,8 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -47,7 +49,9 @@ public class Global extends Application implements Serializable {
     public Party CurrentParty;
     public Thread SocketListener;
     public Context currentContext;
-public    TextView CurTv;
+    public TextView CurTv;
+    public Handler curHandler;
+
     IOObject io;
     ArrayList<JSONObject> fdList, fdRequestList, nearlyByList;
 
@@ -177,11 +181,12 @@ public    TextView CurTv;
         }
         return false;
     }
-public  void StartSocket(){
-    this.client = new Client(this.UserName);
-    this.SocketListener = new serverListener(this.client);
-    this.SocketListener.start();
-}
+
+    public void StartSocket() {
+        this.client = new Client(this.UserName);
+        this.SocketListener = new serverListener(this.client);
+        this.SocketListener.start();
+    }
 
     public class serverListener extends Thread {
         Client client;
@@ -205,9 +210,20 @@ public  void StartSocket(){
                 System.out.println(msg);
                 switch (Action) {
                     case "rchat":
-                        if(CurTv!=null){
-                            CurTv.setText(CurTv.getText()+"\n"+Value);
+                        if (curHandler != null) {
+                            Message curMsg = Message.obtain();
+                            curMsg.what = 1;
+                            curMsg.obj = CurTv.getText() + "\n" + Value;
+                            curHandler.sendMessage(curMsg);
+
                         }
+//                        if(CurTv!=null){
+//                            if(curHandler)
+//                            CurTv.invalidate();
+//                            CurTv.setText(CurTv.getText()+"\n"+Value);
+//                            CurTv.invalidate();
+//
+//                        }
                         break;
 
 
@@ -245,6 +261,7 @@ public  void StartSocket(){
                         }
                     } else {
                         NoticeMsg("You got server Kicked");
+                        //MainActivity.this.finish();
                         System.exit(0);
                     }
                 }

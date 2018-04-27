@@ -92,13 +92,12 @@ public class frdAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
 
-                    switch (tabNo)
-                    {
+                    switch (tabNo) {
                         case 1:
                             try {
 
                                 String funame = frds.get(i).getString("uname");
-                                boolean chk = global.RemoveFrd(global.UserName,funame);
+                                boolean chk = global.RemoveFrd(global.UserName, funame);
                                 if (chk) {
                                     frds.remove(i);
                                     notifyDataSetChanged();
@@ -119,7 +118,7 @@ public class frdAdapter extends BaseAdapter {
                                 String funame = frds.get(i).getString("uname");
                                 global.AcceptFrd(funame);
                                 frds.remove(i);
-                            notifyDataSetChanged();
+                                notifyDataSetChanged();
 
                             } catch (Exception ex) {
 
@@ -175,9 +174,8 @@ public class frdAdapter extends BaseAdapter {
             }
 
 
-        }
-        catch (Exception ex) {
-System.out.println(ex.toString());
+        } catch (Exception ex) {
+            System.out.println(ex.toString());
         }
         return view;
     }
