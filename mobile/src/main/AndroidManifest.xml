@@ -59,12 +59,13 @@
         <activity
             android:name=".ChatActivity"
             android:windowSoftInputMode="adjustPan"></activity>
-        <activity
-            android:name=".chattingActivity"
-            android:label="@string/title_activity_chatting"
-            android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustPan">
-    </activity>
+        <activity android:name=".CameraActivity"></activity>
+        <!--<activity-->
+            <!--android:name=".chattingActivity"-->
+            <!--android:label="@string/title_activity_chatting"-->
+            <!--android:theme="@style/AppTheme"-->
+            <!--android:windowSoftInputMode="adjustPan">-->
+    <!--</activity>-->
     </application>
 
 </manifest>

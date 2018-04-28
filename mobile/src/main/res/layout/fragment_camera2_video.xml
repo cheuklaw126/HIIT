@@ -17,7 +17,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.example.android.camera2video.AutoFitTextureView
+    <com.example.kenneth.hiit.AutoFitTextureView
         android:id="@+id/texture"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -41,8 +41,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|right"
-            android:padding="20dp"
-             />
+            android:padding="20dp"/>
+           -- android:src="@drawable/ic_action_info"
 
     </FrameLayout>
 

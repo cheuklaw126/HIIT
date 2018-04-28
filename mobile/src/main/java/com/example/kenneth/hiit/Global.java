@@ -270,30 +270,31 @@ public class Global extends Application implements Serializable {
     }
 
     public void PlayVideo() {
-        Intent intent = new Intent(currentContext, Client.class);
-        startActivity(intent);
-
-        CountDownTimer cc = new CountDownTimer(5000, 1000) {
-            int count = 5;
-
-            @Override
-            public void onTick(long millisUntilFinished) {
-                client.Send("test:" + millisUntilFinished);
-                //  Toast.makeText(getApplicationContext(), "Ready Start :" +(count-(millisUntilFinished/1000)) +"sec left ", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFinish() {
-                Intent intent = new Intent(currentContext, IndexActivity.class);
-                startActivity(intent);
-
-            }
-        };
-        try {
-            cc.start();
-        } catch (Exception ex) {
-            client.Send("test: fail" + ex);
-        }
+      if(currentContext!=null) {
+          Intent intent = new Intent(currentContext, CameraActivity.class);
+          startActivity(intent);
+      }
+//        CountDownTimer cc = new CountDownTimer(5000, 1000) {
+//            int count = 5;
+//
+//            @Override
+//            public void onTick(long millisUntilFinished) {
+//                client.Send("test:" + millisUntilFinished);
+//                //  Toast.makeText(getApplicationContext(), "Ready Start :" +(count-(millisUntilFinished/1000)) +"sec left ", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onFinish() {
+//                Intent intent = new Intent(currentContext, IndexActivity.class);
+//                startActivity(intent);
+//
+//            }
+//        };
+//        try {
+//            cc.start();
+//        } catch (Exception ex) {
+//            client.Send("test: fail" + ex);
+//        }
 
     }
 

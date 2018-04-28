@@ -44,6 +44,7 @@ this.btn = (Button)findViewById(R.id.btn_ready);
 this.btn.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
+        global.currentContext=getApplicationContext();
         global.client.Send("/rdypty/"+global.UserName);
     }
 });
