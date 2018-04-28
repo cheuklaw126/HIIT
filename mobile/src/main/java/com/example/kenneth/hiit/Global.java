@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,7 +55,7 @@ public class Global extends Application implements Serializable {
     public TextView CurTv;
     public Handler curHandler;
     public Party.PartyUser[] partyUsers;
-
+    ArrayList<Party> partyList;
 
     IOObject io;
     ArrayList<JSONObject> fdList, fdRequestList, nearlyByList, partyMemberList;
@@ -104,7 +105,7 @@ public class Global extends Application implements Serializable {
 
     }
 
-    public void getPartyList(){
+    public void getPartyList() {
         this.client.Send("/getptys/");
     }
 
@@ -239,10 +240,11 @@ public class Global extends Application implements Serializable {
 
                     case "ptys":
                         Gson tmpGson = new Gson();
-String test=Value;
+                        String test = Value;
+                        partyList = tmpGson.fromJson(Value, new TypeToken<ArrayList<Party>>() {
+                        }.getType());
 
-
-                    break;
+                        break;
                     case "rchat":
                         if (curHandler != null) {
                             Message curMsg = Message.obtain();
@@ -257,19 +259,19 @@ String test=Value;
                         break;
 
                     case "updatePty":
-                         tmpGson = new Gson();
-                         Party tmpPty = tmpGson.fromJson(Value, Party.class);
+                        tmpGson = new Gson();
+                        Party tmpPty = tmpGson.fromJson(Value, Party.class);
                         if (CurrentParty != null) {
                             if (CurrentParty.RoomName.equals(tmpPty.RoomName)
                                     && CurrentParty.HostUname.equals(tmpPty.HostUname)) {
 
-                                for (int a = 0; a< CurrentParty.MemberList.size();a++){
-                                    CurrentParty.MemberList.set(a,tmpPty.MemberList.get(a));
+                                for (int a = 0; a < CurrentParty.MemberList.size(); a++) {
+                                    CurrentParty.MemberList.set(a, tmpPty.MemberList.get(a));
                                 }
 //                                CurrentParty.MemberList = (ArrayList<Party.PartyUser>) tmpPty.MemberList.clone();
                                 Message curMsg = Message.obtain();
                                 curMsg.what = 2;
-                                curMsg.obj ="";
+                                curMsg.obj = "";
                                 curHandler.sendMessage(curMsg);
                             }
                         }
@@ -345,9 +347,6 @@ String test=Value;
 //        }
 
     }
-
-
-
 
 
     public void CreateParty(String roomName, String url) {
