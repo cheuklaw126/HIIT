@@ -4,6 +4,7 @@ import android.app.Application;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -19,6 +20,7 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -51,9 +53,11 @@ public class Global extends Application implements Serializable {
     public Context currentContext;
     public TextView CurTv;
     public Handler curHandler;
+    public Party.PartyUser[] partyUsers;
+
 
     IOObject io;
-    ArrayList<JSONObject> fdList, fdRequestList, nearlyByList;
+    ArrayList<JSONObject> fdList, fdRequestList, nearlyByList, partyMemberList;
 
     public void Reset() {
         this.UserName = null;
@@ -99,6 +103,29 @@ public class Global extends Application implements Serializable {
         LastLoginTIme = lastLoginTIme;
 
     }
+
+    public void getPartyList(){
+        this.client.Send("/getptys/");
+    }
+
+
+    public void SetPartyMember() {
+        ArrayList members = null;
+        if (CurrentParty != null) {
+            members = CurrentParty.MemberList;
+            if (partyMemberList == null) {
+                partyMemberList = new ArrayList<JSONObject>();
+            } else {
+                partyMemberList.clear();
+            }
+            for (int i = 0; i < members.size(); i++) {
+                String query = String.format("SELECT * FROM pData where uname='%s'", ((Party.PartyUser) members.get(i)).uname);
+
+
+            }
+        }
+    }
+
 
     public void SetNearlybyList(String uname) {
         if (nearlyByList != null) {
@@ -209,6 +236,13 @@ public class Global extends Application implements Serializable {
                 }
                 System.out.println(msg);
                 switch (Action) {
+
+                    case "ptys":
+                        Gson tmpGson = new Gson();
+String test=Value;
+
+
+                    break;
                     case "rchat":
                         if (curHandler != null) {
                             Message curMsg = Message.obtain();
@@ -217,40 +251,36 @@ public class Global extends Application implements Serializable {
                             curHandler.sendMessage(curMsg);
 
                         }
-//                        if(CurTv!=null){
-//                            if(curHandler)
-//                            CurTv.invalidate();
-//                            CurTv.setText(CurTv.getText()+"\n"+Value);
-//                            CurTv.invalidate();
-//
-//                        }
                         break;
-
-
                     case "msg":
                         NoticeMsg(Value);
                         break;
 
                     case "updatePty":
-                        Gson tmpGson = new Gson();
-                        Party tmpPty = tmpGson.fromJson(Value, Party.class);
+                         tmpGson = new Gson();
+                         Party tmpPty = tmpGson.fromJson(Value, Party.class);
                         if (CurrentParty != null) {
-                            if (CurrentParty.RoomName == tmpPty.RoomName
-                                    && CurrentParty.HostUname == tmpPty.HostUname) {
-                                CurrentParty.MemberList = (ArrayList<Party.PartyUser>) tmpPty.MemberList.clone();
+                            if (CurrentParty.RoomName.equals(tmpPty.RoomName)
+                                    && CurrentParty.HostUname.equals(tmpPty.HostUname)) {
+
+                                for (int a = 0; a< CurrentParty.MemberList.size();a++){
+                                    CurrentParty.MemberList.set(a,tmpPty.MemberList.get(a));
+                                }
+//                                CurrentParty.MemberList = (ArrayList<Party.PartyUser>) tmpPty.MemberList.clone();
+                                Message curMsg = Message.obtain();
+                                curMsg.what = 2;
+                                curMsg.obj ="";
+                                curHandler.sendMessage(curMsg);
                             }
                         }
                         break;
                     case "strPty":
-
                         if (CurrentParty != null) {
                             if (CurrentParty.HostUname.equals(Value)) {
                                 PlayVideo();
                             }
                         }
-
                         break;
-
                 }
                 if (Action.startsWith("kill")) {
                     if (!Action.equals("kill")) {
@@ -270,10 +300,28 @@ public class Global extends Application implements Serializable {
     }
 
     public void PlayVideo() {
-      if(currentContext!=null) {
-          Intent intent = new Intent(currentContext, CameraActivity.class);
-          startActivity(intent);
-      }
+        if (currentContext != null) {
+
+            long t = System.currentTimeMillis();
+            long end = t + 5000;
+            int a = 5;
+            try {
+                while (System.currentTimeMillis() < end) {
+                    Message curMsg = Message.obtain();
+                    curMsg.what = 1;
+                    curMsg.obj = a;
+                    this.curHandler.sendMessage(curMsg);
+                    a = a - 1;
+                    Thread.sleep(1000);
+                }
+            } catch (Exception ex) {
+
+            }
+
+
+            Intent intent = new Intent(currentContext, CameraActivity.class);
+            startActivity(intent);
+        }
 //        CountDownTimer cc = new CountDownTimer(5000, 1000) {
 //            int count = 5;
 //
@@ -297,6 +345,9 @@ public class Global extends Application implements Serializable {
 //        }
 
     }
+
+
+
 
 
     public void CreateParty(String roomName, String url) {

@@ -24,17 +24,13 @@ public class frdAdapter extends BaseAdapter {
     private Global global;
     public int tabNo;
     public int CurrentIndex;
-
     public FloatingActionButton FabBtn;
-
-
     private class ViewHolder {
         TextView tvLastName;
         TextView tvUid;
         ImageView imageView;
         FloatingActionButton fab;
         int index;
-
         public ViewHolder(TextView tvLastName, TextView tvUid, ImageView imageView, FloatingActionButton fab, int index) {
             this.tvLastName = tvLastName;
             this.tvUid = tvUid;
@@ -43,7 +39,6 @@ public class frdAdapter extends BaseAdapter {
             this.index = index;
         }
     }
-
 
     public frdAdapter(Context context, ArrayList<JSONObject> frds, Global global, int tabNo) {
         this.tabNo = tabNo;
@@ -101,17 +96,11 @@ public class frdAdapter extends BaseAdapter {
                                 if (chk) {
                                     frds.remove(i);
                                     notifyDataSetChanged();
-
-
                                 }
-
                             } catch (Exception ex) {
 
                             }
-
                             break;
-
-
                         case 3:
 
                             try {
@@ -123,21 +112,12 @@ public class frdAdapter extends BaseAdapter {
                             } catch (Exception ex) {
 
                             }
-
-
                             System.out.println("DONE");
-
                             break;
-
-
                     }
-
                 }
             });
-
-
             CurrentIndex = i;
-
             switch (tabNo) {
                 case 1:
                     holder.fab.setImageResource(R.drawable.delete);
@@ -149,31 +129,9 @@ public class frdAdapter extends BaseAdapter {
                     });*/
                     break;
                 case 2:
-
-
                 case 3:
                     FabBtn.setImageResource(R.drawable.ic_action_user_add);
-
-                /*
-
-                    holder.fab.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            try {
-                                String funame = frds.get(i).getString("funame");
-                                global.AcceptFrd(funame);
-                                frds.remove(i);
-                                notifyDataSetChanged();
-
-                            } catch (Exception ex) {
-
-                            }
-                        }
-                    });
-*/
             }
-
-
         } catch (Exception ex) {
             System.out.println(ex.toString());
         }
