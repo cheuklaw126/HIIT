@@ -77,13 +77,20 @@ public class PartyActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Ready Start :" + msg.obj + "sec left ", Toast.LENGTH_SHORT).show();
                         break;
                     case 2:
-                            list.invalidateViews();
-                            break;
+                        list.invalidateViews();
+                        break;
                     case 3:
                         Toast.makeText(getApplicationContext(), "Host has benn left", Toast.LENGTH_SHORT).show();
-                        global.curHandler=null;
-                        global.CurrentParty=null;
+                        global.curHandler = null;
+                        global.CurrentParty = null;
                         PartyActivity.this.finish();
+                        break;
+                    case 4:
+                        Intent intent = new Intent(PartyActivity.this, CameraActivity.class);
+                        startActivity(intent);
+                        global.curHandler = null;
+                        PartyActivity.this.finish();
+
                         break;
                 }
             }
@@ -116,7 +123,7 @@ public class PartyActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-       // global.client.Send("/qp/" + global.CurrentParty.HostUname);
+        // global.client.Send("/qp/" + global.CurrentParty.HostUname);
         global.curHandler = null;
     }
 }

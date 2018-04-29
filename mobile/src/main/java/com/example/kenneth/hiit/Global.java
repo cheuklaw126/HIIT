@@ -229,6 +229,23 @@ public void SetUrl(){
         }
     }
 
+    public void Comfirmed(int what) {
+        if (curHandler != null) {
+            Message curMsg = Message.obtain();
+            curMsg.what = what;
+            curMsg.obj = "";
+            curHandler.sendMessage(curMsg);
+        }
+    }
+    public void Comfirmed(int what,Object obj) {
+        if (curHandler != null) {
+            Message curMsg = Message.obtain();
+            curMsg.what = what;
+            curMsg.obj = obj;
+            curHandler.sendMessage(curMsg);
+        }
+    }
+
     public class serverListener extends Thread {
         Client client;
 
@@ -332,25 +349,41 @@ public void SetUrl(){
     public void PlayVideo() {
         if (currentContext != null) {
 
-            long t = System.currentTimeMillis();
-            long end = t + 5000;
-            int a = 5;
-            try {
-                while (System.currentTimeMillis() < end) {
-                    Message curMsg = Message.obtain();
-                    curMsg.what = 1;
-                    curMsg.obj = a;
-                    this.curHandler.sendMessage(curMsg);
-                    a = a - 1;
-                    Thread.sleep(1000);
+            new CountDownTimer(5000,1000){
+
+                @Override
+                public void onFinish() {
+                  Comfirmed(4);
                 }
-            } catch (Exception ex) {
 
-            }
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    Comfirmed(1,millisUntilFinished);
+                  //  mTextView.setText("seconds remaining:"+millisUntilFinished/1000);
+                }
+
+            }.start();
 
 
-            Intent intent = new Intent(currentContext, CameraActivity.class);
-            startActivity(intent);
+//            long t = System.currentTimeMillis();
+//            long end = t + 5000;
+//            int a = 5;
+//            try {
+//                while (System.currentTimeMillis() < end) {
+//                    Message curMsg = Message.obtain();
+//                    curMsg.what = 1;
+//                    curMsg.obj = a;
+//                    this.curHandler.sendMessage(curMsg);
+//                    a = a - 1;
+//                    Thread.sleep(1000);
+//                }
+//            } catch (Exception ex) {
+//
+//            }
+//
+//
+//            Intent intent = new Intent(currentContext, CameraActivity.class);
+//            startActivity(intent);
         }
 //        CountDownTimer cc = new CountDownTimer(5000, 1000) {
 //            int count = 5;
