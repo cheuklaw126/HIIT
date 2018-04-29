@@ -35,7 +35,7 @@ public class Client implements Runnable {
         try {
             InetAddress add = InetAddress.getByName("cheuklaw126.mynetgear.com");
             this.ip = add.getHostAddress();
-         //   this.ip = "192.168.1.22";
+            this.ip = "192.168.1.22";
         } catch (Exception ex) {
             this.ip = "";
         }
@@ -43,7 +43,6 @@ public class Client implements Runnable {
 
     public void StartClient() {
         try {
-            //   InetAddress add = InetAddress.getByName("cheuklaw126.mynetgear.com");
 
             Thread getIpThread = new Thread() {
                 @Override
@@ -55,15 +54,6 @@ public class Client implements Runnable {
             getIpThread.start();
             getIpThread.join();
 
-
-/*
-
-            while (true) {
-                if (ip != null) {
-                    break;
-                }
-            }
-*/
             Thread ConnectThread = new Thread() {
                 @Override
                 public void run() {
@@ -85,7 +75,7 @@ public class Client implements Runnable {
             Thread LoginThread = new Thread() {
                 @Override
                 public void run() {
-                    Send("/login" + UserName);
+                    Send("/login/" + UserName);
                 }
             };
             LoginThread.start();

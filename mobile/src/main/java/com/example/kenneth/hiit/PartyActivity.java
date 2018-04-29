@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 
 public class PartyActivity extends AppCompatActivity {
@@ -20,9 +21,16 @@ public class PartyActivity extends AppCompatActivity {
     Party ptyObj;
     Button btn;
     Thread thread;
-
+    boolean isReady = false;
     ListView list;
 
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        global.curHandler = null;
+        global.client.Send("/qp/" + global.CurrentParty.HostUname);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +40,6 @@ public class PartyActivity extends AppCompatActivity {
         global = (Global) getApplicationContext();
 
         ptyObj = global.CurrentParty;
-
 
 
         list = (ListView) findViewById(R.id.ptyMemberList);
@@ -53,7 +60,6 @@ public class PartyActivity extends AppCompatActivity {
 
                 } else {
                     t2.setText("Not Ready");
-
                 }
                 return v;
             }
@@ -64,34 +70,50 @@ public class PartyActivity extends AppCompatActivity {
             public void handleMessage(Message msg) {
                 switch (msg.what) {
                     case 1:
+                        btn.setEnabled(false);
                         Toast.makeText(getApplicationContext(), "Ready Start :" + msg.obj + "sec left ", Toast.LENGTH_SHORT).show();
                         break;
                     case 2:
-                        list.invalidateViews();
-
+                            list.invalidateViews();
+                            break;
+                    case 3:
+                        Toast.makeText(getApplicationContext(), "Host has benn left", Toast.LENGTH_SHORT).show();
+                        global.curHandler=null;
+                        global.CurrentParty=null;
+                        PartyActivity.this.finish();
                         break;
                 }
             }
         };
-        global.curHandler = mHandler;
-        if (global.UserName == ptyObj.HostUname) {
-            btn.setTag("Start");
-
-            if (ptyObj.MemberList.size() != 1)
-                btn.setEnabled(false);
-        }
         this.btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 global.currentContext = getApplicationContext();
-                global.client.Send("/rdypty/" + global.UserName);
+                if (isReady) {
+                    isReady = false;
+                    global.client.Send("/urdypty/" + global.CurrentParty.HostUname);
+
+                } else {
+                    isReady = true;
+                    global.client.Send("/rdypty/" + global.CurrentParty.HostUname);
+
+                }
             }
         });
+        global.curHandler = mHandler;
+//        if (global.UserName == ptyObj.HostUname) {
+//            btn.setTag("Start");
+//
+//            if (ptyObj.MemberList.size() != 1)
+//                btn.setEnabled(false);
+//        }
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+       // global.client.Send("/qp/" + global.CurrentParty.HostUname);
         global.curHandler = null;
     }
 }
