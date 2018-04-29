@@ -18,6 +18,9 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -121,8 +124,6 @@ public class Global extends Application implements Serializable {
             }
             for (int i = 0; i < members.size(); i++) {
                 String query = String.format("SELECT * FROM pData where uname='%s'", ((Party.PartyUser) members.get(i)).uname);
-
-
             }
         }
     }
@@ -192,7 +193,6 @@ public void SetUrl(){
         String query = String.format("select * from pData where uname ='%s' and password='%s'", acc, pwd);
         ArrayList<String> querys = new ArrayList<String>();
         querys.add(query);
-
         try {
             io = new IOObject("ExecuteReader", querys);
             io.Start();
@@ -215,9 +215,18 @@ public void SetUrl(){
     }
 
     public void StartSocket() {
-        this.client = new Client(this.UserName);
+        this.client = new Client(this.UserName.toLowerCase());
         this.SocketListener = new serverListener(this.client);
         this.SocketListener.start();
+    }
+
+    public void Comfirmed() {
+        if (curHandler != null) {
+            Message curMsg = Message.obtain();
+            curMsg.what = 0;
+            curMsg.obj = "";
+            curHandler.sendMessage(curMsg);
+        }
     }
 
     public class serverListener extends Thread {
@@ -241,13 +250,14 @@ public void SetUrl(){
                 }
                 System.out.println(msg);
                 switch (Action) {
-
                     case "ptys":
                         Gson tmpGson = new Gson();
                         String test = Value;
-                        partyList = tmpGson.fromJson(Value, new TypeToken<ArrayList<Party>>() {
-                        }.getType());
-
+                        if (Value != null) {
+                            partyList = tmpGson.fromJson(Value, new TypeToken<ArrayList<Party>>() {
+                            }.getType());
+                            Comfirmed();
+                        }
                         break;
                     case "rchat":
                         if (curHandler != null) {
@@ -255,29 +265,43 @@ public void SetUrl(){
                             curMsg.what = 1;
                             curMsg.obj = CurTv.getText() + "\n" + Value;
                             curHandler.sendMessage(curMsg);
-
                         }
                         break;
                     case "msg":
                         NoticeMsg(Value);
                         break;
-
                     case "updatePty":
                         tmpGson = new Gson();
-                        Party tmpPty = tmpGson.fromJson(Value, Party.class);
-                        if (CurrentParty != null) {
-                            if (CurrentParty.RoomName.equals(tmpPty.RoomName)
-                                    && CurrentParty.HostUname.equals(tmpPty.HostUname)) {
-
-                                for (int a = 0; a < CurrentParty.MemberList.size(); a++) {
-                                    CurrentParty.MemberList.set(a, tmpPty.MemberList.get(a));
-                                }
-//                                CurrentParty.MemberList = (ArrayList<Party.PartyUser>) tmpPty.MemberList.clone();
+                        if (Value.equals("_")) {
+                            if (curHandler != null) {
+                                //                   CurrentParty.MemberList = (ArrayList<Party.PartyUser>) tmpPty.MemberList.clone();
                                 Message curMsg = Message.obtain();
-                                curMsg.what = 2;
+                                curMsg.what = 3;
                                 curMsg.obj = "";
                                 curHandler.sendMessage(curMsg);
                             }
+                        } else {
+                            Party tmpPty = tmpGson.fromJson(Value, Party.class);
+                            if (CurrentParty != null) {
+                                if (CurrentParty.RoomName.equals(tmpPty.RoomName)
+                                        && CurrentParty.HostUname.equals(tmpPty.HostUname)) {
+                                    CurrentParty.MemberList.clear();
+                                    for (int a = 0; a < tmpPty.MemberList.size(); a++) {
+                                        CurrentParty.MemberList.add(tmpPty.MemberList.get(a));
+                                        //CurrentParty.MemberList.set(a, tmpPty.MemberList.get(a));
+                                    }
+                                }
+                                while (curHandler == null) {
+                                }
+                                if (curHandler != null) {
+                                    //                   CurrentParty.MemberList = (ArrayList<Party.PartyUser>) tmpPty.MemberList.clone();
+                                    Message curMsg = Message.obtain();
+                                    curMsg.what = 2;
+                                    curMsg.obj = "";
+                                    curHandler.sendMessage(curMsg);
+                                }
+                            }
+
                         }
                         break;
                     case "strPty":

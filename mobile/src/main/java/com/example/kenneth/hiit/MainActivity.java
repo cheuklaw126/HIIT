@@ -105,6 +105,7 @@ public class MainActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
+        fab.setVisibility(View.GONE);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -280,6 +281,10 @@ if(global.src.equals("null")||global.src.equals(null)||global.src.equals("")){
 
             switch (id) {
 
+                case R.id.sugFood:
+                    intent.setClass(MainActivity.this, foodActivity.class);
+
+                    break;
                 case R.id.ChatRoom:
                     intent.setClass(MainActivity.this, ChatActivity.class);
                     break;

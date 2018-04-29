@@ -24,6 +24,7 @@ public class LoginActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                btn.setEnabled(false);
                 Global global = (Global) getApplicationContext();
                 global.Reset();
                 global.NoticeMsg("");
@@ -39,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
                     LoginActivity.this.finish();
                 } else {
                     Toast.makeText(getApplicationContext(), "Username or Password Invalid!", Toast.LENGTH_SHORT).show();
+                    btn.setEnabled(true);
                 }
             }
         });
