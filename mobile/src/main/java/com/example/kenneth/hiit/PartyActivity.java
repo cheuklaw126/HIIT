@@ -1,5 +1,6 @@
 package com.example.kenneth.hiit;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -85,6 +86,8 @@ public class PartyActivity extends AppCompatActivity {
             public void onClick(View v) {
                 global.currentContext = getApplicationContext();
                 global.client.Send("/rdypty/" + global.UserName);
+                Intent intent = new Intent(getApplicationContext(),PartyVideoView.class);
+                startActivity(intent);
             }
         });
     }

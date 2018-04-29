@@ -67,6 +67,7 @@
         <!-- android:windowSoftInputMode="adjustPan"> -->
         <!-- </activity> -->
         <activity android:name=".JoinPtyActivity"></activity>
+        <activity android:name=".PartyVideoView"></activity>
     </application>
 
 </manifest>

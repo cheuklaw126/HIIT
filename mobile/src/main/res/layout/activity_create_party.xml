@@ -8,24 +8,52 @@
     tools:context=".CreatePartyActivity">
     android:orientation="vertical"
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Please set a room name:"/>
     <EditText
         android:id="@+id/editText1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+
         android:ems="10"
         android:hint="Room Name"
         android:inputType="textPersonName" />
-
+    </LinearLayout>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Please type a video link or select one:"/>
     <EditText
         android:id="@+id/editText2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+
         android:ems="10"
         android:hint="Video URL"
         android:inputType="textPersonName" />
+    <Spinner
+        android:id="@+id/videolist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
 
+
+
+
+
+        />
+</LinearLayout>
     <Button
         android:id="@+id/btn_create"
         android:layout_width="match_parent"

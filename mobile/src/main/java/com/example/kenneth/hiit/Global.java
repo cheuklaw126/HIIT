@@ -45,7 +45,7 @@ public class Global extends Application implements Serializable {
 
     public String UserName, pw, FirstName, LastName, src;
     public int Uid, vid, compEx;
-    public String lastD, lastT, cc, hr, eg, com;
+    public String lastD, lastT, cc, hr, eg, com, Url;
     public static String vn, link, desc;
     public static Context contextOfApplication;
     public Client client;
@@ -127,7 +127,11 @@ public class Global extends Application implements Serializable {
         }
     }
 
-
+public void SetUrl(){
+        if (CurrentParty != null) {
+            Url = CurrentParty.getUrl().toString();
+        }
+}
     public void SetNearlybyList(String uname) {
         if (nearlyByList != null) {
             nearlyByList.clear();
