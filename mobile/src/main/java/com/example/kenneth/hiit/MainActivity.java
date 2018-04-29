@@ -281,6 +281,10 @@ if(global.src.equals("null")||global.src.equals(null)||global.src.equals("")){
 
             switch (id) {
 
+                case R.id.sugFood:
+                    intent.setClass(MainActivity.this, foodActivity.class);
+
+                    break;
                 case R.id.ChatRoom:
                     intent.setClass(MainActivity.this, ChatActivity.class);
                     break;

@@ -30,7 +30,12 @@
         <item
         android:id="@+id/nav_manage"
         android:icon="@drawable/ic_menu_manage"
-        android:title="Suggest Food" />
+        android:title="TIM" />
+
+        <item
+            android:id="@+id/sugFood"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Suggest Food" />
     </group>
 
     <item android:title="Communicate">
