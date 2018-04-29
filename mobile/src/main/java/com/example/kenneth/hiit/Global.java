@@ -4,6 +4,7 @@ import android.app.Application;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -14,11 +15,15 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,9 +52,13 @@ public class Global extends Application implements Serializable {
     public Party CurrentParty;
     public Thread SocketListener;
     public Context currentContext;
-public    TextView CurTv;
+    public TextView CurTv;
+    public Handler curHandler;
+    public Party.PartyUser[] partyUsers;
+    ArrayList<Party> partyList;
+
     IOObject io;
-    ArrayList<JSONObject> fdList, fdRequestList, nearlyByList;
+    ArrayList<JSONObject> fdList, fdRequestList, nearlyByList, partyMemberList;
 
     public void Reset() {
         this.UserName = null;
@@ -95,6 +104,29 @@ public    TextView CurTv;
         LastLoginTIme = lastLoginTIme;
 
     }
+
+    public void getPartyList() {
+        this.client.Send("/getptys/");
+    }
+
+
+    public void SetPartyMember() {
+        ArrayList members = null;
+        if (CurrentParty != null) {
+            members = CurrentParty.MemberList;
+            if (partyMemberList == null) {
+                partyMemberList = new ArrayList<JSONObject>();
+            } else {
+                partyMemberList.clear();
+            }
+            for (int i = 0; i < members.size(); i++) {
+                String query = String.format("SELECT * FROM pData where uname='%s'", ((Party.PartyUser) members.get(i)).uname);
+
+
+            }
+        }
+    }
+
 
     public void SetNearlybyList(String uname) {
         if (nearlyByList != null) {
@@ -177,11 +209,12 @@ public    TextView CurTv;
         }
         return false;
     }
-public  void StartSocket(){
-    this.client = new Client(this.UserName);
-    this.SocketListener = new serverListener(this.client);
-    this.SocketListener.start();
-}
+
+    public void StartSocket() {
+        this.client = new Client(this.UserName);
+        this.SocketListener = new serverListener(this.client);
+        this.SocketListener.start();
+    }
 
     public class serverListener extends Thread {
         Client client;
@@ -204,37 +237,52 @@ public  void StartSocket(){
                 }
                 System.out.println(msg);
                 switch (Action) {
+
+                    case "ptys":
+                        Gson tmpGson = new Gson();
+                        String test = Value;
+                        partyList = tmpGson.fromJson(Value, new TypeToken<ArrayList<Party>>() {
+                        }.getType());
+
+                        break;
                     case "rchat":
-                        if(CurTv!=null){
-                            CurTv.setText(CurTv.getText()+"\n"+Value);
+                        if (curHandler != null) {
+                            Message curMsg = Message.obtain();
+                            curMsg.what = 1;
+                            curMsg.obj = CurTv.getText() + "\n" + Value;
+                            curHandler.sendMessage(curMsg);
+
                         }
                         break;
-
-
                     case "msg":
                         NoticeMsg(Value);
                         break;
 
                     case "updatePty":
-                        Gson tmpGson = new Gson();
+                        tmpGson = new Gson();
                         Party tmpPty = tmpGson.fromJson(Value, Party.class);
                         if (CurrentParty != null) {
-                            if (CurrentParty.RoomName == tmpPty.RoomName
-                                    && CurrentParty.HostUname == tmpPty.HostUname) {
-                                CurrentParty.MemberList = (ArrayList<Party.PartyUser>) tmpPty.MemberList.clone();
+                            if (CurrentParty.RoomName.equals(tmpPty.RoomName)
+                                    && CurrentParty.HostUname.equals(tmpPty.HostUname)) {
+
+                                for (int a = 0; a < CurrentParty.MemberList.size(); a++) {
+                                    CurrentParty.MemberList.set(a, tmpPty.MemberList.get(a));
+                                }
+//                                CurrentParty.MemberList = (ArrayList<Party.PartyUser>) tmpPty.MemberList.clone();
+                                Message curMsg = Message.obtain();
+                                curMsg.what = 2;
+                                curMsg.obj = "";
+                                curHandler.sendMessage(curMsg);
                             }
                         }
                         break;
                     case "strPty":
-
                         if (CurrentParty != null) {
                             if (CurrentParty.HostUname.equals(Value)) {
                                 PlayVideo();
                             }
                         }
-
                         break;
-
                 }
                 if (Action.startsWith("kill")) {
                     if (!Action.equals("kill")) {
@@ -245,6 +293,7 @@ public  void StartSocket(){
                         }
                     } else {
                         NoticeMsg("You got server Kicked");
+                        //MainActivity.this.finish();
                         System.exit(0);
                     }
                 }
@@ -253,30 +302,49 @@ public  void StartSocket(){
     }
 
     public void PlayVideo() {
-        Intent intent = new Intent(currentContext, Client.class);
-        startActivity(intent);
+        if (currentContext != null) {
 
-        CountDownTimer cc = new CountDownTimer(5000, 1000) {
-            int count = 5;
+            long t = System.currentTimeMillis();
+            long end = t + 5000;
+            int a = 5;
+            try {
+                while (System.currentTimeMillis() < end) {
+                    Message curMsg = Message.obtain();
+                    curMsg.what = 1;
+                    curMsg.obj = a;
+                    this.curHandler.sendMessage(curMsg);
+                    a = a - 1;
+                    Thread.sleep(1000);
+                }
+            } catch (Exception ex) {
 
-            @Override
-            public void onTick(long millisUntilFinished) {
-                client.Send("test:" + millisUntilFinished);
-                //  Toast.makeText(getApplicationContext(), "Ready Start :" +(count-(millisUntilFinished/1000)) +"sec left ", Toast.LENGTH_SHORT).show();
             }
 
-            @Override
-            public void onFinish() {
-                Intent intent = new Intent(currentContext, IndexActivity.class);
-                startActivity(intent);
 
-            }
-        };
-        try {
-            cc.start();
-        } catch (Exception ex) {
-            client.Send("test: fail" + ex);
+            Intent intent = new Intent(currentContext, CameraActivity.class);
+            startActivity(intent);
         }
+//        CountDownTimer cc = new CountDownTimer(5000, 1000) {
+//            int count = 5;
+//
+//            @Override
+//            public void onTick(long millisUntilFinished) {
+//                client.Send("test:" + millisUntilFinished);
+//                //  Toast.makeText(getApplicationContext(), "Ready Start :" +(count-(millisUntilFinished/1000)) +"sec left ", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onFinish() {
+//                Intent intent = new Intent(currentContext, IndexActivity.class);
+//                startActivity(intent);
+//
+//            }
+//        };
+//        try {
+//            cc.start();
+//        } catch (Exception ex) {
+//            client.Send("test: fail" + ex);
+//        }
 
     }
 

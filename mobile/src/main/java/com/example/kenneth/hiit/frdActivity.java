@@ -32,17 +32,12 @@ public class frdActivity extends AppCompatActivity {
         setContentView(R.layout.activity_frd);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
         tabHost = (TabHost) findViewById(R.id.tab_host);
         tabHost.setup();
-
-
         TabHost.TabSpec spec1 = tabHost.newTabSpec("tab1");
         spec1.setContent(R.id.tab1);
         spec1.setIndicator("Friends");
         tabHost.addTab(spec1);
-
         TabHost.TabSpec spec2 = tabHost.newTabSpec("Nearly By");
         spec2.setIndicator("Nearly By");
         spec2.setContent(R.id.tab2);
@@ -51,36 +46,20 @@ public class frdActivity extends AppCompatActivity {
         spec3.setIndicator("Friends Request");
         spec3.setContent(R.id.tab3);
         tabHost.addTab(spec3);
-
         tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String tabId) {
-
                 global.SetFrdList();
                 global.SetFrdRequestList();
-
-
                 ad1.notifyDataSetChanged();
                 ad2.notifyDataSetChanged();
                 ad3.notifyDataSetChanged();
             }
         });
-
-
         fdView = (ListView) findViewById(R.id.fdView);
         suggestView = (ListView) findViewById(R.id.suggestView);
         addView = (ListView) findViewById(R.id.addView);
 
-        //   FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
-
-        //    frdListView = (ListView) findViewById(R.id.frd);
         global = (Global) getApplicationContext();
 
         global.SetFrdList();
@@ -101,61 +80,10 @@ public class frdActivity extends AppCompatActivity {
         suggestView.setAdapter(ad2);
         addView.setAdapter(ad3);
 
-
-
-
-
-
-//        fdView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//FloatingActionButton fb1 = fdView.findViewById(R.id.fb1);
-//                index  = position;
-//
-//fb1.setOnClickListener(new View.OnClickListener() {
-//    @Override
-//    public void onClick(View v) {
-//        try {
-//            String uname = frdList.get(index).getString("uname");
-//            boolean chk=global.RemoveFrd(uname);
-//            if(chk){
-//                frdList.remove(index);
-//                ad1.notifyDataSetChanged();
-//            }
-//
-//        }
-//        catch (Exception ex){
-//
-//        }
-//    }
-//});
-
-//
-//            }
-//        });
-
-//        suggestView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//            }
-//        });
-//        addView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//            }
-//        });
-        // listView = (ListView) findViewById(R.id.frd);
-
-        //FloatingActionButton tab1btn = (FloatingActionButton)findViewById(R.id.fb1);
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab2);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
 
                 final AlertDialog.Builder inputAlert = new AlertDialog.Builder(context);
                 inputAlert.setTitle("Add Freiend");
@@ -166,27 +94,19 @@ public class frdActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String userInputValue = userInput.getText().toString();
-
                         boolean chk = false;
-
-
                         if (!global.ChkFrdExit(userInputValue)) {
                             chk = global.AddFrd(userInputValue.toLowerCase());
-
                         } else {
-
                             chk = true;
                         }
                         if (chk) {
                             Snackbar.make(view, "Successful", Snackbar.LENGTH_LONG)
                                     .setAction("Action", null).show();
                         } else {
-
                             Snackbar.make(view, "User Name not found", Snackbar.LENGTH_LONG)
                                     .setAction("Action", null).show();
                         }
-
-
                     }
                 });
                 inputAlert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -197,19 +117,8 @@ public class frdActivity extends AppCompatActivity {
                 });
                 AlertDialog alertDialog = inputAlert.create();
                 alertDialog.show();
-
-
             }
         });
-
-//        listView.setAdapter(new frdAdapter(this,frdList));
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                ListView listView = (ListView) parent;
-//            }
-//        });
-
 
     }
 }

@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onDestroy() {
-        this.global.client.Send("/logout");
+    this.global.client.Send("/logout");
         super.onDestroy();
     }
 
@@ -232,6 +232,12 @@ if(global.src.equals("null")||global.src.equals(null)||global.src.equals("")){
 
 
     @Override
+    protected void onStop() {
+        super.onStop();
+     //   global.client.Send("/logout");
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -280,6 +286,10 @@ if(global.src.equals("null")||global.src.equals(null)||global.src.equals("")){
                 case R.id.createParty:
                     intent.setClass(MainActivity.this, CreatePartyActivity.class);
                     break;
+                case R.id.joinParty:
+                    intent.setClass(MainActivity.this, JoinPtyActivity.class);
+                    break;
+
                 case R.id.frd:
                     //intent.putExtra("global", global);
                     intent.setClass(MainActivity.this, frdActivity.class);
