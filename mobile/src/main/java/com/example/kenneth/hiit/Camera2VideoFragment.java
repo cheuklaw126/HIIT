@@ -67,16 +67,16 @@ import java.util.concurrent.TimeUnit;
 public class Camera2VideoFragment extends Fragment
         implements View.OnClickListener, FragmentCompat.OnRequestPermissionsResultCallback {
 
-    private static final int SENSOR_ORIENTATION_DEFAULT_DEGREES = 90;
-    private static final int SENSOR_ORIENTATION_INVERSE_DEGREES = 270;
-    private static final SparseIntArray DEFAULT_ORIENTATIONS = new SparseIntArray();
-    private static final SparseIntArray INVERSE_ORIENTATIONS = new SparseIntArray();
+    public static final int SENSOR_ORIENTATION_DEFAULT_DEGREES = 90;
+    public static final int SENSOR_ORIENTATION_INVERSE_DEGREES = 270;
+    public static final SparseIntArray DEFAULT_ORIENTATIONS = new SparseIntArray();
+    public static final SparseIntArray INVERSE_ORIENTATIONS = new SparseIntArray();
 
-    private static final String TAG = "Camera2VideoFragment";
-    private static final int REQUEST_VIDEO_PERMISSIONS = 1;
-    private static final String FRAGMENT_DIALOG = "dialog";
+    public static final String TAG = "Camera2VideoFragment";
+    public static final int REQUEST_VIDEO_PERMISSIONS = 1;
+    public static final String FRAGMENT_DIALOG = "dialog";
 
-    private static final String[] VIDEO_PERMISSIONS = {
+    public static final String[] VIDEO_PERMISSIONS = {
             Manifest.permission.CAMERA,
             Manifest.permission.RECORD_AUDIO,
     };
@@ -98,29 +98,29 @@ public class Camera2VideoFragment extends Fragment
     /**
      * An {@link AutoFitTextureView} for camera preview.
      */
-    private AutoFitTextureView mTextureView;
+    public AutoFitTextureView mTextureView;
 
     /**
      * Button to record video
      */
-    private Button mButtonVideo;
+    public Button mButtonVideo;
 
     /**
      * A reference to the opened {@link CameraDevice}.
      */
-    private CameraDevice mCameraDevice;
+    public CameraDevice mCameraDevice;
 
     /**
      * A reference to the current {@link CameraCaptureSession} for
      * preview.
      */
-    private CameraCaptureSession mPreviewSession;
+    public CameraCaptureSession mPreviewSession;
 
     /**
      * {@link TextureView.SurfaceTextureListener} handles several lifecycle events on a
      * {@link TextureView}.
      */
-    private TextureView.SurfaceTextureListener mSurfaceTextureListener
+    public TextureView.SurfaceTextureListener mSurfaceTextureListener
             = new TextureView.SurfaceTextureListener() {
 
         @Override
@@ -149,42 +149,42 @@ public class Camera2VideoFragment extends Fragment
     /**
      * The {@link Size} of camera preview.
      */
-    private Size mPreviewSize;
+    public Size mPreviewSize;
 
     /**
      * The {@link Size} of video recording.
      */
-    private Size mVideoSize;
+    public Size mVideoSize;
 
     /**
      * MediaRecorder
      */
-    private MediaRecorder mMediaRecorder;
+    public MediaRecorder mMediaRecorder;
 
     /**
      * Whether the app is recording video now
      */
-    private boolean mIsRecordingVideo;
+    public boolean mIsRecordingVideo;
 
     /**
      * An additional thread for running tasks that shouldn't block the UI.
      */
-    private HandlerThread mBackgroundThread;
+    public HandlerThread mBackgroundThread;
 
     /**
      * A {@link Handler} for running tasks in the background.
      */
-    private Handler mBackgroundHandler;
+    public Handler mBackgroundHandler;
 
     /**
      * A {@link Semaphore} to prevent the app from exiting before closing the camera.
      */
-    private Semaphore mCameraOpenCloseLock = new Semaphore(1);
+    public Semaphore mCameraOpenCloseLock = new Semaphore(1);
 
     /**
      * {@link CameraDevice.StateCallback} is called when {@link CameraDevice} changes its status.
      */
-    private CameraDevice.StateCallback mStateCallback = new CameraDevice.StateCallback() {
+    public CameraDevice.StateCallback mStateCallback = new CameraDevice.StateCallback() {
 
         @Override
         public void onOpened(@NonNull CameraDevice cameraDevice) {
@@ -215,9 +215,9 @@ public class Camera2VideoFragment extends Fragment
         }
 
     };
-    private Integer mSensorOrientation;
-    private String mNextVideoAbsolutePath;
-    private CaptureRequest.Builder mPreviewBuilder;
+    public Integer mSensorOrientation;
+    public String mNextVideoAbsolutePath;
+    public CaptureRequest.Builder mPreviewBuilder;
 
     public static Camera2VideoFragment newInstance() {
         return new Camera2VideoFragment();
@@ -230,7 +230,7 @@ public class Camera2VideoFragment extends Fragment
      * @param choices The list of available sizes
      * @return The video size
      */
-    private static Size chooseVideoSize(Size[] choices) {
+    public static Size chooseVideoSize(Size[] choices) {
         for (Size size : choices) {
             if (size.getWidth() == size.getHeight() * 4 / 3 && size.getWidth() <= 1080) {
                 return size;
@@ -251,7 +251,7 @@ public class Camera2VideoFragment extends Fragment
      * @param aspectRatio The aspect ratio
      * @return The optimal {@code Size}, or an arbitrary one if none were big enough
      */
-    private static Size chooseOptimalSize(Size[] choices, int width, int height, Size aspectRatio) {
+    public static Size chooseOptimalSize(Size[] choices, int width, int height, Size aspectRatio) {
         // Collect the supported resolutions that are at least as big as the preview Surface
         List<Size> bigEnough = new ArrayList<>();
         int w = aspectRatio.getWidth();
@@ -275,7 +275,6 @@ public class Camera2VideoFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         return inflater.inflate(R.layout.fragment_camera2_video, container, false);
     }
 
@@ -285,7 +284,6 @@ public class Camera2VideoFragment extends Fragment
         mButtonVideo = (Button) view.findViewById(R.id.video);
         mButtonVideo.setOnClickListener(this);
         view.findViewById(R.id.info).setOnClickListener(this);
-      //  mMediaRecorder.start();
     }
 
     @Override
@@ -333,7 +331,7 @@ public class Camera2VideoFragment extends Fragment
     /**
      * Starts a background thread and its {@link Handler}.
      */
-    private void startBackgroundThread() {
+    public void startBackgroundThread() {
         mBackgroundThread = new HandlerThread("CameraBackground");
         mBackgroundThread.start();
         mBackgroundHandler = new Handler(mBackgroundThread.getLooper());
@@ -342,7 +340,7 @@ public class Camera2VideoFragment extends Fragment
     /**
      * Stops the background thread and its {@link Handler}.
      */
-    private void stopBackgroundThread() {
+    public void stopBackgroundThread() {
         mBackgroundThread.quitSafely();
         try {
             mBackgroundThread.join();
@@ -359,7 +357,7 @@ public class Camera2VideoFragment extends Fragment
      * @param permissions The permissions your app wants to request.
      * @return Whether you can show permission rationale UI.
      */
-    private boolean shouldShowRequestPermissionRationale(String[] permissions) {
+    public boolean shouldShowRequestPermissionRationale(String[] permissions) {
         for (String permission : permissions) {
             if (FragmentCompat.shouldShowRequestPermissionRationale(this, permission)) {
                 return true;
@@ -371,7 +369,7 @@ public class Camera2VideoFragment extends Fragment
     /**
      * Requests permissions needed for recording video.
      */
-    private void requestVideoPermissions() {
+    public void requestVideoPermissions() {
         if (shouldShowRequestPermissionRationale(VIDEO_PERMISSIONS)) {
             new ConfirmationDialog().show(getChildFragmentManager(), FRAGMENT_DIALOG);
         } else {
@@ -401,7 +399,7 @@ public class Camera2VideoFragment extends Fragment
         }
     }
 
-    private boolean hasPermissionsGranted(String[] permissions) {
+    public boolean hasPermissionsGranted(String[] permissions) {
         for (String permission : permissions) {
             if (ActivityCompat.checkSelfPermission(getActivity(), permission)
                     != PackageManager.PERMISSION_GRANTED) {
@@ -415,7 +413,7 @@ public class Camera2VideoFragment extends Fragment
      * Tries to open a {@link CameraDevice}. The result is listened by `mStateCallback`.
      */
     @SuppressWarnings("MissingPermission")
-    private void openCamera(int width, int height) {
+    public void openCamera(int width, int height) {
         if (!hasPermissionsGranted(VIDEO_PERMISSIONS)) {
             requestVideoPermissions();
             return;
@@ -466,7 +464,7 @@ public class Camera2VideoFragment extends Fragment
         }
     }
 
-    private void closeCamera() {
+    public void closeCamera() {
         try {
             mCameraOpenCloseLock.acquire();
             closePreviewSession();
@@ -488,7 +486,7 @@ public class Camera2VideoFragment extends Fragment
     /**
      * Start the camera preview.
      */
-    private void startPreview() {
+    public void startPreview() {
         if (null == mCameraDevice || !mTextureView.isAvailable() || null == mPreviewSize) {
             return;
         }
@@ -527,7 +525,7 @@ public class Camera2VideoFragment extends Fragment
     /**
      * Update the camera preview. {@link #startPreview()} needs to be called in advance.
      */
-    private void updatePreview() {
+    public void updatePreview() {
         if (null == mCameraDevice) {
             return;
         }
@@ -541,7 +539,7 @@ public class Camera2VideoFragment extends Fragment
         }
     }
 
-    private void setUpCaptureRequestBuilder(CaptureRequest.Builder builder) {
+    public void setUpCaptureRequestBuilder(CaptureRequest.Builder builder) {
         builder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO);
     }
 
@@ -553,7 +551,7 @@ public class Camera2VideoFragment extends Fragment
      * @param viewWidth  The width of `mTextureView`
      * @param viewHeight The height of `mTextureView`
      */
-    private void configureTransform(int viewWidth, int viewHeight) {
+    public void configureTransform(int viewWidth, int viewHeight) {
         Activity activity = getActivity();
         if (null == mTextureView || null == mPreviewSize || null == activity) {
             return;
@@ -576,7 +574,7 @@ public class Camera2VideoFragment extends Fragment
         mTextureView.setTransform(matrix);
     }
 
-    private void setUpMediaRecorder() throws IOException {
+    public void setUpMediaRecorder() throws IOException {
         final Activity activity = getActivity();
         if (null == activity) {
             return;
@@ -605,13 +603,13 @@ public class Camera2VideoFragment extends Fragment
         mMediaRecorder.prepare();
     }
 
-    private String getVideoFilePath(Context context) {
+    public String getVideoFilePath(Context context) {
         final File dir = context.getExternalFilesDir(null);
         return (dir == null ? "" : (dir.getAbsolutePath() + "/"))
                 + System.currentTimeMillis() + ".mp4";
     }
 
-    private void startRecordingVideo() {
+    public void startRecordingVideo() {
         if (null == mCameraDevice || !mTextureView.isAvailable() || null == mPreviewSize) {
             return;
         }
@@ -650,7 +648,7 @@ public class Camera2VideoFragment extends Fragment
                             mIsRecordingVideo = true;
 
                             // Start recording
-
+                            mMediaRecorder.start();
                         }
                     });
                 }
@@ -669,14 +667,14 @@ public class Camera2VideoFragment extends Fragment
 
     }
 
-    private void closePreviewSession() {
+    public void closePreviewSession() {
         if (mPreviewSession != null) {
             mPreviewSession.close();
             mPreviewSession = null;
         }
     }
 
-    private void stopRecordingVideo() {
+    public void stopRecordingVideo() {
         // UI
         mIsRecordingVideo = false;
         mButtonVideo.setText(R.string.record);
@@ -710,7 +708,7 @@ public class Camera2VideoFragment extends Fragment
 
     public static class ErrorDialog extends DialogFragment {
 
-        private static final String ARG_MESSAGE = "message";
+        public static final String ARG_MESSAGE = "message";
 
         public static ErrorDialog newInstance(String message) {
             ErrorDialog dialog = new ErrorDialog();

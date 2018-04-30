@@ -17,12 +17,16 @@
 package com.example.kenneth.hiit;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.MediaController;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -36,7 +40,7 @@ public class CameraActivity extends YouTubeBaseActivity implements YouTubePlayer
     Global global;
     String ytshortlink, templink;
     YouTubePlayer u2;
-
+    Camera2VideoFragment frag;
     @Override
     protected void onDestroy() {
         global.curHandler = null;
@@ -54,12 +58,14 @@ public class CameraActivity extends YouTubeBaseActivity implements YouTubePlayer
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
-        if (null == savedInstanceState) {
-            getFragmentManager().beginTransaction()
-                    .replace(R.id.container, Camera2VideoFragment.newInstance())
-                    .commit();
-        }
-
+        ((FrameLayout)findViewById(R.id.container1)).setVisibility(View.GONE);
+        FragmentManager fm = getFragmentManager();
+      if (null == savedInstanceState) {
+    fm.beginTransaction()
+            .replace(R.id.container1, Camera2VideoFragment.newInstance(),"sos")
+            .commit();
+    }
+    frag = (Camera2VideoFragment)fm.findFragmentByTag("MY_FRAGMENT");
         VideoView vv = (VideoView) findViewById(R.id.vv);
 
         YouTubePlayerView youTubeView = (YouTubePlayerView)
@@ -72,7 +78,9 @@ public class CameraActivity extends YouTubeBaseActivity implements YouTubePlayer
                 switch (msg.what) {
                     //all ready
                     case 20:
+                    //    frag.startRecordingVideo();
                         u2.play();
+
                         break;
                     case 21:
                         //some one not ready
@@ -134,6 +142,8 @@ public class CameraActivity extends YouTubeBaseActivity implements YouTubePlayer
             public void onVideoEnded() {
                 global.curHandler = null;
                 global.client.Send("|qp|" + global.CurrentParty.HostUname);
+                frag.stopRecordingVideo();
+
                 CameraActivity.this.finish();
             }
 
