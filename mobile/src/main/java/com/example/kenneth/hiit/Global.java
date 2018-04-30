@@ -16,6 +16,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
@@ -26,12 +27,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Console;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -39,6 +42,7 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
+import java.util.regex.Pattern;
 
 /**
  * Created by Kenneth on 27/2/2018.
@@ -109,7 +113,7 @@ public class Global extends Application implements Serializable {
     }
 
     public void getPartyList() {
-        this.client.Send("/getptys/");
+        this.client.Send("|getptys|");
     }
 
 
@@ -128,11 +132,12 @@ public class Global extends Application implements Serializable {
         }
     }
 
-public void SetUrl(){
+    public void SetUrl() {
         if (CurrentParty != null) {
             Url = CurrentParty.getUrl().toString();
         }
-}
+    }
+
     public void SetNearlybyList(String uname) {
         if (nearlyByList != null) {
             nearlyByList.clear();
@@ -237,7 +242,8 @@ public void SetUrl(){
             curHandler.sendMessage(curMsg);
         }
     }
-    public void Comfirmed(int what,Object obj) {
+
+    public void Comfirmed(int what, Object obj) {
         if (curHandler != null) {
             Message curMsg = Message.obtain();
             curMsg.what = what;
@@ -257,12 +263,16 @@ public void SetUrl(){
         public void run() {
             while (true) {
                 String msg = client.Listener();
-                String[] pair = msg.split("/");
+                if (msg.isEmpty())
+                    return;
+                String[] pair = msg.split(Pattern.quote("|"));
                 String Action = "", Value = "";
                 try {
                     //     Action = pair[0].toLowerCase();
                     Action = pair[1];
                     Value = pair[2];
+
+
                 } catch (Exception ex) {
                 }
                 System.out.println(msg);
@@ -349,20 +359,26 @@ public void SetUrl(){
     public void PlayVideo() {
         if (currentContext != null) {
 
-            new CountDownTimer(5000,1000){
-
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
-                public void onFinish() {
-                  Comfirmed(4);
-                }
+                public void run() {
+                    CountDownTimer cdt5 = new CountDownTimer(5000, 1000) {
 
-                @Override
-                public void onTick(long millisUntilFinished) {
-                    Comfirmed(1,millisUntilFinished);
-                  //  mTextView.setText("seconds remaining:"+millisUntilFinished/1000);
-                }
+                        @Override
+                        public void onFinish() {
+                            Comfirmed(4);
+                        }
 
-            }.start();
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+                            Comfirmed(1, Math.ceil(millisUntilFinished/1000));
+                            System.out.println(millisUntilFinished+"..............");
+                            //  mTextView.setText("seconds remaining:"+millisUntilFinished/1000);
+                        }
+                    }.start();
+                }
+            });
+        }
 
 
 //            long t = System.currentTimeMillis();
@@ -384,7 +400,7 @@ public void SetUrl(){
 //
 //            Intent intent = new Intent(currentContext, CameraActivity.class);
 //            startActivity(intent);
-        }
+    }
 //        CountDownTimer cc = new CountDownTimer(5000, 1000) {
 //            int count = 5;
 //
@@ -407,16 +423,16 @@ public void SetUrl(){
 //            client.Send("test: fail" + ex);
 //        }
 
-    }
-
 
     public void CreateParty(String roomName, String url) {
         CurrentParty = new Party(roomName, this.UserName, url);
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder()
+                .disableHtmlEscaping()
+                .create();
         String jsonString = gson.toJson(CurrentParty);
 
 //this.client.Send("0123456789");
-        this.client.Send("/cp/" + jsonString);
+        this.client.Send("|cp|" + jsonString);
 
     }
 

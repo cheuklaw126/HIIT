@@ -75,7 +75,7 @@ public class Client implements Runnable {
             Thread LoginThread = new Thread() {
                 @Override
                 public void run() {
-                    Send("/login/" + UserName);
+                    Send("|login|" + UserName);
                 }
             };
             LoginThread.start();

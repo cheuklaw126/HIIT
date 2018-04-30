@@ -58,7 +58,7 @@ tv.setText(msg.obj.toString());
     public boolean onKeyUp(int keyCode, KeyEvent event) {
 
         if (keyCode == 66) {
-            global.client.Send("/chat/" + global.LastName + " : " + et.getText());
+            global.client.Send("|chat|" + global.LastName + " : " + et.getText());
             et.setText("");
 
         }

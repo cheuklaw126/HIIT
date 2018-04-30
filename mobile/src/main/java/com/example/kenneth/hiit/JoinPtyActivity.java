@@ -71,7 +71,7 @@ public class JoinPtyActivity extends AppCompatActivity {
               JoinPtyActivity.this.finish();
               global.curHandler=null;
               global.CurrentParty=global.partyList.get(position);
-              global.client.Send("/jp/" + global.partyList.get(position).HostUname);
+              global.client.Send("|jp|" + global.partyList.get(position).HostUname);
 
           }
       });
