@@ -1,21 +1,22 @@
 package com.example.kenneth.hiit;
 
 import android.content.Context;
-        import android.hardware.Sensor;
-        import android.hardware.SensorEvent;
-        import android.hardware.SensorEventListener;
-        import android.hardware.SensorManager;
-        import android.os.Bundle;
-        import android.os.SystemClock;
-        import android.support.wearable.input.WearableButtons;
+import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.os.Bundle;
+import android.os.SystemClock;
+import android.support.wearable.input.WearableButtons;
 import android.util.Log;
-        import android.view.KeyEvent;
-        import android.view.WindowManager;
-        import android.widget.Button;
-        import android.widget.TextView;
+import android.view.KeyEvent;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.TextView;
 
-        import java.text.SimpleDateFormat;
-        import java.util.Calendar;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import android.support.wearable.activity.WearableActivity;
 
@@ -31,16 +32,19 @@ public class StartExerciseOnWear extends WearableActivity implements SensorEvent
     private static final String TAG = "StarExerciseOnWear";
     //private TextView mTextViewStepCount;
     //private TextView mTextViewStepDetect;
-    private TextView hp;
+    private SensorManager mSensorManager;
+    private Sensor mHeartRateSensor;
+    private Button startbtn,stopbtn;
+    private TextView timeSpent, hp;
     private long lastMillis;
     private long totalMilliseconds;
-
+    boolean isButtonClicked = false;
     private Handler stopwatchHandler;
     private Runnable timerThread;
 
     private StartClickListener startClickListener;
 
-    private TextView timeSpent;
+
     private Button start;
     private Button reset;
     Context mContext;
@@ -56,8 +60,11 @@ public class StartExerciseOnWear extends WearableActivity implements SensorEvent
         startClickListener = new StartClickListener();
 
 
-        timeSpent = (TextView) findViewById(R.id.ex_t);
-        hp = (TextView) findViewById(R.id.h_p);
+        timeSpent = (TextView) findViewById(R.id.doing_t);
+        hp = (TextView) findViewById(R.id.rt_p);
+        startbtn = (Button) findViewById(R.id.startBTN);
+        stopbtn = (Button) findViewById(R.id.stopBTN);
+        stopbtn.setEnabled(false);
         int count = WearableButtons.getButtonCount(mContext);
         if(count==1){
             StartClickListener sw = new StartClickListener();
@@ -68,14 +75,38 @@ public class StartExerciseOnWear extends WearableActivity implements SensorEvent
             sw.stop();
 
         }
-
+        startbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                StartClickListener btnS = new StartClickListener();
+                stopbtn.setEnabled(true);
+                isButtonClicked=!isButtonClicked;
+                if(isButtonClicked){
+                    btnS.start();
+                    getStepCount();
+                }else {
+                    btnS.stop();
+                }
+                getStepCount();
+                stopbtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        System.out.println("total HIIT time = " + TimeFormatter.getTimeFromMillis(totalMilliseconds));
+                        System.out.println("Heart Rate = "+mHeartRateSensor);
+                        ResetClickListener reset = new ResetClickListener();
+                        stopbtn.setEnabled(false);
+                        reset.onClick(v);
+                    }
+                });
+            }
+        });
         // }
         //});
     }
 
     private void getStepCount() {
-        SensorManager mSensorManager = ((SensorManager)getSystemService(SENSOR_SERVICE));
-        Sensor mHeartRateSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE);
+        mSensorManager = ((SensorManager)getSystemService(SENSOR_SERVICE));
+        mHeartRateSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE);
         // Sensor mStepCountSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         ///Sensor mStepDetectSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
 
@@ -133,19 +164,22 @@ public class StartExerciseOnWear extends WearableActivity implements SensorEvent
 
         }
 
+
         private void start() {
 
-            start.setText(getText(R.string.stop));
+            //start.setText(getText(R.string.stop));
             started = true;
 
             lastMillis = SystemClock.uptimeMillis();
-
+            System.out.println("inside start@@@@@@@@@@@@@@@@@");
             stopwatchHandler.post(timerThread);
         }
 
         private void stop() {
-            start.setText(getText(R.string.start));
+            //start.setText(getText(R.string.start));
             started = false;
+            System.out.println("inside stop@@@@@@@@@@@@@@@@@");
+
             stopwatchHandler.removeCallbacks(timerThread);
 
         }
