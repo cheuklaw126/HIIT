@@ -113,4 +113,5 @@
     <string name="title_activity_frd">frdActivity</string>
     <string name="title_activity_chat_room">ChatRoomActivity</string>
     <string name="title_activity_chatting">chattingActivity</string>
+
 </resources>

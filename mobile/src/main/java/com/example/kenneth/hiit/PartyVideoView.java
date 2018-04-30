@@ -15,7 +15,7 @@ import com.google.android.youtube.player.YouTubePlayerView;
 public class PartyVideoView extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
     Global global;
     String ytlink, ytshortlink, templink;
-    final String DEVELOPER_KEY = getString(R.string.DEVELOPER_KEY);
+
 
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer player, boolean wasRestored) {
@@ -34,8 +34,10 @@ public class PartyVideoView extends YouTubeBaseActivity implements YouTubePlayer
         final VideoView mVideoView = (VideoView) findViewById(R.id.vv);
         YouTubePlayerView youTubeView = (YouTubePlayerView)
                 findViewById(R.id.videoView1);
-        System.out.println("global.Url = " + global.Url);
-        templink = global.Url;
+        final String DEVELOPER_KEY = "AIzaSyAsJkJqZZ6zW1_hswItJup7FQP3UVNoaM4";
+        global = (Global) getApplicationContext();
+        System.out.println("global.CurrentParty.Url = " + global.CurrentParty.Url);
+        templink = global.CurrentParty.Url;
         if (templink.contains("youtube")) {
             ytlink = templink.replace("https://www.youtube", "https://http://www.youtube");
             System.out.println("ytlink = " + ytlink);

@@ -86,6 +86,7 @@ public class PartyActivity extends AppCompatActivity {
                         PartyActivity.this.finish();
                         break;
                     case 4:
+                        //Intent intent = new Intent(PartyActivity.this, PartyVideoView.class);
                         Intent intent = new Intent(PartyActivity.this, CameraActivity.class);
                         startActivity(intent);
                         global.curHandler = null;
