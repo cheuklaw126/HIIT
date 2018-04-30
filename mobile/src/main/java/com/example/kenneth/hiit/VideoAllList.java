@@ -31,14 +31,15 @@ import java.util.Map;
  */
 
 public class VideoAllList extends AppCompatActivity {
-
+Global global;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.video_alllist);
-
-
+        global = (Global) getApplicationContext();
+        MainActivity ma = new MainActivity();
+        ma.GetExerciseHistory(global.Uid);
     }
 
     public static final class VideoListFragment extends ListFragment {
@@ -62,6 +63,7 @@ public class VideoAllList extends AppCompatActivity {
             VideoAllList.VideoListAdapter adapter= new VideoAllList.VideoListAdapter(getActivity());
             setListAdapter(adapter);
             //setListAdapter(new VideoListAdapter(getActivity()));
+
 
         }
         @Override
@@ -114,8 +116,13 @@ public class VideoAllList extends AppCompatActivity {
             LINK=vl.getLINK();
             DESC=vl.getDESC();
             for(int i=0; i<vl.getcount(); i++) {
-                System.out.println("inside videocontent getallVideolist.getLINK = " + LINK[i] + "  vl.getDESC =" + DESC[i] + " v1.getcount = " + vl.getcount());
-                addItem(new YTContent.YTV(LINK[i], DESC[i]));
+                String[] slink=LINK;
+                System.out.println("inside videocontent getallVideolist.getLINK = " + LINK[i] + "  vl.getDESC =" + DESC[i] + " v1.getcount = " + vl.getcount()+"slink = "+slink[i]);
+                if ((slink[i].contains("http://")) || (slink[i].contains("https://"))) {
+                System.out.println("inside videoAllList  link have http:// or https//");
+                } else {
+                    addItem(new YTContent.YTV(LINK[i], DESC[i]));
+                }
             }
         }
 
