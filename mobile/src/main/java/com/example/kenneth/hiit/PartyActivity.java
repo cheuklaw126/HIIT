@@ -30,7 +30,7 @@ public class PartyActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         global.curHandler = null;
-        global.client.Send("/qp/" + global.CurrentParty.HostUname);
+        global.client.Send("|qp|" + global.CurrentParty.HostUname);
     }
 
     @Override
@@ -101,11 +101,11 @@ public class PartyActivity extends AppCompatActivity {
                 global.currentContext = getApplicationContext();
                 if (isReady) {
                     isReady = false;
-                    global.client.Send("/urdypty/" + global.CurrentParty.HostUname);
+                    global.client.Send("|urdypty|" + global.CurrentParty.HostUname);
 
                 } else {
                     isReady = true;
-                    global.client.Send("/rdypty/" + global.CurrentParty.HostUname);
+                    global.client.Send("|rdypty|" + global.CurrentParty.HostUname);
 
                 }
             }
@@ -123,7 +123,7 @@ public class PartyActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // global.client.Send("/qp/" + global.CurrentParty.HostUname);
+        // global.client.Send("|qp|" + global.CurrentParty.HostUname);
         global.curHandler = null;
     }
 }

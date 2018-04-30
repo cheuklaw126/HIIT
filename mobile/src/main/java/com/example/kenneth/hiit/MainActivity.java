@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onDestroy() {
-    this.global.client.Send("/logout");
+    this.global.client.Send("|logout");
         super.onDestroy();
     }
 
@@ -235,7 +235,7 @@ if(global.src.equals("null")||global.src.equals(null)||global.src.equals("")){
     @Override
     protected void onStop() {
         super.onStop();
-     //   global.client.Send("/logout");
+     //   global.client.Send("|logout");
     }
 
     @Override
@@ -250,7 +250,7 @@ if(global.src.equals("null")||global.src.equals(null)||global.src.equals("")){
             return true;
         }
         if (id == R.id.logout) {
-            global.client.Send("/logout");
+            global.client.Send("|logout");
 
             MainActivity.this.finish();
             //  global = null;
