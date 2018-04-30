@@ -14,7 +14,7 @@ import com.google.android.youtube.player.YouTubePlayerView;
 
 public class PartyVideoView extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
     Global global;
-    String ytlink, ytshortlink, templink;
+    String ytshortlink, templink;
 
 
     @Override
@@ -31,7 +31,7 @@ public class PartyVideoView extends YouTubeBaseActivity implements YouTubePlayer
         super.onCreate(savedInstanceState);
         setContentView(R.layout.party_videovideo);
         VideoView vv = (VideoView) findViewById(R.id.vv);
-        final VideoView mVideoView = (VideoView) findViewById(R.id.vv);
+
         YouTubePlayerView youTubeView = (YouTubePlayerView)
                 findViewById(R.id.videoView1);
         final String DEVELOPER_KEY = "AIzaSyAsJkJqZZ6zW1_hswItJup7FQP3UVNoaM4";
@@ -39,21 +39,11 @@ public class PartyVideoView extends YouTubeBaseActivity implements YouTubePlayer
         System.out.println("global.CurrentParty.Url = " + global.CurrentParty.Url);
         templink = global.CurrentParty.Url;
         if (templink.contains("youtube")) {
-            ytlink = templink.replace("https://www.youtube", "https://http://www.youtube");
-            System.out.println("ytlink = " + ytlink);
+
             ytshortlink = templink.replaceAll(".*v=", "");
             System.out.println("ytshortlink = " + ytshortlink);
             youTubeView.initialize(DEVELOPER_KEY, this);
-            MediaController mediaController = new MediaController(this);
-            mediaController.setAnchorView(mVideoView);
-            mVideoView.setMediaController(mediaController);
-            mVideoView.setVideoPath(ytlink);
-            mVideoView.requestFocus();
-            mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                public void onPrepared(MediaPlayer mp) {
-                    mVideoView.start();
-                }
-            });
+
         } else {
             vv.setMediaController(new MediaController(this));
 

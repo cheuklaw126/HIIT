@@ -15,6 +15,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -24,36 +25,59 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
+import com.google.android.youtube.player.YouTubeBaseActivity;
+import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubeIntents;
 import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerView;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 
 //  import com.mynetgear.cheuklaw126.hiit.YouTubeFragment;
 
 
-public class HistoryPage extends AppCompatActivity {
+public class HistoryPage extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
 
     int vid, uid;
-    String lastD, lastT, cc, eg, com, hr, vn, eid;
+    String lastD, lastT, cc, eg, com, hr, vn, eid,vl;
 
     SQLiteDatabase db;
 
     @Override
+    public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer player, boolean wasRestored) {
+        System.out.println("vl = "+vl);
+        if (!wasRestored) player.cueVideo(vl); // your video to play
+
+
+    }
+
+    @Override
+    public void onInitializationFailure(YouTubePlayer.Provider arg0, YouTubeInitializationResult arg1) {
+    }
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //VideoListFragment newFragment = new VideoListFragment();
-        //FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        //transaction.replace(R.id.video_list, newFragment)
+
         eid = getIntent().getStringExtra("eid");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.history_page);
+
+        YouTubePlayerView youTubeView = (YouTubePlayerView)
+                findViewById(R.id.hpyt);
         getExData(eid);
-        getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentById(R.id.video_list)).commit();
-        //setListAdapter(new VideoListAdapter(getActivity()));
+        final String DEVELOPER_KEY = "AIzaSyAsJkJqZZ6zW1_hswItJup7FQP3UVNoaM4";
+        youTubeView.initialize(DEVELOPER_KEY, this);
+
+
+       // getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentById(R.id.video_list)).commit();
+
+
 
     }
+
 
     private void getExData(String eid) {
 
@@ -86,6 +110,7 @@ public class HistoryPage extends AppCompatActivity {
                     Cursor cursor2 = db.rawQuery("SELECT * from videolist where vid=" + vid + ";", null);
                     while (cursor2.moveToNext()) {
                         vn = cursor2.getString(cursor2.getColumnIndex("vname"));
+                        vl= cursor2.getString(cursor2.getColumnIndex("vlink"));
                     }
                     TextView showTEXT = (TextView) findViewById(R.id.lastDT);
                     showTEXT.setText(lastD);
@@ -120,16 +145,11 @@ public class HistoryPage extends AppCompatActivity {
     }
 
 
-    public static final class VideoListFragment extends ListFragment {
+    /*public static final class VideoListFragment extends ListFragment {
 
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            //getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentById(R.id.video_list)).commit();
-            //FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            //transaction.remove()
-            //FragmentManager fragmentManager = getFragmentManager();
-            //FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            //int count = fragmentManager.getBackStackEntryCount();
+
             System.out.println("inside historypage ~ videolistfragment count = ");
             List<Fragment> fragment = getFragmentManager().getFragments();
             if (fragment != null) {
@@ -137,11 +157,9 @@ public class HistoryPage extends AppCompatActivity {
                 System.out.println(" in HistoryList onclick fragment not null");
                 getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentById(R.id.video_list)).commit();
             }
-            //fragmentManager.popBackStack();
-            //fragmentManager.findFragmentById(R.id.video_list);
-            //fragmentTransaction.commit();
+
             VideoListAdapter adapter = new VideoListAdapter(getActivity());
-            //setListAdapter(adapter);
+
             if (adapter.getCount() > 0) {
                 System.out.println("adapter.getCount() "+adapter.getCount());
 
@@ -150,7 +168,7 @@ public class HistoryPage extends AppCompatActivity {
             }else {
                 setListAdapter(adapter);
             }
-            //setListAdapter(new VideoListAdapter(getActivity()));
+
 
         }
         @Override
@@ -176,6 +194,6 @@ public class HistoryPage extends AppCompatActivity {
         }
 
 
-    }
+    }*/
 
 }
