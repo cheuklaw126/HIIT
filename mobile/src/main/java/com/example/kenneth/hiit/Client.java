@@ -35,7 +35,7 @@ public class Client implements Runnable {
         try {
             InetAddress add = InetAddress.getByName("cheuklaw126.mynetgear.com");
             this.ip = add.getHostAddress();
-       this.ip = "192.168.1.22";
+      // this.ip = "192.168.1.22";
         } catch (Exception ex) {
             this.ip = "";
         }
