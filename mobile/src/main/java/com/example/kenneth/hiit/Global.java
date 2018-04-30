@@ -277,6 +277,12 @@ public class Global extends Application implements Serializable {
                 }
                 System.out.println(msg);
                 switch (Action) {
+                    case "strVdo":
+                        Comfirmed(20);
+                        break;
+                    case "waitPP":
+                        Comfirmed(21);
+                        break;
                     case "ptys":
                         Gson tmpGson = new Gson();
                         String test = Value;
@@ -371,8 +377,8 @@ public class Global extends Application implements Serializable {
 
                         @Override
                         public void onTick(long millisUntilFinished) {
-                            Comfirmed(1, Math.ceil(millisUntilFinished/1000));
-                            System.out.println(millisUntilFinished+"..............");
+                            Comfirmed(1, Math.ceil(((double) millisUntilFinished) / 1000));
+                            System.out.println(millisUntilFinished + "..............");
                             //  mTextView.setText("seconds remaining:"+millisUntilFinished/1000);
                         }
                     }.start();

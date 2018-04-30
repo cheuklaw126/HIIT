@@ -17,9 +17,38 @@
 package com.example.kenneth.hiit;
 
 import android.app.Activity;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.widget.MediaController;
+import android.widget.Toast;
+import android.widget.VideoView;
 
-public class CameraActivity extends Activity {
+import com.google.android.youtube.player.YouTubeBaseActivity;
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerView;
+
+public class CameraActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
+    Global global;
+    String ytshortlink, templink;
+    YouTubePlayer u2;
+
+    @Override
+    protected void onDestroy() {
+        global.curHandler = null;
+        global.client.Send("|qp|" + global.CurrentParty.HostUname);
+        super.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        //     super.onBackPressed();
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +59,95 @@ public class CameraActivity extends Activity {
                     .replace(R.id.container, Camera2VideoFragment.newInstance())
                     .commit();
         }
+
+        VideoView vv = (VideoView) findViewById(R.id.vv);
+
+        YouTubePlayerView youTubeView = (YouTubePlayerView)
+                findViewById(R.id.videoView1);
+        final String DEVELOPER_KEY = "AIzaSyAsJkJqZZ6zW1_hswItJup7FQP3UVNoaM4";
+        global = (Global) getApplicationContext();
+        Handler mHandler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                switch (msg.what) {
+                    //all ready
+                    case 20:
+                        u2.play();
+                        break;
+                    case 21:
+                        //some one not ready
+                        Toast.makeText(getApplicationContext(), "Waiting others", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+
+            }
+        };
+
+        global.curHandler = mHandler;
+        System.out.println("global.CurrentParty.Url = " + global.CurrentParty.Url);
+        templink = global.CurrentParty.Url;
+        if (templink.contains("youtube")) {
+
+            ytshortlink = templink.replaceAll(".*v=", "");
+            System.out.println("ytshortlink = " + ytshortlink);
+            youTubeView.initialize(DEVELOPER_KEY, this);
+            youTubeView.setEnabled(false);
+            //    youTubeView.set
+
+        } else {
+            vv.setMediaController(new MediaController(this));
+            Uri uri = Uri.parse(global.Url);
+            vv.setVideoURI(uri);
+            vv.start();
+        }
     }
 
+    @Override
+    public void onInitializationSuccess(YouTubePlayer.Provider provider, final YouTubePlayer youTubePlayer, boolean wasRestored) {
+        youTubePlayer.cueVideo(ytshortlink);
+        u2 = youTubePlayer;
+        youTubePlayer.setPlayerStateChangeListener(new YouTubePlayer.PlayerStateChangeListener() {
+            @Override
+            public void onLoading() {
+                Log.d("CheckPoint", "CheckPoint onLoading");
+                u2.setFullscreen(true);
+            }
+
+            @Override
+            public void onLoaded(String s) {
+                Log.d("CheckPoint", "CheckPoint onLoaded");
+                u2.setPlayerStyle(YouTubePlayer.PlayerStyle.CHROMELESS);
+                global.client.Send("|vdoOK|" + global.CurrentParty.HostUname);
+            }
+
+            @Override
+            public void onAdStarted() {
+                Log.d("CheckPoint", "CheckPoint onAdStarted");
+            }
+
+            @Override
+            public void onVideoStarted() {
+                Log.d("CheckPoint", "CheckPoint onVideoStarted");
+            }
+
+            @Override
+            public void onVideoEnded() {
+                global.curHandler = null;
+                global.client.Send("|qp|" + global.CurrentParty.HostUname);
+                CameraActivity.this.finish();
+            }
+
+            @Override
+            public void onError(YouTubePlayer.ErrorReason errorReason) {
+                Log.d("CheckPoint", "CheckPoint onError = " + errorReason);
+            }
+        });
+
+
+    }
+
+    @Override
+    public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
+
+    }
 }

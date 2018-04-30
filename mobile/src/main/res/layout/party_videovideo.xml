@@ -4,12 +4,12 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 android:layout_width="match_parent"
 android:layout_height="match_parent">
 <VideoView
-    android:id="@+id/vv"
+    android:id="@+id/vv3"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_centerInParent="true"/>
     <com.google.android.youtube.player.YouTubePlayerView
-        android:id="@+id/videoView1"
+        android:id="@+id/videoView13"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
