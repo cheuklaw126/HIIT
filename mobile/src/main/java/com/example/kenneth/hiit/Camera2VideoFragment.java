@@ -690,6 +690,7 @@ public class Camera2VideoFragment extends Fragment
         }
         mNextVideoAbsolutePath = null;
         startPreview();
+        System.out.println("88888888888888888888");
     }
 
     /**

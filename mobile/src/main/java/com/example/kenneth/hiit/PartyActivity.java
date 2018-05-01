@@ -72,7 +72,7 @@ public class PartyActivity extends AppCompatActivity {
             @Override
             public void handleMessage(Message msg) {
                 switch (msg.what) {
-                    case 1:
+                    case 10:
                         btn.setEnabled(false);
                         Toast.makeText(getApplicationContext(), "Ready Start :" + msg.obj + "sec left ", Toast.LENGTH_SHORT).show();
                         break;
@@ -85,9 +85,9 @@ public class PartyActivity extends AppCompatActivity {
                         global.CurrentParty = null;
                         PartyActivity.this.finish();
                         break;
-                    case 4:
+                    case 11:
                         //Intent intent = new Intent(PartyActivity.this, PartyVideoView.class);
-                        Intent intent = new Intent(PartyActivity.this, CameraActivity.class);
+                        Intent intent = new Intent(PartyActivity.this, GameActivity.class);
                         startActivity(intent);
                         global.curHandler = null;
                         PartyActivity.this.finish();

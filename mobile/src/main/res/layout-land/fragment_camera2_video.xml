@@ -19,39 +19,40 @@
 
     <com.example.kenneth.hiit.AutoFitTextureView
         android:id="@+id/texture"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="0px"
+        android:layout_height="0px"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/video"
-        android:layout_marginTop="518dp"
-        android:visibility="visible" />
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="238dp" />
 
     <FrameLayout
-        android:id="@+id/youtube_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/texture"
-        android:background="#4285f4">
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/texture"
+        android:layout_marginLeft="476dp"
+        android:background="#4285f4"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/video"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/record" />
 
         <ImageButton
             android:id="@+id/info"
-            android:contentDescription="@string/description_info"
             style="@android:style/Widget.Material.Light.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|right"
+            android:layout_gravity="center_horizontal|bottom"
+            android:contentDescription="@string/description_info"
             android:padding="20dp"
-       />
+    />
 
     </FrameLayout>
-
-    <Button
-        android:id="@+id/video"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/record" />
 
 </RelativeLayout>

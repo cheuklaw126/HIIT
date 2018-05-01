@@ -280,7 +280,9 @@ if(global.src.equals("null")||global.src==null||global.src.equals("")){
 
 
             switch (id) {
-
+                case R.id.debug:
+                    intent.setClass(MainActivity.this, GameActivity.class);
+break;
                 case R.id.sugFood:
                     intent.setClass(MainActivity.this, foodActivity.class);
 

@@ -66,9 +66,11 @@
         <!-- android:theme="@style/AppTheme" -->
         <!-- android:windowSoftInputMode="adjustPan"> -->
         <!-- </activity> -->
-        <activity android:name=".JoinPtyActivity"></activity>
-        <activity android:name=".PartyVideoView"></activity>
-        <activity android:name=".testvideo"></activity>
+        <activity android:name=".JoinPtyActivity" />
+        <activity android:name=".PartyVideoView" />
+        <activity android:name=".testvideo" />
+        <activity android:name=".GameActivity" />
+        <activity android:name=".partyVdoActivity"></activity>
     </application>
 
 </manifest>

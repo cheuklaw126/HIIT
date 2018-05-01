@@ -276,7 +276,7 @@ public class Global extends Application implements Serializable {
                 String Action = "", Value = "";
                 try {
                     //     Action = pair[0].toLowerCase();
-                    Action = pair[1];
+                    Action = pair[1].toLowerCase();
                     Value = pair[2];
 
 
@@ -284,10 +284,10 @@ public class Global extends Application implements Serializable {
                 }
                 System.out.println(msg);
                 switch (Action) {
-                    case "strVdo":
+                    case "strvdo":
                         Comfirmed(20);
                         break;
-                    case "waitPP":
+                    case "waitpp":
                         Comfirmed(21);
                         break;
                     case "ptys":
@@ -310,7 +310,7 @@ public class Global extends Application implements Serializable {
                     case "msg":
                         NoticeMsg(Value);
                         break;
-                    case "updatePty":
+                    case "updatepty":
                         tmpGson = new Gson();
                         if (Value.equals("_")) {
                             if (curHandler != null) {
@@ -344,7 +344,7 @@ public class Global extends Application implements Serializable {
 
                         }
                         break;
-                    case "strPty":
+                    case "strpty":
                         if (CurrentParty != null) {
                             if (CurrentParty.HostUname.equals(Value)) {
                                 PlayVideo();
@@ -379,12 +379,12 @@ public class Global extends Application implements Serializable {
 
                         @Override
                         public void onFinish() {
-                            Comfirmed(4);
+                            Comfirmed(11);
                         }
 
                         @Override
                         public void onTick(long millisUntilFinished) {
-                            Comfirmed(1, Math.ceil(((double) millisUntilFinished) / 1000));
+                            Comfirmed(10, Math.ceil(((double) millisUntilFinished) / 1000));
                             System.out.println(millisUntilFinished + "..............");
                             //  mTextView.setText("seconds remaining:"+millisUntilFinished/1000);
                         }
