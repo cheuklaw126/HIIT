@@ -16,6 +16,8 @@ import com.google.android.youtube.player.YouTubePlayerView;
 
 import java.util.ArrayList;
 
+import static android.view.View.GONE;
+
 public class videoAdapter extends BaseAdapter implements YouTubePlayer.OnInitializedListener {
 
     YouTubePlayer Player;
@@ -26,8 +28,17 @@ public class videoAdapter extends BaseAdapter implements YouTubePlayer.OnInitial
     String ytshortlink, templink;
 
     @Override
-    public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer player, boolean wasRestored) {
-        if (!wasRestored) player.cueVideo(ytshortlink); // your video to play
+    public void onInitializationSuccess(YouTubePlayer.Provider provider, final YouTubePlayer player, boolean wasRestored) {
+        if (!wasRestored){
+            player.cueVideo(ytshortlink); // your video to play
+            player.setOnFullscreenListener(new YouTubePlayer.OnFullscreenListener() {
+                @Override
+                public void onFullscreen(boolean b) {
+                    player.loadVideo(ytshortlink);
+                }
+            });
+        }
+
         //if(!wasRestored)
         //Player=player;
         //Player.setOnFullscreenListener(new YouTubePlayer.OnFullscreenListener() {
@@ -93,6 +104,7 @@ public class videoAdapter extends BaseAdapter implements YouTubePlayer.OnInitial
         System.out.println("templink = " + templink);
         if (templink.contains("youtube")) {
             //holder.ytview.setVisibility(view.VISIBLE);
+            holder.ytview.setVisibility(view.VISIBLE);
             ytshortlink = templink.replaceAll(".*v=", "");
             System.out.println("ytshortlink = " + ytshortlink);
             holder.ytview.initialize(DEVELOPER_KEY, this);
@@ -100,12 +112,14 @@ public class videoAdapter extends BaseAdapter implements YouTubePlayer.OnInitial
 
         } else if ((templink.contains("http://")) || (templink.contains("https://"))) {
             //holder.videov.setVisibility(view.VISIBLE);
+            holder.ytview.setVisibility(view.VISIBLE);
             holder.videov.setMediaController(new MediaController(view.getContext()));
             Uri uri = Uri.parse(video.getVideolink());
             holder.videov.setVideoURI(uri);
             holder.videov.start();
         } else {
             ytshortlink = templink;
+            holder.ytview.setVisibility(view.VISIBLE);
             holder.ytview.initialize(DEVELOPER_KEY, this);
 
         }
