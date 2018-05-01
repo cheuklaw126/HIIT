@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.example.kenneth.hiit.YouTubeContent;
 import com.google.android.youtube.player.YouTubeInitializationResult;
@@ -160,6 +161,7 @@ public class VideoListAdapter extends BaseAdapter implements YouTubeThumbnailVie
     static class VideoHolder {
         YouTubeThumbnailView thumb;
         TextView title;
+        VideoView vv;
     }
 
 }
