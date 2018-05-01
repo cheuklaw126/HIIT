@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onDestroy() {
-        this.global.client.Send("|logout");
+      //  this.global.client.Send("|logout");
         super.onDestroy();
     }
 
@@ -155,8 +155,13 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        if (global.src.equals("null") || global.src == null || global.src.equals("")) {
-            global.src = "http://cheuklaw126.mynetgear.com/share/img/default.png";
+
+        if(global.src!=null) {
+            if (global.src.length() > 4) {
+
+            } else {
+                global.src = "http://cheuklaw126.mynetgear.com/share/img/default.png";
+            }
         }
         global.SetImage(pIcon, global.src);
 

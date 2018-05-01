@@ -343,7 +343,7 @@ public class Global extends Application implements Serializable {
                         Comfirmed(20);
                         break;
                     case "waitpp":
-                        Comfirmed(21);
+                      //  Comfirmed(21);
                         break;
                     case "ptys":
                         Gson tmpGson = new Gson();
@@ -425,6 +425,7 @@ public class Global extends Application implements Serializable {
     }
 
     public void PlayVideo() {
+        Comfirmed(10, 1);
         Comfirmed(11);
         return;
 //        if (currentContext != null) {
@@ -506,6 +507,17 @@ public class Global extends Application implements Serializable {
         this.client.Send("|cp|" + jsonString);
 
     }
+
+public void PartyEnd(){
+        if(CurrentParty.HostUname.equals(UserName)){
+            client.Send("|killpty|" + UserName);
+
+
+            CurrentParty=null;
+        }
+
+
+}
 
 
     public void NoticeMsg(String msg) {

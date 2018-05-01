@@ -21,6 +21,7 @@ public class JoinPtyActivity extends AppCompatActivity {
     Global global;
     ListView list;
     ListAdapter adapter;
+    ArrayList <Party>al;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +33,7 @@ public class JoinPtyActivity extends AppCompatActivity {
         }
         global.partyList=null;
         global.getPartyList();
+         al= global.partyList;
         list = (ListView) findViewById(R.id.listView_partyList);
         Handler mHandler = new Handler() {
             @Override

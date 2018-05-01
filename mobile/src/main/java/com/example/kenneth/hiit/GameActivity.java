@@ -59,13 +59,16 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
                     //all ready
                     case 20:
                         //    frag.startRecordingVideo();
-                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
                         if (isYoutble) {
+                            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
                             u2.play();
                         } else {
                             frag = (Camera2VideoFragment) fm.findFragmentByTag("sos");
                             frag.mButtonVideo.callOnClick();
                             vv.start();
+                            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
                         }
                         break;
@@ -101,21 +104,24 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
             vv.setClickable(false);
             int lenght = vv.getDuration();
             vv.setEnabled(false);
+            vv.setMediaController(null);
+          //  setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
             vv.setOnInfoListener(new MediaPlayer.OnInfoListener() {
                 @Override
                 public boolean onInfo(MediaPlayer mp, int what, int extra) {
                     return false;
                 }
             });
-
+vv.setEnabled(false);
             vv.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
                     System.out.println("tes2");
                    //u2.setFullscreen(false);
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                     global.curHandler = null;
-                    global.client.Send("|qp|" + global.CurrentParty.HostUname);
+                    global.PartyEnd();
+                   // global.client.Send("|qp|" + global.CurrentParty.HostUname);
                     frag.mButtonVideo.callOnClick();
 
                     GameActivity.this.finish();
