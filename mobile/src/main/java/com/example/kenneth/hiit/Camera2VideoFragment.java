@@ -66,7 +66,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Camera2VideoFragment extends Fragment
         implements View.OnClickListener, FragmentCompat.OnRequestPermissionsResultCallback {
-
+    Global global;
     public static final int SENSOR_ORIENTATION_DEFAULT_DEGREES = 90;
     public static final int SENSOR_ORIENTATION_INVERSE_DEGREES = 270;
     public static final SparseIntArray DEFAULT_ORIENTATIONS = new SparseIntArray();
@@ -284,6 +284,8 @@ public class Camera2VideoFragment extends Fragment
         mButtonVideo = (Button) view.findViewById(R.id.video);
         mButtonVideo.setOnClickListener(this);
         view.findViewById(R.id.info).setOnClickListener(this);
+        Context ct= getActivity();
+        global = (Global) ct.getApplicationContext();
     }
 
     @Override
@@ -686,6 +688,8 @@ public class Camera2VideoFragment extends Fragment
         if (null != activity) {
             Toast.makeText(activity, "Video saved: " + mNextVideoAbsolutePath,
                     Toast.LENGTH_SHORT).show();
+            global.upload(mNextVideoAbsolutePath);
+
             Log.d(TAG, "Video saved: " + mNextVideoAbsolutePath);
         }
         mNextVideoAbsolutePath = null;

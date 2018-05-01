@@ -425,30 +425,31 @@ public class Global extends Application implements Serializable {
     }
 
     public void PlayVideo() {
-        if (currentContext != null) {
-
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    CountDownTimer cdt5 = new CountDownTimer(5000, 1000) {
-
-                        @Override
-                        public void onFinish() {
-                            Comfirmed(11);
-                        }
-
-                        @Override
-                        public void onTick(long millisUntilFinished) {
-                            final long remainLong = millisUntilFinished;
-                            double remain = Math.ceil(((double) remainLong) / 1000);
-                            Comfirmed(10, remain);
-                            System.out.println(millisUntilFinished + "..............");
-                            //  mTextView.setText("seconds remaining:"+millisUntilFinished/1000);
-                        }
-                    }.start();
-                }
-            });
-        }
+        Comfirmed(11);
+        return;
+//        if (currentContext != null) {
+//
+//            new Handler(Looper.getMainLooper()).post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    CountDownTimer cdt5 = new CountDownTimer(5000, 1000) {
+//
+//                        @Override
+//                        public void onFinish() {
+//                            Comfirmed(11);
+//                        }
+//
+//                        @Override
+//                        public void onTick(long millisUntilFinished) {
+//                            final long remainLong = millisUntilFinished;
+//                            double remain = Math.ceil(((double) remainLong) / 1000);
+//                            Comfirmed(10, remain);
+//                            System.out.println(millisUntilFinished + "..............");
+//                            //  mTextView.setText("seconds remaining:"+millisUntilFinished/1000);
+//                        }
+//                    }.start();
+//                }
+//            });}
 
 
 //            long t = System.currentTimeMillis();
