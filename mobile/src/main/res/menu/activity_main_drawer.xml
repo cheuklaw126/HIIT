@@ -29,8 +29,8 @@
             android:title="MyVideo" />
         <item
         android:id="@+id/nav_manage"
-        android:icon="@drawable/ic_menu_manage"
-        android:title="TIM" />
+        android:icon="@drawable/ic_menu_slideshow"
+        android:title="Exercise Analysis" />
 
         <item
             android:id="@+id/sugFood"
