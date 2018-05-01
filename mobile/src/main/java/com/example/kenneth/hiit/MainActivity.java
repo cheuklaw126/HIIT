@@ -306,9 +306,13 @@ if(global.src.equals("null")||global.src.equals(null)||global.src.equals("")){
                     System.out.println(" in intent nav_slideshow");
                     intent.setClass(MainActivity.this, VideoAllList.class);
                     break;
-                case R.id.nav_manage:
-                    System.out.println("in intent nav_manage");
+                case R.id.nav_analysis:
+                    System.out.println("in intent nav_analysis");
                     intent.setClass(MainActivity.this, AnalysisPage.class);
+                    break;
+                case R.id.nav_test:
+                    System.out.println("in intent nav_analysis");
+                    intent.setClass(MainActivity.this, testvideo.class);
                     break;
                 default:
                     break;

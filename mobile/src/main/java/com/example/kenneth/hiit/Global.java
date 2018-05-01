@@ -53,6 +53,8 @@ public class Global extends Application implements Serializable {
     public String UserName, pw, FirstName, LastName, src;
     public int Uid, vid, compEx;
     public String lastD, lastT, cc, hr, eg, com, Url;
+    public String[] vn1,link1, desc1;
+    public int numvideo;
     public static String vn, link, desc;
     public static Context contextOfApplication;
     public Client client;
@@ -85,6 +87,11 @@ public class Global extends Application implements Serializable {
         this.client = null;
         this.CurrentParty = null;
         this.SocketListener = null;
+        this.Url = null;
+        this.vn = null;
+        this.desc = null;
+        this.link = null;
+        this.numvideo = 0;
     }
 
     public Global() {
@@ -727,6 +734,38 @@ public class Global extends Application implements Serializable {
         }
     }
 
+    public void GetAllVideo() {
+
+        String queryV = String.format("select * from movie");
+
+        final ArrayList<String> queryvs = new ArrayList<String>();
+        queryvs.add(queryV);
+        try {
+            io = new IOObject("ExecuteReader", queryvs);
+            io.Start();
+            JSONObject vjobj = io.getReturnObject();
+            JSONArray vjsonArray = io.getReturnObject().getJSONArray("data");
+            System.out.println(" vjsonArray.length = "+vjsonArray.length());
+            if (vjsonArray.length() > 0) {
+                numvideo = vjsonArray.length();
+                System.out.println(" numvideo = "+numvideo);
+                vn1=new String[numvideo];
+                link1=new String[numvideo];
+                desc1=new String[numvideo];
+                for (int i = 0; i<numvideo; i++) {
+                    JSONObject veh = vjsonArray.getJSONObject(i);
+                    System.out.println(" veh "+i+" link1 = "+veh.getString("link")+" desc1 = "+veh.getString("description"));
+                    //vn1[i] = "ieyzL5OaPZk";
+                    vn1[i] = veh.getString("vname");
+                   link1[i] = veh.getString("link");
+                    desc1[i] = veh.getString("description");
+                    System.out.println(" Global getALLVIDEO vn1 = "+vn1[i]+" link1 = "+link1[i]+" desc1 = "+desc1[i]);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
     public void GetVideo(int vid) {
         SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/com.example.kenneth.hiit/hiitDB", null, SQLiteDatabase.OPEN_READWRITE); //open DB file
         db.execSQL("DELETE FROM videoList");
@@ -749,6 +788,7 @@ public class Global extends Application implements Serializable {
             ex.printStackTrace();
         }
     }
+
 
     public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;

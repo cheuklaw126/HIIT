@@ -68,6 +68,7 @@
         <!-- </activity> -->
         <activity android:name=".JoinPtyActivity"></activity>
         <activity android:name=".PartyVideoView"></activity>
+        <activity android:name=".testvideo"></activity>
     </application>
 
 </manifest>

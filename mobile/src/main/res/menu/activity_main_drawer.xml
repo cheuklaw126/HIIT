@@ -28,10 +28,14 @@
             android:icon="@drawable/ic_menu_slideshow"
             android:title="MyVideo" />
         <item
-        android:id="@+id/nav_manage"
+        android:id="@+id/nav_analysis"
         android:icon="@drawable/ic_menu_slideshow"
         android:title="Exercise Analysis" />
 
+        <item
+            android:id="@+id/nav_test"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Test" />
         <item
             android:id="@+id/sugFood"
             android:icon="@drawable/ic_menu_manage"
