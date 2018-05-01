@@ -44,8 +44,13 @@ public class CreatePartyActivity extends AppCompatActivity {
                     System.out.println("vname = " + vname);
                     vlink = cursor.getString(cursor.getColumnIndex("vlink"));
                     System.out.println("vlink = " + vlink);
-                    vl.add(new VL("https://www.youtube.com/watch?v=" + vlink));
-                    vn.add(new VN(vname));
+                    if((vlink.contains("https://"))||(vlink.contains("http://"))||(vlink.contains("youtube.com"))){
+                        vl.add(new VL(vlink));
+                        vn.add(new VN(vname));
+                    }else {
+                        vl.add(new VL("https://www.youtube.com/watch?v=" + vlink));
+                        vn.add(new VN(vname));
+                    }
                 }
                 ArrayAdapter<VN> adapter = new ArrayAdapter<VN>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, vn);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
