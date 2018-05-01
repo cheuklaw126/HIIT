@@ -4,9 +4,12 @@ import android.app.Application;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,6 +21,7 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +57,7 @@ public class Global extends Application implements Serializable {
     public String UserName, pw, FirstName, LastName, src;
     public int Uid, vid, compEx;
     public String lastD, lastT, cc, hr, eg, com, Url;
-    public String[] vn1,link1, desc1;
+    public String[] vn1, link1, desc1;
     public int numvideo;
     public static String vn, link, desc;
     public static Context contextOfApplication;
@@ -119,6 +123,30 @@ public class Global extends Application implements Serializable {
 
     }
 
+    public void UpdateCurrentData(){
+
+        String query = String.format("SELECT * from pData where uname='%s'", UserName);
+        final ArrayList<String> querys = new ArrayList<String>();
+        querys.add(query);
+        try {
+            io = new IOObject("ExecuteReader", querys);
+            io.Start();
+            JSONArray jsonArray = io.getReturnObject().getJSONArray("data");
+            JSONObject data = jsonArray.getJSONObject(0);
+            if (jsonArray.length() > 0) {
+                this.Uid = data.getInt("uid");
+                this.UserName = data.getString("uname");
+                this.FirstName = data.getString("firstName");
+                this.LastName = data.getString("lastName");
+                this.pw = data.getString("password");
+                this.src = data.getString("src");
+            }
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+    }
+
+
     public void getPartyList() {
         this.client.Send("|getptys|");
     }
@@ -171,6 +199,33 @@ public class Global extends Application implements Serializable {
             System.out.println(ex);
         }
     }
+
+    public void upload(String path) {
+
+        try {
+            File file = new File(path);
+            byte[] fileByte = loadFile(file);
+            String enc64 = android.util.Base64.encodeToString(fileByte, android.util.Base64.DEFAULT);
+            FileInputStream fileInputStream = new FileInputStream(file);
+
+            IOObject ioObj = new IOObject("obj", new ArrayList<String>());
+            ioObj.obj = enc64;
+            if (path.endsWith("jpg")) {
+                ioObj.FileType = "jpg";
+            } else if (path.endsWith("png")) {
+                ioObj.FileType = "png";
+            } else {
+                ioObj.FileType = "mp4";
+            }
+
+            ioObj.CreateUser = UserName;
+            ioObj.Start();
+        } catch (Exception ex) {
+
+        }
+
+    }
+
 
     public byte[] loadFile(File file) throws IOException {
         InputStream is = null;
@@ -384,7 +439,9 @@ public class Global extends Application implements Serializable {
 
                         @Override
                         public void onTick(long millisUntilFinished) {
-                            Comfirmed(10, Math.ceil(((double) millisUntilFinished) / 1000));
+                            final long remainLong = millisUntilFinished;
+                            double remain = Math.ceil(((double) remainLong) / 1000);
+                            Comfirmed(10, remain);
                             System.out.println(millisUntilFinished + "..............");
                             //  mTextView.setText("seconds remaining:"+millisUntilFinished/1000);
                         }
@@ -734,6 +791,12 @@ public class Global extends Application implements Serializable {
         }
     }
 
+    public void Upload(String picPath, Intent data) {
+
+
+    }
+
+
     public void GetAllVideo() {
 
         String queryV = String.format("select * from movie");
@@ -745,27 +808,28 @@ public class Global extends Application implements Serializable {
             io.Start();
             JSONObject vjobj = io.getReturnObject();
             JSONArray vjsonArray = io.getReturnObject().getJSONArray("data");
-            System.out.println(" vjsonArray.length = "+vjsonArray.length());
+            System.out.println(" vjsonArray.length = " + vjsonArray.length());
             if (vjsonArray.length() > 0) {
                 numvideo = vjsonArray.length();
-                System.out.println(" numvideo = "+numvideo);
-                vn1=new String[numvideo];
-                link1=new String[numvideo];
-                desc1=new String[numvideo];
-                for (int i = 0; i<numvideo; i++) {
+                System.out.println(" numvideo = " + numvideo);
+                vn1 = new String[numvideo];
+                link1 = new String[numvideo];
+                desc1 = new String[numvideo];
+                for (int i = 0; i < numvideo; i++) {
                     JSONObject veh = vjsonArray.getJSONObject(i);
-                    System.out.println(" veh "+i+" link1 = "+veh.getString("link")+" desc1 = "+veh.getString("description"));
+                    System.out.println(" veh " + i + " link1 = " + veh.getString("link") + " desc1 = " + veh.getString("description"));
                     //vn1[i] = "ieyzL5OaPZk";
                     vn1[i] = veh.getString("vname");
-                   link1[i] = veh.getString("link");
+                    link1[i] = veh.getString("link");
                     desc1[i] = veh.getString("description");
-                    System.out.println(" Global getALLVIDEO vn1 = "+vn1[i]+" link1 = "+link1[i]+" desc1 = "+desc1[i]);
+                    System.out.println(" Global getALLVIDEO vn1 = " + vn1[i] + " link1 = " + link1[i] + " desc1 = " + desc1[i]);
                 }
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
+
     public void GetVideo(int vid) {
         SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/com.example.kenneth.hiit/hiitDB", null, SQLiteDatabase.OPEN_READWRITE); //open DB file
         db.execSQL("DELETE FROM videoList");

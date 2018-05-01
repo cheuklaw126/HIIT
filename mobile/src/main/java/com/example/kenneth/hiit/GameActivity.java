@@ -1,6 +1,7 @@
 package com.example.kenneth.hiit;
 
 import android.app.FragmentManager;
+import android.content.pm.ActivityInfo;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
@@ -29,7 +30,7 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
     boolean a = false;
     VideoView vv;
     boolean isYoutble;
-
+    Handler mHandler;
     @Override
     protected void onDestroy() {
         // global.curHandler = null;
@@ -51,13 +52,14 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
         final String DEVELOPER_KEY = "AIzaSyAsJkJqZZ6zW1_hswItJup7FQP3UVNoaM4";
         global = (Global) getApplicationContext();
         vv = (VideoView) findViewById(R.id.vv000);
-        Handler mHandler = new Handler() {
+         mHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 switch (msg.what) {
                     //all ready
                     case 20:
                         //    frag.startRecordingVideo();
+                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                         if (isYoutble) {
                             u2.play();
                         } else {
@@ -78,10 +80,10 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
         YouTubePlayerView youTubeView = (YouTubePlayerView)
                 findViewById(R.id.videoView000);
         global.curHandler = mHandler;
-        // templink = global.CurrentParty.Url;
+         templink = global.CurrentParty.Url;
 
-        templink = "https://www.youtube.com/watch?v=wg8ezm5MXs4";
-        templink = "http://cheuklaw126.mynetgear.com/share/vdo/bg.mp4";
+    //    templink = "https://www.youtube.com/watch?v=wg8ezm5MXs4";
+      //  templink = "http://cheuklaw126.mynetgear.com/share/vdo/bg.mp4";
 
         if (templink.contains("youtube")) {
             isYoutble = true;
@@ -98,7 +100,7 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
             vv.setVisibility(View.VISIBLE);
             vv.setClickable(false);
             int lenght = vv.getDuration();
-
+            vv.setEnabled(false);
             vv.setOnInfoListener(new MediaPlayer.OnInfoListener() {
                 @Override
                 public boolean onInfo(MediaPlayer mp, int what, int extra) {
@@ -111,6 +113,7 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
                 public void onCompletion(MediaPlayer mp) {
                     System.out.println("tes2");
                    //u2.setFullscreen(false);
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                     global.curHandler = null;
                     global.client.Send("|qp|" + global.CurrentParty.HostUname);
                     frag.mButtonVideo.callOnClick();
@@ -135,7 +138,7 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
             vv.setMediaController(new MediaController(this));
             Uri uri = Uri.parse(templink);
             vv.setVideoURI(uri);
-            vv.start();
+       //     vv.start();
         }
         Button btn = (Button) findViewById(R.id.button5);
         btn.setVisibility(View.GONE);
@@ -171,6 +174,7 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
             public void onLoaded(String s) {
                 Log.d("CheckPoint", "CheckPoint onLoaded");
                 //       if(isFulledScreen){
+                global.curHandler = mHandler;
                 global.client.Send("|vdoOK|" + global.CurrentParty.HostUname);
                 frag = (Camera2VideoFragment) fm.findFragmentByTag("sos");
                 //     }

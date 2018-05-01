@@ -43,7 +43,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     TextView ac, lastname;
-    IOObject io,io1;
+    IOObject io, io1;
     Global global;
     VideoView vdo;
     private static int IMG_RESULT = 1;
@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onDestroy() {
-    this.global.client.Send("|logout");
+        this.global.client.Send("|logout");
         super.onDestroy();
     }
 
@@ -155,9 +155,9 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-if(global.src.equals("null")||global.src==null||global.src.equals("")){
-    global.src = "http://cheuklaw126.mynetgear.com/share/img/default.png";
-}
+        if (global.src.equals("null") || global.src == null || global.src.equals("")) {
+            global.src = "http://cheuklaw126.mynetgear.com/share/img/default.png";
+        }
         global.SetImage(pIcon, global.src);
 
         return true;
@@ -191,23 +191,9 @@ if(global.src.equals("null")||global.src==null||global.src.equals("")){
                     if (path.endsWith("jpg") || path.endsWith("png")) {
                         picPath = path;
                         Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
-                        File file = new File(picPath);
-
-                        byte[] fileByte = global.loadFile(file);
-                        String enc64 = android.util.Base64.encodeToString(fileByte, android.util.Base64.DEFAULT);
-                        FileInputStream fileInputStream = new FileInputStream(file);
-                        io = new IOObject("obj", new ArrayList<String>());
-                        io.obj = enc64;
-                        if (path.endsWith("jpg")) {
-
-                            io.FileType = "jpg";
-                        } else {
-                            io.FileType = "png";
-                        }
-
-
-                        io.CreateUser = global.UserName;
-                        io.Start();
+                        global.upload(path);
+                        global.UpdateCurrentData();
+                        global.SetImage(pIcon, global.src);
 
 
                         // imageView.setImageBitmap(bitmap);
@@ -235,7 +221,7 @@ if(global.src.equals("null")||global.src==null||global.src.equals("")){
     @Override
     protected void onStop() {
         super.onStop();
-     //   global.client.Send("|logout");
+        //   global.client.Send("|logout");
     }
 
     @Override
@@ -282,7 +268,7 @@ if(global.src.equals("null")||global.src==null||global.src.equals("")){
             switch (id) {
                 case R.id.debug:
                     intent.setClass(MainActivity.this, GameActivity.class);
-break;
+                    break;
                 case R.id.sugFood:
                     intent.setClass(MainActivity.this, foodActivity.class);
 

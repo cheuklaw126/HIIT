@@ -41,7 +41,8 @@ public class frdActivity extends AppCompatActivity {
         TabHost.TabSpec spec2 = tabHost.newTabSpec("Nearly By");
         spec2.setIndicator("Nearly By");
         spec2.setContent(R.id.tab2);
-        tabHost.addTab(spec2);
+
+       // tabHost.addTab(spec2);
         TabHost.TabSpec spec3 = tabHost.newTabSpec("Friends Request");
         spec3.setIndicator("Friends Request");
         spec3.setContent(R.id.tab3);

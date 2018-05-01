@@ -24,7 +24,8 @@ public class PartyActivity extends AppCompatActivity {
     Thread thread;
     boolean isReady = false;
     ListView list;
-
+    Thread thread1;
+    int timeRemain=5;
 
     @Override
     public void onBackPressed() {
@@ -67,6 +68,9 @@ public class PartyActivity extends AppCompatActivity {
                 return v;
             }
         };
+
+
+
         list.setAdapter(adapter);
         Handler mHandler = new Handler() {
             @Override
@@ -74,7 +78,7 @@ public class PartyActivity extends AppCompatActivity {
                 switch (msg.what) {
                     case 10:
                         btn.setEnabled(false);
-                        Toast.makeText(getApplicationContext(), "Ready Start :" + msg.obj + "sec left ", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Ready Start :" + msg.obj.toString() + "sec left ", Toast.LENGTH_SHORT).show();
                         break;
                     case 2:
                         list.invalidateViews();
@@ -111,6 +115,22 @@ public class PartyActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+         thread1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true){
+                    if(timeRemain==0){
+
+                        break;
+                    }
+                }
+            }
+        });
+
+
+
         global.curHandler = mHandler;
 //        if (global.UserName == ptyObj.HostUname) {
 //            btn.setTag("Start");
