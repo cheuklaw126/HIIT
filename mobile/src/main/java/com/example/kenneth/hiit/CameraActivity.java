@@ -41,6 +41,7 @@ public class CameraActivity extends YouTubeBaseActivity implements YouTubePlayer
     String ytshortlink, templink;
     YouTubePlayer u2;
     Camera2VideoFragment frag;
+    FragmentManager fm;
     @Override
     protected void onDestroy() {
         global.curHandler = null;
@@ -59,13 +60,13 @@ public class CameraActivity extends YouTubeBaseActivity implements YouTubePlayer
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
         ((FrameLayout)findViewById(R.id.container1)).setVisibility(View.GONE);
-        FragmentManager fm = getFragmentManager();
+         fm = getFragmentManager();
       if (null == savedInstanceState) {
     fm.beginTransaction()
             .replace(R.id.container1, Camera2VideoFragment.newInstance(),"sos")
             .commit();
     }
-    frag = (Camera2VideoFragment)fm.findFragmentByTag("MY_FRAGMENT");
+
         VideoView vv = (VideoView) findViewById(R.id.vv);
 
         YouTubePlayerView youTubeView = (YouTubePlayerView)
@@ -126,6 +127,7 @@ public class CameraActivity extends YouTubeBaseActivity implements YouTubePlayer
                 Log.d("CheckPoint", "CheckPoint onLoaded");
                 u2.setPlayerStyle(YouTubePlayer.PlayerStyle.CHROMELESS);
                 global.client.Send("|vdoOK|" + global.CurrentParty.HostUname);
+                frag = (Camera2VideoFragment)fm.findFragmentByTag("sos");
             }
 
             @Override
@@ -136,6 +138,8 @@ public class CameraActivity extends YouTubeBaseActivity implements YouTubePlayer
             @Override
             public void onVideoStarted() {
                 Log.d("CheckPoint", "CheckPoint onVideoStarted");
+                frag.mButtonVideo.callOnClick();
+
             }
 
             @Override
