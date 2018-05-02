@@ -24,7 +24,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-
             android:name=".StartActivity"
             android:theme="@style/AppTheme">
             <intent-filter>
@@ -57,6 +56,7 @@
         <activity android:name=".CaloriesBurn" />
         <activity android:name=".PartyActivity" />
         <activity android:name=".CreatePartyActivity" />
+        <activity android:name=".foodActivity" />
         <activity
             android:name=".ChatActivity"
             android:windowSoftInputMode="adjustPan" />
@@ -70,10 +70,11 @@
         <activity android:name=".JoinPtyActivity" />
         <activity android:name=".PartyVideoView" />
         <activity android:name=".testvideo" />
-        <activity android:name=".GameActivity"
-            android:configChanges="orientation|keyboardHidden"
-            />
-        <activity android:name=".partyVdoActivity"></activity>
+        <activity
+            android:name=".GameActivity"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity android:name=".partyVdoActivity" />
+        <activity android:name=".ProfileActivity"></activity>
     </application>
 
 </manifest>

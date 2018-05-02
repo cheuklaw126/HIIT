@@ -35,16 +35,13 @@
         <item
             android:id="@+id/nav_test"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Test" />
+            android:title="Exercise video" />
         <item
             android:id="@+id/sugFood"
             android:icon="@drawable/ic_menu_manage"
             android:title="Suggest Food" />
 
-        <item
-            android:id="@+id/debug"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="debug" />
+
     </group>
 
     <item android:title="Communicate">
