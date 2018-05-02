@@ -123,7 +123,28 @@ public class Global extends Application implements Serializable {
 
     }
 
-    public void UpdateCurrentData(){
+    public boolean SQLhelper(String query) {
+        ArrayList<String> querys = new ArrayList<String>();
+        querys.add(query);
+        try {
+            io = new IOObject("ExecuteNonQuery", querys);
+            io.Start();
+            JSONObject jsonObject = io.getReturnObject();
+            int effectRows = jsonObject.getInt("effectRows");
+            if (effectRows == 1) {
+                return true;
+            } else {
+
+
+            }
+        } catch (Exception ex) {
+            return false;
+        }
+        return false;
+    }
+
+
+    public void UpdateCurrentData() {
 
         String query = String.format("SELECT * from pData where uname='%s'", UserName);
         final ArrayList<String> querys = new ArrayList<String>();
@@ -343,7 +364,7 @@ public class Global extends Application implements Serializable {
                         Comfirmed(20);
                         break;
                     case "waitpp":
-                      //  Comfirmed(21);
+                        //  Comfirmed(21);
                         break;
                     case "ptys":
                         Gson tmpGson = new Gson();
@@ -508,16 +529,16 @@ public class Global extends Application implements Serializable {
 
     }
 
-public void PartyEnd(){
-        if(CurrentParty.HostUname.equals(UserName)){
+    public void PartyEnd() {
+        if (CurrentParty.HostUname.equals(UserName)) {
             client.Send("|killpty|" + UserName);
 
 
-            CurrentParty=null;
+            CurrentParty = null;
         }
 
 
-}
+    }
 
 
     public void NoticeMsg(String msg) {

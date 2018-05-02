@@ -57,6 +57,7 @@
         <activity android:name=".CaloriesBurn" />
         <activity android:name=".PartyActivity" />
         <activity android:name=".CreatePartyActivity" />
+        <activity android:name=".foodActivity" />
         <activity
             android:name=".ChatActivity"
             android:windowSoftInputMode="adjustPan" />
@@ -70,10 +71,11 @@
         <activity android:name=".JoinPtyActivity" />
         <activity android:name=".PartyVideoView" />
         <activity android:name=".testvideo" />
-        <activity android:name=".GameActivity"
-            android:configChanges="orientation|keyboardHidden"
-            />
-        <activity android:name=".partyVdoActivity"></activity>
+        <activity
+            android:name=".GameActivity"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity android:name=".partyVdoActivity" />
+        <activity android:name=".ProfileActivity"></activity>
         <activity android:name=".playvideo"></activity>
     </application>
 

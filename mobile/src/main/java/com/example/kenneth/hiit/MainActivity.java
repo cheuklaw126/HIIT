@@ -29,6 +29,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -271,8 +272,8 @@ public class MainActivity extends AppCompatActivity
 
 
             switch (id) {
-                case R.id.debug:
-                    intent.setClass(MainActivity.this, GameActivity.class);
+                case R.id.Profile:
+                    intent.setClass(MainActivity.this, ProfileActivity.class);
                     break;
                 case R.id.sugFood:
                     intent.setClass(MainActivity.this, foodActivity.class);
