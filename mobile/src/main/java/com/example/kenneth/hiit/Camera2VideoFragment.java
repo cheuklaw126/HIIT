@@ -41,6 +41,7 @@ import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v13.app.FragmentCompat;
 import android.support.v4.app.ActivityCompat;
@@ -288,7 +289,7 @@ public class Camera2VideoFragment extends Fragment
         global = (Global) ct.getApplicationContext();
 
 
-        global.Comfirmed(50);
+    //    global.Comfirmed(50);
 
     }
 
@@ -316,10 +317,10 @@ public class Camera2VideoFragment extends Fragment
             case R.id.video: {
                 if (mIsRecordingVideo) {
                     stopRecordingVideo();
-                    global.Comfirmed(52);
+             //       global.Comfirmed(52);
                 } else {
                     startRecordingVideo();
-                    global.Comfirmed(51);
+                  //  global.Comfirmed(51);
 
                 }
                 break;
@@ -693,15 +694,18 @@ public class Camera2VideoFragment extends Fragment
 
         Activity activity = getActivity();
         if (null != activity) {
-            Toast.makeText(activity, "Video saved: " + mNextVideoAbsolutePath,
-                    Toast.LENGTH_SHORT).show();
-            global.upload(mNextVideoAbsolutePath);
+//            Toast.makeText(activity, "Video saved: " + mNextVideoAbsolutePath,
+//                    Toast.LENGTH_SHORT).show();
+        //    global.upload(mNextVideoAbsolutePath);
 
-            Log.d(TAG, "Video saved: " + mNextVideoAbsolutePath);
+global.upload(mNextVideoAbsolutePath);
+         //   Log.d(TAG, "Video saved: " + mNextVideoAbsolutePath);
         }
         mNextVideoAbsolutePath = null;
         startPreview();
         System.out.println("88888888888888888888");
+        Activity ct = getActivity();
+        ct.finish();
     }
 
     /**
