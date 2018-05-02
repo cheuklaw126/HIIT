@@ -286,6 +286,10 @@ public class Camera2VideoFragment extends Fragment
         view.findViewById(R.id.info).setOnClickListener(this);
         Context ct= getActivity();
         global = (Global) ct.getApplicationContext();
+
+
+        global.Comfirmed(50);
+
     }
 
     @Override
@@ -312,8 +316,11 @@ public class Camera2VideoFragment extends Fragment
             case R.id.video: {
                 if (mIsRecordingVideo) {
                     stopRecordingVideo();
+                    global.Comfirmed(52);
                 } else {
                     startRecordingVideo();
+                    global.Comfirmed(51);
+
                 }
                 break;
             }

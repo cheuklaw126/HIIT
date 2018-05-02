@@ -34,15 +34,11 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
     boolean isYoutble;
     Handler mHandler;
     boolean isPlayed = false;
+    boolean isFinished = false;
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            // super.onBackPressed();
-        }
+
     }
 
     @Override
@@ -87,9 +83,15 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
 
                         }
                         break;
+                    case 50:
+                        if (isFinished) {
+
+                        }
+
+
                     case 21:
                         //some one not ready
-                        Toast.makeText(getApplicationContext(), "Waiting others", Toast.LENGTH_SHORT).show();
+                    //    Toast.makeText(getApplicationContext(), "Waiting others", Toast.LENGTH_SHORT).show();
                         break;
                 }
 
@@ -148,16 +150,11 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
                 public void onCompletion(MediaPlayer mp) {
                     System.out.println("tes2");
                     //u2.setFullscreen(false);
+                    isFinished=true;
+
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT);
 
-                    global.curHandler = null;
-
-                    // global.client.Send("|qp|" + global.CurrentParty.HostUname);
-                    frag.mButtonVideo.callOnClick();
-
-                    global.PartyEnd();
-
-                    GameActivity.this.finish();
+                    Save();
                 }
             });
 
@@ -189,6 +186,14 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
     }
 
 
+
+    public void Save(){
+        frag = (Camera2VideoFragment) fm.findFragmentByTag("sos");
+        frag.mButtonVideo.callOnClick();
+
+        global.PartyEnd();
+        GameActivity.this.finish();
+    }
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider, final YouTubePlayer youTubePlayer, boolean wasRestored) {
 
@@ -229,13 +234,11 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
 
                     //     }
                     //
-                    if(!isPlayed) {
+                    if (!isPlayed) {
                         u2.play();
-                        isPlayed=true;
+                        isPlayed = true;
                     }
                 }
-
-
             }
 
             @Override
@@ -246,20 +249,16 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
             @Override
             public void onVideoStarted() {
                 Log.d("CheckPoint", "CheckPoint onVideoStarted");
-
-
             }
 
             @Override
             public void onVideoEnded() {
                 u2.setFullscreen(false);
+                isFinished=true;
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT);
 
-                global.curHandler = null;
-                //     global.client.Send("|qp|" + global.CurrentParty.HostUname);
-                frag.mButtonVideo.callOnClick();
 
-                GameActivity.this.finish();
+                Save();
             }
 
             @Override

@@ -22,6 +22,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -226,7 +227,7 @@ public class Global extends Application implements Serializable {
         try {
             File file = new File(path);
             byte[] fileByte = loadFile(file);
-            String enc64 = android.util.Base64.encodeToString(fileByte, android.util.Base64.DEFAULT);
+            String enc64 = Base64.encodeToString(fileByte, Base64.DEFAULT);
             FileInputStream fileInputStream = new FileInputStream(file);
 
             IOObject ioObj = new IOObject("obj", new ArrayList<String>());
