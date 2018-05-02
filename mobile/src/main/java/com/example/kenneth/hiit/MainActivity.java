@@ -298,7 +298,7 @@ public class MainActivity extends AppCompatActivity
                     break;
                 case R.id.nav_slideshow:
                     System.out.println(" in intent nav_slideshow");
-                    intent.setClass(MainActivity.this, VideoAllList.class);
+                    intent.setClass(MainActivity.this, testvideo.class);
                     break;
                 case R.id.nav_analysis:
                     System.out.println("in intent nav_analysis");
@@ -306,7 +306,7 @@ public class MainActivity extends AppCompatActivity
                     break;
                 case R.id.nav_test:
                     System.out.println("in intent nav_analysis");
-                    intent.setClass(MainActivity.this, testvideo.class);
+                    intent.setClass(MainActivity.this, VideoAllList.class);
                     break;
                 default:
                     break;
