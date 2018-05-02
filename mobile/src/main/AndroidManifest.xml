@@ -74,6 +74,7 @@
             android:configChanges="orientation|keyboardHidden"
             />
         <activity android:name=".partyVdoActivity"></activity>
+        <activity android:name=".playvideo"></activity>
     </application>
 
 </manifest>

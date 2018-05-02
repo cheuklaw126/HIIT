@@ -44,13 +44,18 @@ public class PartyVideoView extends YouTubeBaseActivity implements YouTubePlayer
             System.out.println("ytshortlink = " + ytshortlink);
             youTubeView.initialize(DEVELOPER_KEY, this);
 
-        } else {
+        } else if ((templink.contains("http://"))||(templink.contains("https://"))||(templink.contains("www."))){
             vv.setMediaController(new MediaController(this));
 
             Uri uri = Uri.parse(global.Url);
             vv.setVideoURI(uri);
             vv.start();
 
+        }else{
+            ytshortlink=templink;
+            System.out.println("ytshortlink = " + ytshortlink);
+            youTubeView.initialize(DEVELOPER_KEY, this);
         }
+
     }
 }

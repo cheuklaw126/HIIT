@@ -98,14 +98,28 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
             youTubeView.setEnabled(false);
             //    youTubeView.set
 
-        } else {
+        } else if ((templink.contains("http://"))||(templink.contains("https://"))||(templink.contains("www."))){
             isYoutble = false;
             vv.setVisibility(View.VISIBLE);
             vv.setClickable(false);
             int lenght = vv.getDuration();
             vv.setEnabled(false);
             vv.setMediaController(null);
-          //  setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
+            Uri uri = Uri.parse(global.Url);
+            vv.setVideoURI(uri);
+
+
+        }else{
+            isYoutble = true;
+            vv.setVisibility(View.GONE);
+            youTubeView.setVisibility(View.VISIBLE);
+            ytshortlink=templink;
+            System.out.println("ytshortlink = " + ytshortlink);
+            youTubeView.initialize(DEVELOPER_KEY, this);
+            youTubeView.setEnabled(false);
+
+
 
             vv.setOnInfoListener(new MediaPlayer.OnInfoListener() {
                 @Override
