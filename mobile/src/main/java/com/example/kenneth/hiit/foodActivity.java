@@ -21,12 +21,17 @@ public class foodActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.rv);
 
         foodsList = new ArrayList<>();
+        foodsList.add(new ModelFood(R.drawable.signin, "Healthy Chicken and Veggies", "chicken breasts, red onion, brocolini", "240Cal"));
+        foodsList.add(new ModelFood(R.drawable.signin, "Lemon Roasted Salmon With Sweet Potatoes", "sweet potatoes, brocolini, salmon filets", "282Cal"));
+        foodsList.add(new ModelFood(R.drawable.signin, "Paleo Fried Rice", "onion, eggs, green onions", "272Cal"));
+        foodsList.add(new ModelFood(R.drawable.signin, "Lemon Rosemary Chicken", "chicken breasts, sweet potatoes, lemon,rosemary", "250Cal"));
+        foodsList.add(new ModelFood(R.drawable.signin, "Healthy Chicken and Veggies", "chicken breasts, red onion, brocolini", "240Cal"));
 
-        foodsList.add(new ModelFood(R.drawable.signin, "Karachi Savour", "haleem", "4"));
-        foodsList.add(new ModelFood(R.drawable.signin, "haleem", "Chaman Savour", "6"));
-        foodsList.add(new ModelFood(R.drawable.signin, "chaat", "Karachi Foods", "3"));
-        foodsList.add(new ModelFood(R.drawable.signin, "Kare", "Karachi Foods", "7"));
+        foodsList.add(new ModelFood(R.drawable.signin, "Lemon Roasted Salmon With Sweet Potatoes", "sweet potatoes, brocolini, salmon filets", "282Cal"));
 
+        foodsList.add(new ModelFood(R.drawable.signin, "Paleo Fried Rice", "onion, eggs, green onions", "272Cal"));
+
+        foodsList.add(new ModelFood(R.drawable.signin, "Lemon Rosemary Chicken", "chicken breasts, sweet potatoes, lemon,rosemary", "250Cal"));
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         RecyclerView.LayoutManager rvLiLayoutManager = layoutManager;
         recyclerView.setLayoutManager(rvLiLayoutManager);
