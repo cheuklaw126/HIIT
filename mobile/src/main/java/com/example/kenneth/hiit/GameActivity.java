@@ -3,6 +3,7 @@ package com.example.kenneth.hiit;
 import android.app.FragmentManager;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,9 +12,9 @@ import android.os.Message;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.OrientationEventListener;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.MediaController;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -35,7 +36,7 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
     Handler mHandler;
     boolean isPlayed = false;
     boolean isFinished = false;
-
+    OrientationEventListener mOrientationListener;
     @Override
     public void onBackPressed() {
 
@@ -97,6 +98,19 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
 
             }
         };
+        mOrientationListener = new OrientationEventListener(this,
+                SensorManager.SENSOR_DELAY_NORMAL) {
+
+            @Override
+            public void onOrientationChanged(int orientation) {
+              if(orientation==Configuration.ORIENTATION_PORTRAIT
+                      && isFinished){
+              }
+            }
+        };
+
+
+
         YouTubePlayerView youTubeView = (YouTubePlayerView)
                 findViewById(R.id.videoView000);
         global.curHandler = mHandler;
@@ -115,28 +129,15 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
             youTubeView.setEnabled(false);
             //    youTubeView.set
 
-        } else if ((templink.contains("http://"))||(templink.contains("https://"))||(templink.contains("www."))){
+
+        } else {
             isYoutble = false;
             vv.setVisibility(View.VISIBLE);
             vv.setClickable(false);
             int lenght = vv.getDuration();
             vv.setEnabled(false);
             vv.setMediaController(null);
-
-            Uri uri = Uri.parse(global.Url);
-            vv.setVideoURI(uri);
-
-
-        }else{
-            isYoutble = true;
-            vv.setVisibility(View.GONE);
-            youTubeView.setVisibility(View.VISIBLE);
-            ytshortlink=templink;
-            System.out.println("ytshortlink = " + ytshortlink);
-            youTubeView.initialize(DEVELOPER_KEY, this);
-            youTubeView.setEnabled(false);
-
-
+            //  setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
             vv.setOnInfoListener(new MediaPlayer.OnInfoListener() {
                 @Override
@@ -151,10 +152,10 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
                     System.out.println("tes2");
                     //u2.setFullscreen(false);
                     isFinished=true;
-
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT);
 
                     Save();
+
                 }
             });
 
@@ -184,7 +185,18 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
         Button btn = (Button) findViewById(R.id.button5);
         btn.setVisibility(View.GONE);
     }
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        if(isFinished)
+        {
 
+
+        }
+
+
+        super.onConfigurationChanged(newConfig);
+
+    }
 
 
     public void Save(){
@@ -192,7 +204,7 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
         frag.mButtonVideo.callOnClick();
 
         global.PartyEnd();
-        GameActivity.this.finish();
+      //  GameActivity.this.finish();
     }
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider, final YouTubePlayer youTubePlayer, boolean wasRestored) {
@@ -256,9 +268,8 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
                 u2.setFullscreen(false);
                 isFinished=true;
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT);
-
-
                 Save();
+
             }
 
             @Override

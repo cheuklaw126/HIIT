@@ -73,7 +73,7 @@
         <activity android:name=".testvideo" />
         <activity
             android:name=".GameActivity"
-            android:configChanges="orientation|keyboardHidden" />
+            android:configChanges="screenSize|orientation|keyboardHidden" />
         <activity android:name=".partyVdoActivity" />
         <activity android:name=".ProfileActivity"></activity>
         <activity android:name=".playvideo"></activity>

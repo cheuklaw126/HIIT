@@ -67,9 +67,23 @@ public class Global extends Application implements Serializable {
     public Thread SocketListener;
     public Context currentContext;
     public TextView CurTv;
-    public Handler curHandler;
+    public Handler curHandler, GlobalHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                //all ready
+                case 100:
+                    //   uploadVdo
+
+                //    upload(msg.obj.toString());
+                    break;
+            }
+
+        }
+    };
     public Party.PartyUser[] partyUsers;
     ArrayList<Party> partyList;
+
 
     IOObject io;
     ArrayList<JSONObject> fdList, fdRequestList, nearlyByList, partyMemberList;
@@ -121,6 +135,9 @@ public class Global extends Application implements Serializable {
         FirstName = firstName;
         LastName = lastName;
         LastLoginTIme = lastLoginTIme;
+
+
+
 
     }
 
@@ -222,30 +239,43 @@ public class Global extends Application implements Serializable {
         }
     }
 
-    public void upload(String path) {
+    public class MyRunnable implements Runnable {
+        String path;
 
-        try {
-            File file = new File(path);
-            byte[] fileByte = loadFile(file);
-            String enc64 = Base64.encodeToString(fileByte, Base64.DEFAULT);
-            FileInputStream fileInputStream = new FileInputStream(file);
-
-            IOObject ioObj = new IOObject("obj", new ArrayList<String>());
-            ioObj.obj = enc64;
-            if (path.endsWith("jpg")) {
-                ioObj.FileType = "jpg";
-            } else if (path.endsWith("png")) {
-                ioObj.FileType = "png";
-            } else {
-                ioObj.FileType = "mp4";
-            }
-
-            ioObj.CreateUser = UserName;
-            ioObj.Start();
-        } catch (Exception ex) {
-
+        public MyRunnable(String path) {
+            // store parameter for later user
+            this.path = path;
         }
 
+        public void run() {
+            try {
+                File file = new File(this.path);
+                byte[] fileByte = loadFile(file);
+                String enc64 = Base64.encodeToString(fileByte, Base64.DEFAULT);
+                FileInputStream fileInputStream = new FileInputStream(file);
+
+                IOObject ioObj = new IOObject("obj", new ArrayList<String>());
+                ioObj.obj = enc64;
+                if (path.endsWith("jpg")) {
+                    ioObj.FileType = "jpg";
+                } else if (path.endsWith("png")) {
+                    ioObj.FileType = "png";
+                } else {
+                    ioObj.FileType = "mp4";
+                }
+
+                ioObj.CreateUser = UserName;
+                ioObj.Start();
+            } catch (Exception ex) {
+System.out.println(ex.toString()+"________________________________________________________________");
+            }
+        }
+    }
+
+    public void upload(String path) {
+        Runnable r = new MyRunnable(path);
+        Thread thread = new Thread(r);
+        thread.start();
     }
 
 
