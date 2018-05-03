@@ -69,6 +69,8 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
                     .replace(R.id.container, Camera2VideoFragment.newInstance(), "sos")
                     .commit();
         }
+        frag = (Camera2VideoFragment) fm.findFragmentByTag("sos");
+
         //((FrameLayout)findViewById(R.id.container1)).setVisibility(View.GONE);
         final String DEVELOPER_KEY = "AIzaSyAsJkJqZZ6zW1_hswItJup7FQP3UVNoaM4";
         global = (Global) getApplicationContext();
@@ -84,7 +86,8 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
                         if (isYoutble) {
 //                            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 //
-//                            u2.play();
+//
+//
                         } else {
 //                            frag = (Camera2VideoFragment) fm.findFragmentByTag("sos");
 //                            frag.mButtonVideo.callOnClick();
@@ -94,7 +97,9 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
 
                         }
                         break;
-                    case 50:
+                    case 300:
+                    //    frag = (Camera2VideoFragment) fm.findFragmentByTag("sos");
+                      //  frag.mButtonVideo.callOnClick();
                         if (isFinished) {
 
                         }
@@ -106,6 +111,12 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
                         GameActivity.this.finish();
                         global.curHandler=null;
                         break;
+                    case 202:
+                        //record str
+
+                        break;
+
+
                     case 21:
                         //some one not ready
                         //    Toast.makeText(getApplicationContext(), "Waiting others", Toast.LENGTH_SHORT).show();
@@ -142,6 +153,8 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
             System.out.println("ytshortlink = " + ytshortlink);
             youTubeView.initialize(DEVELOPER_KEY, this);
             youTubeView.setEnabled(false);
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
             //    youTubeView.set
 
 
@@ -227,10 +240,9 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
 
         u2 = youTubePlayer;
         u2.setPlayerStyle(YouTubePlayer.PlayerStyle.CHROMELESS);
-        frag = (Camera2VideoFragment) fm.findFragmentByTag("sos");
-        frag.mButtonVideo.callOnClick();
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        youTubePlayer.cueVideo(ytshortlink);
+        u2.cueVideo(ytshortlink);
+      //  u2.play();
+
         //    u2.setFullscreen(true);
         isPlayed = false;
         u2.setOnFullscreenListener(new YouTubePlayer.OnFullscreenListener() {
@@ -263,7 +275,9 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
                     //     }
                     //
                     if (!isPlayed) {
-                        u2.play();
+                      u2.play();
+                        frag = (Camera2VideoFragment) fm.findFragmentByTag("sos");
+                        frag.mButtonVideo.callOnClick();
                         isPlayed = true;
                     }
                 }
@@ -283,7 +297,7 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
             public void onVideoEnded() {
              //   u2.setFullscreen(false);
                 isFinished = true;
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT);
+         //       setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT);
                 Save();
 
             }

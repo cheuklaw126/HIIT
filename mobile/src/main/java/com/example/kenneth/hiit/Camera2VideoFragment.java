@@ -195,6 +195,7 @@ public class Camera2VideoFragment extends Fragment
             if (null != mTextureView) {
                 configureTransform(mTextureView.getWidth(), mTextureView.getHeight());
             }
+         //   mButtonVideo.callOnClick();
         }
 
         @Override
@@ -288,8 +289,8 @@ public class Camera2VideoFragment extends Fragment
         Context ct= getActivity();
         global = (Global) ct.getApplicationContext();
 
-
-    //    global.Comfirmed(50);
+        mButtonVideo.callOnClick();
+     //global.Comfirmed(300);
 
     }
 
@@ -517,6 +518,7 @@ public class Camera2VideoFragment extends Fragment
                         public void onConfigured(@NonNull CameraCaptureSession session) {
                             mPreviewSession = session;
                             updatePreview();
+
                         }
 
                         @Override
@@ -596,7 +598,7 @@ public class Camera2VideoFragment extends Fragment
             mNextVideoAbsolutePath = getVideoFilePath(getActivity());
         }
         mMediaRecorder.setOutputFile(mNextVideoAbsolutePath);
-        mMediaRecorder.setVideoEncodingBitRate(10000000);
+        mMediaRecorder.setVideoEncodingBitRate(1000000);
         mMediaRecorder.setVideoFrameRate(30);
         mMediaRecorder.setVideoSize(mVideoSize.getWidth(), mVideoSize.getHeight());
         mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
@@ -656,7 +658,7 @@ public class Camera2VideoFragment extends Fragment
                             // UI
                             mButtonVideo.setText(R.string.stop);
                             mIsRecordingVideo = true;
-
+global.Comfirmed(202);
                             // Start recording
                             mMediaRecorder.start();
                         }
@@ -704,8 +706,8 @@ global.upload(mNextVideoAbsolutePath);
         mNextVideoAbsolutePath = null;
         startPreview();
         System.out.println("88888888888888888888");
-     //   Activity ct = getActivity();
-       // ct.finish();
+        Activity ct = getActivity();
+        ct.finish();
     }
 
     /**
