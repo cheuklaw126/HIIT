@@ -704,8 +704,8 @@ global.upload(mNextVideoAbsolutePath);
         mNextVideoAbsolutePath = null;
         startPreview();
         System.out.println("88888888888888888888");
-        Activity ct = getActivity();
-        ct.finish();
+     //   Activity ct = getActivity();
+       // ct.finish();
     }
 
     /**

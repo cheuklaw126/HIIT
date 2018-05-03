@@ -35,7 +35,7 @@ public class Client implements Runnable {
         try {
             InetAddress add = InetAddress.getByName("cheuklaw126.mynetgear.com");
             this.ip = add.getHostAddress();
-      this.ip = "192.168.1.22";
+    //  this.ip = "192.168.1.22";
         } catch (Exception ex) {
             this.ip = "";
         }
@@ -71,7 +71,7 @@ public class Client implements Runnable {
             ConnectThread.join();
             int timeout = 5000;
             System.out.println("連線中....");
-            out = new PrintWriter(sc.getOutputStream(), true);
+            out = new PrintWriter(sc.getOutputStream(), false);
             Thread LoginThread = new Thread() {
                 @Override
                 public void run() {
@@ -104,7 +104,14 @@ public class Client implements Runnable {
     Thread msgThread=    new Thread(){
             @Override
             public void run(){
-                out.println(msgr);
+                if(msgr.contains("mp4")){
+                    out.println(msgr);
+
+                }else {
+                    out.println(msgr);
+
+                }
+                out.flush();
             }
         };
     msgThread.start();
@@ -115,7 +122,22 @@ public class Client implements Runnable {
         }
 
     }
-
+//    public void SendFile(byte[] file) {
+//        //final String msgr = msg;
+//        Thread msgThread=    new Thread(){
+//            @Override
+//            public void run(){
+//               out.p
+//            }
+//        };
+//        msgThread.start();
+//        try {
+//            msgThread.join();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
 
     public String Listener() {
         try {

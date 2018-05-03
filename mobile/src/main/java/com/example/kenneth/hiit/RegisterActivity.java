@@ -21,15 +21,16 @@ import java.util.concurrent.ExecutionException;
 public class RegisterActivity extends AppCompatActivity {
     Button btn1;
     EditText ac, pw, pw2, fname, lname, height, weight;
-    TextView acMsg,pwdMsg;
+    TextView acMsg, pwdMsg;
     RadioButton rm, rf;
     RadioGroup rgp;
-ArrayList errorList;
-    String acc,pwd;
-public enum ChkNum{
-    account,password;
+    ArrayList errorList;
+    String acc, pwd;
 
-}
+    public enum ChkNum {
+        account, password;
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,40 +48,40 @@ public enum ChkNum{
         final RadioButton rf = (RadioButton) findViewById(R.id.rf);
         acMsg = (TextView) findViewById(R.id.acMsg);
         pwdMsg = (TextView) findViewById(R.id.pwdMsg);
-        btn1 = (Button)findViewById(R.id.btn1);
+        btn1 = (Button) findViewById(R.id.btn1);
         errorList = new ArrayList();
 
 
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               if(errorList.isEmpty()){
+                if (errorList.isEmpty()) {
 
 
-String w = weight.getText().toString();
+                    String w = weight.getText().toString();
                     String h = height.getText().toString();
-String Sex="";
-if(rf.isChecked()){
-    Sex="F";
-}else{
-    Sex ="M";
-}
+                    String Sex = "";
+                    if (rf.isChecked()) {
+                        Sex = "F";
+                    } else {
+                        Sex = "M";
+                    }
 
-String First = fname.getText().toString();
-String Last = lname.getText().toString();
-acc= acc.toLowerCase();
-String query =String.format("INSERT INTO [dbo].[pData] ([uname],[firstName],[lastName],[password],[height],[weight],[sex],[createDate] ,[level]) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s')",acc,First,Last,pwd,h,w,Sex, "","1");
+                    String First = fname.getText().toString();
+                    String Last = lname.getText().toString();
+                    acc = acc.toLowerCase();
+                    String query = String.format("INSERT INTO [dbo].[pData] ([uname],[firstName],[lastName],[password],[height],[weight],[sex],[createDate] ,[level]) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s')", acc, First, Last, pwd, h, w, Sex, "", "1");
 
                     final ArrayList<String> querys = new ArrayList<String>();
                     querys.add(query);
 
                     try {
-IOObject io = new IOObject("ExecuteNonQuery",querys);
-io.Start();
-                        JSONObject jsonObject= io.getReturnObject();
-                     int effectRows=   jsonObject.getInt("effectRows");
+                        IOObject io = new IOObject("ExecuteNonQuery", querys);
+                        io.Start();
+                        JSONObject jsonObject = io.getReturnObject();
+                        int effectRows = jsonObject.getInt("effectRows");
 
-                        if(effectRows==1){
+                        if (effectRows == 1) {
                             AlertDialog ad = new AlertDialog.Builder(RegisterActivity.this).create();
                             ad.setCancelable(false); // This blocks the 'BACK' button
                             ad.setMessage("Successful");
@@ -92,23 +93,15 @@ io.Start();
                                 }
                             });
                             ad.show();
-                        }else{
+                        } else {
                             Toast.makeText(getApplicationContext(), "Server Busy, Please try again!", Toast.LENGTH_SHORT).show();
                         }
-
-
-System.out.println(effectRows);
-
+                        System.out.println(effectRows);
                     } catch (JSONException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    } catch (ExecutionException e) {
                         e.printStackTrace();
                     }
 
-               }
-                else{
+                } else {
                     return;
                 }
             }
@@ -118,42 +111,40 @@ System.out.println(effectRows);
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                     acc = ac.getText().toString();
+                    acc = ac.getText().toString();
                     Global globalobj = new Global();
                     if (globalobj.ChkAccExit(acc)) {
-acMsg.setText(acc +" Already Exit!");
+                        acMsg.setText(acc + " Already Exit!");
                         errorList.add(ChkNum.account);
 //ac.requestFocus();
                     } else {
                         acMsg.setText("");
-                        acc=ac.getText().toString();
+                        acc = ac.getText().toString();
                         errorList.remove(ChkNum.account);
                     }
                 }
             }
         });
 
-pw2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        pw2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
 
-                String pwString1  = pw.getText().toString();
-                String pwString2  = pw2.getText().toString();
-if(!pwString1.equals(pwString2) || pwString2.equals("")){
-    pwdMsg.setText("Password Invaid");
-    errorList.add(ChkNum.password);
-}else{
-    errorList.remove(ChkNum.password);
-    pwd = pw2.getText().toString();
-    pwdMsg.setText("");
-}
+                    String pwString1 = pw.getText().toString();
+                    String pwString2 = pw2.getText().toString();
+                    if (!pwString1.equals(pwString2) || pwString2.equals("")) {
+                        pwdMsg.setText("Password Invaid");
+                        errorList.add(ChkNum.password);
+                    } else {
+                        errorList.remove(ChkNum.password);
+                        pwd = pw2.getText().toString();
+                        pwdMsg.setText("");
+                    }
                 }
             }
         });
     }
-
-
 
 
 }

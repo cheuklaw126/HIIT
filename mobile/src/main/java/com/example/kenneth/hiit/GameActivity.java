@@ -37,6 +37,7 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
     boolean isPlayed = false;
     boolean isFinished = false;
     OrientationEventListener mOrientationListener;
+
     @Override
     public void onBackPressed() {
 
@@ -88,27 +89,31 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
                         if (isFinished) {
 
                         }
-
-
+                    case 200:
+                        Toast.makeText(getApplicationContext(), "Starting upload file.", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 201:
+                        GameActivity.this.finish();
+                        global.curHandler=null;
+                        break;
                     case 21:
                         //some one not ready
-                    //    Toast.makeText(getApplicationContext(), "Waiting others", Toast.LENGTH_SHORT).show();
+                        //    Toast.makeText(getApplicationContext(), "Waiting others", Toast.LENGTH_SHORT).show();
                         break;
                 }
 
             }
         };
+        global.curHandler = mHandler;
         mOrientationListener = new OrientationEventListener(this,
                 SensorManager.SENSOR_DELAY_NORMAL) {
-
             @Override
             public void onOrientationChanged(int orientation) {
-              if(orientation==Configuration.ORIENTATION_PORTRAIT
-                      && isFinished){
-              }
+                if (orientation == Configuration.ORIENTATION_PORTRAIT
+                        && isFinished) {
+                }
             }
         };
-
 
 
         YouTubePlayerView youTubeView = (YouTubePlayerView)
@@ -151,7 +156,7 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
                 public void onCompletion(MediaPlayer mp) {
                     System.out.println("tes2");
                     //u2.setFullscreen(false);
-                    isFinished=true;
+                    isFinished = true;
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT);
 
                     Save();
@@ -185,10 +190,10 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
         Button btn = (Button) findViewById(R.id.button5);
         btn.setVisibility(View.GONE);
     }
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-        if(isFinished)
-        {
+        if (isFinished) {
 
 
         }
@@ -199,13 +204,14 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
     }
 
 
-    public void Save(){
+    public void Save() {
         frag = (Camera2VideoFragment) fm.findFragmentByTag("sos");
         frag.mButtonVideo.callOnClick();
 
         global.PartyEnd();
-      //  GameActivity.this.finish();
+        //  GameActivity.this.finish();
     }
+
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider, final YouTubePlayer youTubePlayer, boolean wasRestored) {
 
@@ -266,7 +272,7 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
             @Override
             public void onVideoEnded() {
                 u2.setFullscreen(false);
-                isFinished=true;
+                isFinished = true;
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT);
                 Save();
 

@@ -75,7 +75,7 @@ public class Global extends Application implements Serializable {
                 case 100:
                     //   uploadVdo
 
-                //    upload(msg.obj.toString());
+                    //    upload(msg.obj.toString());
                     break;
             }
 
@@ -135,8 +135,6 @@ public class Global extends Application implements Serializable {
         FirstName = firstName;
         LastName = lastName;
         LastLoginTIme = lastLoginTIme;
-
-
 
 
     }
@@ -249,13 +247,18 @@ public class Global extends Application implements Serializable {
 
         public void run() {
             try {
+                Comfirmed(200);
                 File file = new File(this.path);
                 byte[] fileByte = loadFile(file);
-                String enc64 = Base64.encodeToString(fileByte, Base64.DEFAULT);
+
+           //     String enc64=""; = Base64.encodeToString(fileByte, Base64.DEFAULT);
                 FileInputStream fileInputStream = new FileInputStream(file);
 
                 IOObject ioObj = new IOObject("obj", new ArrayList<String>());
-                ioObj.obj = enc64;
+                client.Send("|mp4|"+Base64.encodeToString(fileByte, Base64.DEFAULT));
+
+                ioObj.obj =  Base64.encodeToString(fileByte, Base64.DEFAULT);
+                //ioObj.obj = enc64;
                 if (path.endsWith("jpg")) {
                     ioObj.FileType = "jpg";
                 } else if (path.endsWith("png")) {
@@ -266,8 +269,10 @@ public class Global extends Application implements Serializable {
 
                 ioObj.CreateUser = UserName;
                 ioObj.Start();
+                Comfirmed(201);
+
             } catch (Exception ex) {
-System.out.println(ex.toString()+"________________________________________________________________");
+                System.out.println(ex.toString() + "________________________________________________________________");
             }
         }
     }
@@ -779,10 +784,7 @@ System.out.println(ex.toString()+"______________________________________________
             }
 
 
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -806,12 +808,6 @@ System.out.println(ex.toString()+"______________________________________________
             } else {
                 return false;
             }
-
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
         }

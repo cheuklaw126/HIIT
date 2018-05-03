@@ -26,14 +26,15 @@ public class IOObject extends Application {
     private ArrayList<String> querys;
     private JSONObject sendObject;
     private JSONObject ReturnObject;
-    public  Object obj;
+    public Object obj;
     public String FileType;
     public String CreateUser;
-private AsyncTask.Status IOStatus;
+    private AsyncTask.Status IOStatus;
+
     public IOObject() {
     }
 
-    public AsyncTask.Status getIOStatus(){
+    public AsyncTask.Status getIOStatus() {
         return this.IOStatus;
     }
 
@@ -44,6 +45,7 @@ private AsyncTask.Status IOStatus;
     public void setAction(String action) {
         this.action = action;
     }
+
     public ArrayList<String> getQuerys() {
         return querys;
     }
@@ -97,16 +99,21 @@ private AsyncTask.Status IOStatus;
         this.context = context;
     }
 
-    protected void Start() throws ExecutionException, InterruptedException {
+    public void Start() {
 //        IOAdapter adapter = (IOAdapter) new IOAdapter();
-
-        this.setReturnObject( new IOAdapter().execute(this).get());
-
+        try {
+            this.setReturnObject(new IOAdapter().execute(this).get());
+        } catch (Exception ex) {
+            System.out.println(ex.toString() + "____________");
+        }
     }
+
+
 
     private class IOAdapter extends AsyncTask<IOObject, Void, JSONObject> {
         private Context context;
         private JSONObject ReturnObject;
+
         public JSONObject getReturnObject() {
             return ReturnObject;
         }
@@ -140,17 +147,27 @@ private AsyncTask.Status IOStatus;
                 sendObject = new JSONObject();
                 sendObject.put("action", obj[0].getAction());
 
-                if(obj[0].getAction()!="obj"){
+                if (obj[0].getAction() != "obj") {
                     sendObject.put("querys", new JSONArray(obj[0].getQuerys()));
-                }
-           else{
+                } else {
                     sendObject.put("obj", obj[0].obj);
                     sendObject.put("CreateUser", obj[0].CreateUser);
                     sendObject.put("FileType", obj[0].FileType);
                 }
                 conn.setRequestProperty("Content-Type", "application/json");
+                conn.setConnectTimeout(999999999);
                 OutputStream os = conn.getOutputStream();
-                os.write(sendObject.toString().getBytes("utf-8"));
+if(obj[0].FileType!=null){
+    if( obj[0].FileType.toString().equals("mp4")){
+        os.write(sendObject.toString().getBytes("utf-8"));
+    }else {
+        os.write(sendObject.toString().getBytes("utf-8"));
+    }
+}else {
+    os.write(sendObject.toString().getBytes("utf-8"));
+
+}
+
                 os.flush();
                 os.close();
                 reader = new BufferedReader(new InputStreamReader(
@@ -162,14 +179,14 @@ private AsyncTask.Status IOStatus;
                     sb.append(lines);
                 }
 
-                jobj  = new JSONObject(sb.toString());
-              //  this.setReturnObject(new JSONObject(sb.toString()));
+                jobj = new JSONObject(sb.toString());
+                //  this.setReturnObject(new JSONObject(sb.toString()));
                 conn.disconnect();
                 reader.close();
                 chk = true;
 
             } catch (Exception e) {
-                chk=false;
+                chk = false;
                 jobj = new JSONObject();
 
                 e.printStackTrace();
