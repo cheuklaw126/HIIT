@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubeIntents;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
@@ -209,10 +210,20 @@ Global global;
                 holder = new VideoListAdapter.VideoHolder();
 
                 //Set the title
-                holder.title = (TextView) convertView.findViewById(R.id.textView_title);
-                holder.title.setText(item.title);
-
                 templink= item.id;
+                if (templink.contains("youtube")) {
+                    holder.title = (TextView) convertView.findViewById(R.id.textView_title);
+                    holder.title.setText(item.title);
+                    System.out.println("inside holder.title templink  = " + templink);
+                }else if((templink.contains("http://"))||(templink.contains("https://"))||(templink.contains("www."))) {
+                    System.out.println("inside holder.title else if templink  = " + templink);
+                }else {
+                    holder.title = (TextView) convertView.findViewById(R.id.textView_title);
+                    holder.title.setText(item.title);
+                    System.out.println("inside holder.title templink  = " + templink);
+                }
+
+                //templink= item.id;
                 System.out.println(" videoalllist templink = "+item.id);
                 if (templink.contains("youtube")) {
                     //Initialise the thumbnail
@@ -222,21 +233,27 @@ Global global;
                     System.out.println("ytshortlink = " + ytshortlink);
                     holder.thumb.setTag(ytshortlink);
                     holder.thumb.initialize(mContext.getString(R.string.DEVELOPER_KEY), this);
-                }else if((templink.contains("http://"))||(templink.contains("https://"))) {
+                }else if((templink.contains("http://"))||(templink.contains("https://"))||(templink.contains("www."))) {
                     //Initialise videoview
-                    System.out.println("templink  = " + templink);
+                    System.out.println("inside else if templink  = " + templink);
 
-                    holder.vv = (ImageView) convertView.findViewById(R.id.vvv);
-                    holder.vv.setVisibility(convertView.VISIBLE);
-                    holder.vv.setImageBitmap(ThumbnailUtils.createVideoThumbnail(templink,MediaStore.Video.Thumbnails.MICRO_KIND));
-                    holder.vv.setOnClickListener(new View.OnClickListener(){
-                        @Override
+                    //holder.vv = (ImageView) convertView.findViewById(R.id.vvv);
+                    //holder.thumb.setVisibility(convertView.INVISIBLE);
+                    //holder.vv.setVisibility(convertView.VISIBLE);
+                    //Glide.with(mContext)
+                            //.load(templink)
+
+                            //.thumbnail(0.2f)
+                            //.into(holder.vv);
+                    //holder.vv.setImageBitmap(ThumbnailUtils.createVideoThumbnail(templink,MediaStore.Video.Thumbnails.MICRO_KIND));
+                    //holder.vv.setOnClickListener(new View.OnClickListener(){
+                        /*@Override
                         public void onClick(View v){
                         Intent intent = new Intent(Intent.ACTION_VIEW);
                         intent.setDataAndType(Uri.parse(templink), null);
                         //startActivity(intent);
                         }
-                    });
+                    });  */
                     //BitmapDrawable bitmapDrawable = new BitmapDrawable(mContext.getResources(),thumb);
                     //holder.vv.setBackground(thumb);
                     //holder.vv.setMediaController(new MediaController(mContext));

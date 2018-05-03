@@ -44,7 +44,7 @@ public class GetAllVideoList {
             db = SQLiteDatabase.openDatabase("/data/data/com.example.kenneth.hiit/hiitDB", null, SQLiteDatabase.OPEN_READWRITE); //Create DB file
             System.out.println("inside getALLVIDEO SELECT *  FROM allvideo;");
             try {
-                Cursor cursor = db.rawQuery("SELECT * FROM allvideo;", null);
+                Cursor cursor = db.rawQuery("select * from allvideo where vlink not like '%http://%' and vlink not like '%https://%' and vlink not like '%www.%';", null);
                 GV= cursor.getCount();
                 LINK=new String[GV];
                 DESC=new String[GV];
@@ -58,8 +58,15 @@ public class GetAllVideoList {
                         System.out.println("inside allvideo  get lengtt "+LINK.length+DESC.length);
                         System.out.println("inside allvideo vlink"+cursor.getString(cursor.getColumnIndex("vlink")));
                         System.out.println("inside allvideo description"+cursor.getString(cursor.getColumnIndex("description")));
-                        LINK[i] = cursor.getString(cursor.getColumnIndex("vlink"));
-                        DESC[i] = cursor.getString(cursor.getColumnIndex("description"));
+                        if (cursor.getString(cursor.getColumnIndex("vlink")).contains("youtube")) {
+                            LINK[i] = cursor.getString(cursor.getColumnIndex("vlink"));
+                            DESC[i] = cursor.getString(cursor.getColumnIndex("description"));
+                        }else if((cursor.getString(cursor.getColumnIndex("vlink")).contains("http://"))||(cursor.getString(cursor.getColumnIndex("vlink")).contains("https://"))||(cursor.getString(cursor.getColumnIndex("vlink")).contains("www."))){
+                            i--;
+                        }else{
+                            LINK[i] = cursor.getString(cursor.getColumnIndex("vlink"));
+                            DESC[i] = cursor.getString(cursor.getColumnIndex("description"));
+                        }
 
 
                         System.out.println("inside allvideo " + LINK[i] + "  " + DESC[i]);
