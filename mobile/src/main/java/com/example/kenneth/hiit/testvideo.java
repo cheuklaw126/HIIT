@@ -57,14 +57,16 @@ public void setupvideo(){
    if(global.numvideo>0) {
        System.out.println(" global.numvideo = " + global.numvideo);
        for (int i = 0; i < global.numvideo; i++) {
-           System.out.println("inside setupvideo for loop global.link1 = " + global.link1[i] + " , global.desc1 = " + global.desc1[i] + " i  = " + i);
-          if((global.link1[i].contains("http://"))||(global.link1[i].contains("https://"))||(global.link1[i].contains("www."))) {
-              videos.add(new Video(
-                      global.link1[i], global.desc1[i]));
-          }else{
-              System.out.println("this is youtube link!!!");
-          }
-           //store videoID , link,description
+           System.out.println("inside setupvideo for loop global.link1 = " + global.link1[i] + " , global.desc1 = " + global.desc1[i] + " i  = " + i+"global.createby1 = "+global.createby1[i]);
+           if(global.createby1[i].equals(global.UserName)) {
+               if ((global.link1[i].contains("http://")) || (global.link1[i].contains("https://")) || (global.link1[i].contains("www."))) {
+                   videos.add(new Video(
+                           global.link1[i], global.desc1[i]));
+               } else {
+                   System.out.println("this is youtube link!!!");
+               }
+               //store videoID , link,description
+           }
        }
    }
 

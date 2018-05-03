@@ -58,7 +58,7 @@ public class Global extends Application implements Serializable {
     public String UserName, pw, FirstName, LastName, src;
     public int Uid, vid, compEx;
     public String lastD, lastT, cc, hr, eg, com, Url;
-    public String[] vn1, link1, desc1;
+    public String[] vn1, link1, desc1, createby1;
     public int numvideo;
     public static String vn, link, desc;
     public static Context contextOfApplication;
@@ -876,14 +876,16 @@ public class Global extends Application implements Serializable {
                 vn1 = new String[numvideo];
                 link1 = new String[numvideo];
                 desc1 = new String[numvideo];
+                createby1 = new String[numvideo];
                 for (int i = 0; i < numvideo; i++) {
                     JSONObject veh = vjsonArray.getJSONObject(i);
-                    System.out.println(" veh " + i + " link1 = " + veh.getString("link") + " desc1 = " + veh.getString("description"));
+                    System.out.println(" veh " + i + " link1 = " + veh.getString("link") + " desc1 = " + veh.getString("description")+"createby = "+ veh.getString("createBy"));
                     //vn1[i] = "ieyzL5OaPZk";
                     vn1[i] = veh.getString("vname");
                     link1[i] = veh.getString("link");
                     desc1[i] = veh.getString("description");
-                    System.out.println(" Global getALLVIDEO vn1 = " + vn1[i] + " link1 = " + link1[i] + " desc1 = " + desc1[i]);
+                    createby1[i] = veh.getString("createBy");
+                    System.out.println(" Global getALLVIDEO vn1 = " + vn1[i] + " link1 = " + link1[i] + " desc1 = " + desc1[i]+"createby1 = "+ createby1[i]);
                 }
             }
         } catch (Exception ex) {
