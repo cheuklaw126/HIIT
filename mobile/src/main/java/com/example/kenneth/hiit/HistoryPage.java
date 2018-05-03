@@ -127,8 +127,8 @@ public class HistoryPage extends YouTubeBaseActivity implements YouTubePlayer.On
                     TextView ccal = (TextView) findViewById(R.id.CalBurn);
                     ccal.setText(cc);
 
-                    TextView shr = (TextView) findViewById(R.id.heartRate);
-                    shr.setText(hr);
+                    //TextView shr = (TextView) findViewById(R.id.heartRate);
+                    //shr.setText(hr);
 
                     TextView exG = (TextView) findViewById(R.id.exGain);
                     exG.setText(eg);

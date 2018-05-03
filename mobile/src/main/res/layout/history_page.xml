@@ -113,31 +113,7 @@
             android:textSize="20dp"
             android:text="show calorie here"/>
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
 
-        android:padding="3dp">
-
-        <TextView
-
-            android:id="@+id/lastHeart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="3dp"
-            android:textSize="20dp"
-            android:textStyle="bold"
-            android:text="Heart rate average"
-            />
-        <TextView
-            android:id="@+id/heartRate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="3dp"
-            android:textSize="20dp"
-            android:text="show heart rate here"/>
-    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

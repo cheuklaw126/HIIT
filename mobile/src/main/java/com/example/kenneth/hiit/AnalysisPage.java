@@ -78,14 +78,14 @@ public class AnalysisPage extends AppCompatActivity {
                     com = cursor1.getString(cursor1.getColumnIndex("com"));
                     eg = cursor1.getString(cursor1.getColumnIndex("eg"));
                     TEG = Float.parseFloat(eg) + TEG;
-                    hr = cursor1.getString(cursor1.getColumnIndex("hr"));
-                    THR = Float.parseFloat(hr);
-                    System.out.println("TotTime, TTC, TEG, THR, count = " + TotTime + " , " + TTC + " , " + TEG + " , " + THR + " , " + cursor1.getCount());
+                    //hr = cursor1.getString(cursor1.getColumnIndex("hr"));
+                    //THR = Float.parseFloat(hr);
+                    System.out.println("TotTime, TTC, TEG, / count = " + TotTime + " , " + TTC + " , " + TEG + " , " + cursor1.getCount());
                 }
                 GV.setText(Float.toString(TEG));
                 NH.setText(Integer.toString(count));
                 TT.setText(Float.toString(TotTime));
-                HR.setText(Float.toString(THR));
+                //HR.setText(Float.toString(THR));
                 TC.setText(Float.toString(TTC));
             } else {
                 Toast.makeText(getApplicationContext(), "You havn't exercise recond !", Toast.LENGTH_LONG).show();
@@ -117,13 +117,13 @@ public class AnalysisPage extends AppCompatActivity {
                 }
             });
 
-            LHR.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent picture_intent = new Intent(AnalysisPage.this, HeartRate.class);
-                    startActivity(picture_intent);
-                }
-            });
+            //LHR.setOnClickListener(new View.OnClickListener() {
+                //@Override
+                //public void onClick(View v) {
+                    //Intent picture_intent = new Intent(AnalysisPage.this, HeartRate.class);
+                    //startActivity(picture_intent);
+                //}
+            //});
 
             LTC.setOnClickListener(new View.OnClickListener() {
                 @Override

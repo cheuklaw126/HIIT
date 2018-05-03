@@ -242,14 +242,16 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="#ff0000"
+            android:text="Support future"/>
 
         <TextView
             android:id="@+id/bpm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:text=" bpm"
+
             android:textSize="20sp"
             android:textStyle="bold" />
 
