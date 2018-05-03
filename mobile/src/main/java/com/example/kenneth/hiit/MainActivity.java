@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity
             db.execSQL("CREATE TABLE IF NOT EXISTS novideo(totalvideo int);");
             db.execSQL("CREATE TABLE IF NOT EXISTS allvideo(vid int PRIMARY KEY , vname text,vlevel text,vlength text, description text, createBy text, createDate text, vlink text);");
             db.close();
-
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         } catch (SQLException e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
@@ -110,10 +110,18 @@ public class MainActivity extends AppCompatActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                global.SetImage(pIcon,global.src);
+            }
+
+
+        };
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
+//global.SetImage(pIcon,global.src);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -178,6 +186,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public boolean onMenuOpened(int featureId, Menu menu) {
+        return super.onMenuOpened(featureId, menu);
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
 
@@ -193,15 +206,16 @@ public class MainActivity extends AppCompatActivity
                     ContentResolver cr = this.getContentResolver();
                     int colunm_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
                     cursor.moveToFirst();
-                    String path = cursor.getString(colunm_index);
-                    if (path.endsWith("jpg") || path.endsWith("png")) {
+                    String path = cursor.getString(colunm_index).toLowerCase();
+                    if (path.endsWith("jpg") || path.endsWith("png")||path.endsWith("gif")) {
                         picPath = path;
                         Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
                         global.upload(path);
                         global.UpdateCurrentData();
-                        global.SetImage(pIcon, global.src);
-
-
+                     //   global.SetImage(pIcon, global.src);
+                        Toast.makeText(this, "New Icon uploaded", Toast.LENGTH_LONG).show();
+                        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                        drawer.closeDrawer(GravityCompat.START);
                         // imageView.setImageBitmap(bitmap);
                     } else {
 
@@ -353,7 +367,7 @@ public class MainActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         vdo.start();
-
+        GetExerciseHistory(global.Uid);
     }
 
     public void setAllVideo() {

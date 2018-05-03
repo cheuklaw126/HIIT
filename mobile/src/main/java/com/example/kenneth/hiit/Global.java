@@ -259,10 +259,12 @@ public class Global extends Application implements Serializable {
 
                 ioObj.obj =  Base64.encodeToString(fileByte, Base64.DEFAULT);
                 //ioObj.obj = enc64;
-                if (path.endsWith("jpg")) {
+                if (path.toLowerCase().endsWith("jpg")) {
                     ioObj.FileType = "jpg";
-                } else if (path.endsWith("png")) {
+                } else if (path.toLowerCase().endsWith("png")) {
                     ioObj.FileType = "png";
+                } else if (path.toLowerCase().endsWith("gif")) {
+                    ioObj.FileType = "gif";
                 } else {
                     ioObj.FileType = "mp4";
                 }
@@ -631,6 +633,8 @@ public class Global extends Application implements Serializable {
 
         query = String.format("insert into fdList  values('%s','%s',GETDATE());", this.UserName.toLowerCase(), frdName.toLowerCase());
         querys.add(query);
+        query = String.format("insert into fdList  values('%s','%s',GETDATE());",  frdName.toLowerCase(),this.UserName.toLowerCase());
+        querys.add(query);
         try {
             io = new IOObject("ExecuteNonQuery", querys);
             io.Start();
@@ -719,7 +723,7 @@ public class Global extends Application implements Serializable {
             fdList = new ArrayList<JSONObject>();
         }
 
-        String query = String.format("SELECT pData.* ,fdList.funame  FROM fdList ,pData where fdList.funame= pData.uname and (fdList.uname='%s'    or fdList.funame='%s');", this.UserName.toLowerCase(), this.UserName.toLowerCase());
+        String query = String.format("SELECT pData.* ,fdList.funame  FROM fdList ,pData where fdList.funame= pData.uname and (fdList.uname='%s');", this.UserName.toLowerCase());
         final ArrayList<String> querys = new ArrayList<String>();
         querys.add(query);
         try {

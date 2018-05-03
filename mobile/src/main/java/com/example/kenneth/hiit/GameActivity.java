@@ -162,7 +162,7 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
             isYoutble = false;
             vv.setVisibility(View.VISIBLE);
             vv.setClickable(false);
-            int lenght = vv.getDuration();
+
             vv.setEnabled(false);
             vv.setMediaController(null);
             //  setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -206,7 +206,19 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
             vv.setMediaController(new MediaController(this));
             Uri uri = Uri.parse(templink);
             vv.setVideoURI(uri);
+            int lenght = vv.getDuration();
+int ex=0;
+            while ( lenght/1000 >5){
 
+         ex++;
+
+            }
+
+
+            float car = (float) (32 * lenght/4.184/1000/60);
+
+            String query = String.format("insert into exeriseHistory (vid,uid,caloriesCal,createDate,isComplete,totTime,heartRate,exGain) values ((select vid from movie where link ='%s'),%s,%s,GETDATE(),'Y',(SELECT DATEADD(ss,%s,0)),%s,%s)",templink,global.Uid,car,lenght/1000,111,ex);
+            global.SQLhelper(query);
 
             //     vv.start();
         }
