@@ -51,20 +51,27 @@ public class HistoryList extends  AppCompatActivity {
 
         lvHistory = (ListView) findViewById(R.id.hList);
         lvHistory.setAdapter(new HistoryListAdapter(this, historys));
-        lvHistory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                History m = historys.get(i);
-                String eid = Integer.toString(m.getEid());
-                String vid= Integer.toString(m.getVid());
-                setvid(vid);
-                System.out.println("getEid, getVid = " + eid+" , "+vid);
-                Intent intent = new Intent();
-                intent.putExtra("eid", eid);
-                intent.setClass(HistoryList.this, HistoryPage.class);
-                startActivity(intent);
-            }
-        });
+        if ((historys == null) || (historys.isEmpty())) {
+            Toast.makeText(getApplicationContext(), "You haven't exercise history", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent();
+            intent.setClass(HistoryList.this, MainActivity.class);
+            startActivity(intent);
+        } else {
+            lvHistory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    History m = historys.get(i);
+                    String eid = Integer.toString(m.getEid());
+                    String vid = Integer.toString(m.getVid());
+                    setvid(vid);
+                    System.out.println("getEid, getVid = " + eid + " , " + vid);
+                    Intent intent = new Intent();
+                    intent.putExtra("eid", eid);
+                    intent.setClass(HistoryList.this, HistoryPage.class);
+                    startActivity(intent);
+                }
+            });
+        }
     }
 
 
