@@ -30,7 +30,7 @@ public class IOObject extends Application {
     public String FileType;
     public String CreateUser;
     private AsyncTask.Status IOStatus;
-
+public Global global;
     public IOObject() {
     }
 
@@ -207,6 +207,7 @@ if(obj[0].FileType!=null){
         @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
+
         }
 
         @Override

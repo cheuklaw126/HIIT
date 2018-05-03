@@ -255,7 +255,7 @@ public class Global extends Application implements Serializable {
                 FileInputStream fileInputStream = new FileInputStream(file);
 
                 IOObject ioObj = new IOObject("obj", new ArrayList<String>());
-                client.Send("|mp4|"+Base64.encodeToString(fileByte, Base64.DEFAULT));
+            //    client.Send("|mp4|"+Base64.encodeToString(fileByte, Base64.DEFAULT));
 
                 ioObj.obj =  Base64.encodeToString(fileByte, Base64.DEFAULT);
                 //ioObj.obj = enc64;

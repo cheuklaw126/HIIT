@@ -1,6 +1,7 @@
 package com.example.kenneth.hiit;
 
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.hardware.SensorManager;
@@ -9,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.PowerManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -16,6 +18,7 @@ import android.view.OrientationEventListener;
 import android.view.View;
 import android.widget.Button;
 import android.widget.MediaController;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -26,6 +29,7 @@ import com.google.android.youtube.player.YouTubePlayerView;
 
 public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
     Global global;
+    ProgressBar progressBar;
     String ytshortlink, templink;
     YouTubePlayer u2;
     Camera2VideoFragment frag;
@@ -37,6 +41,7 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
     boolean isPlayed = false;
     boolean isFinished = false;
     OrientationEventListener mOrientationListener;
+    protected PowerManager.WakeLock mWakeLock;
 
     @Override
     public void onBackPressed() {
@@ -54,6 +59,10 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+//        final PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+//        this.mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
+//        this.mWakeLock.acquire();
+        progressBar = (ProgressBar)findViewById(R.id.progressBar);
         fm = getFragmentManager();
         if (null == savedInstanceState) {
             fm.beginTransaction()
@@ -91,6 +100,7 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
                         }
                     case 200:
                         Toast.makeText(getApplicationContext(), "Starting upload file.", Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.VISIBLE);
                         break;
                     case 201:
                         GameActivity.this.finish();
@@ -271,7 +281,7 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
 
             @Override
             public void onVideoEnded() {
-                u2.setFullscreen(false);
+             //   u2.setFullscreen(false);
                 isFinished = true;
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT);
                 Save();
