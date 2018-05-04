@@ -62,7 +62,7 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
 //        final PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 //        this.mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
 //        this.mWakeLock.acquire();
-        progressBar = (ProgressBar)findViewById(R.id.progressBar);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
         fm = getFragmentManager();
         if (null == savedInstanceState) {
             fm.beginTransaction()
@@ -98,8 +98,8 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
                         }
                         break;
                     case 300:
-                    //    frag = (Camera2VideoFragment) fm.findFragmentByTag("sos");
-                      //  frag.mButtonVideo.callOnClick();
+                        //    frag = (Camera2VideoFragment) fm.findFragmentByTag("sos");
+                        //  frag.mButtonVideo.callOnClick();
                         if (isFinished) {
 
                         }
@@ -109,7 +109,7 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
                         break;
                     case 201:
                         GameActivity.this.finish();
-                        global.curHandler=null;
+                        global.curHandler = null;
                         break;
                     case 202:
                         //record str
@@ -198,6 +198,29 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
                     frag.mButtonVideo.callOnClick();
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                     vv.start();
+
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            int lenght = vv.getDuration();
+                            int ex = 0;
+                            while (lenght / 1000 > 5) {
+
+                                ex++;
+
+                            }
+
+
+                            float car = (float) (32 * lenght / 4.184 / 1000 / 60);
+
+                            String query = String.format("insert into exeriseHistory (vid,uid,caloriesCal,createDate,isComplete,totTime,heartRate,exGain) values ((select vid from movie where link ='%s'),%s,%s,GETDATE(),'Y',(SELECT DATEADD(ss,%s,0)),%s,%s)", templink, global.Uid, car, lenght / 1000, 111, ex);
+                            global.SQLhelper(query);
+                        }
+                    });
+
+                    thread.start();
+
+
                 }
             });
 
@@ -206,19 +229,6 @@ public class GameActivity extends YouTubeBaseActivity implements YouTubePlayer.O
             vv.setMediaController(new MediaController(this));
             Uri uri = Uri.parse(templink);
             vv.setVideoURI(uri);
-            int lenght = vv.getDuration();
-int ex=0;
-            while ( lenght/1000 >5){
-
-         ex++;
-
-            }
-
-
-            float car = (float) (32 * lenght/4.184/1000/60);
-
-            String query = String.format("insert into exeriseHistory (vid,uid,caloriesCal,createDate,isComplete,totTime,heartRate,exGain) values ((select vid from movie where link ='%s'),%s,%s,GETDATE(),'Y',(SELECT DATEADD(ss,%s,0)),%s,%s)",templink,global.Uid,car,lenght/1000,111,ex);
-            global.SQLhelper(query);
 
             //     vv.start();
         }
@@ -253,7 +263,7 @@ int ex=0;
         u2 = youTubePlayer;
         u2.setPlayerStyle(YouTubePlayer.PlayerStyle.CHROMELESS);
         u2.cueVideo(ytshortlink);
-      //  u2.play();
+        //  u2.play();
 
         //    u2.setFullscreen(true);
         isPlayed = false;
@@ -287,7 +297,7 @@ int ex=0;
                     //     }
                     //
                     if (!isPlayed) {
-                      u2.play();
+                        u2.play();
                         frag = (Camera2VideoFragment) fm.findFragmentByTag("sos");
                         frag.mButtonVideo.callOnClick();
                         isPlayed = true;
@@ -307,9 +317,9 @@ int ex=0;
 
             @Override
             public void onVideoEnded() {
-             //   u2.setFullscreen(false);
+                //   u2.setFullscreen(false);
                 isFinished = true;
-         //       setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT);
+                //       setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT);
                 Save();
 
             }
